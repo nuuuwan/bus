@@ -21,7 +21,6 @@ function App() {
             <Route path="/map/:latLng" element={<MapPage />} />
             <Route path="/route/:routeNum" element={<MapPage />} />
             <Route path="/bus_halt/:name" element={<MapPage />} />
-            <Route path="/bus/:busID" element={<MapPage />} />
           </Routes>
         </BrowserRouter>
       </DataProvider>
