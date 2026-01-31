@@ -1,0 +1,24 @@
+[
+  { "name": "Pettah (Central Bus Stand)", "latLng": [6.9344, 79.8517] },
+  { "name": "Fort (Bastian Mawatha)", "latLng": [6.9332, 79.85] },
+  { "name": "Lake House", "latLng": [6.9315, 79.8492] },
+  { "name": "Slave Island", "latLng": [6.9255, 79.8524] },
+  { "name": "Ibbanwala Junction", "latLng": [6.9205, 79.8596] },
+  { "name": "Town Hall", "latLng": [6.9147, 79.8611] },
+  { "name": "Public Library (Cinnamon Gardens)", "latLng": [6.9118, 79.8604] },
+  { "name": "Thummulla Junction", "latLng": [6.9015, 79.8617] },
+  { "name": "Thimbirigasyaya Junction", "latLng": [6.8942, 79.8681] },
+  { "name": "Havelock Town", "latLng": [6.8864, 79.8631] },
+  { "name": "Kirulapone", "latLng": [6.8804, 79.8732] },
+  { "name": "Nugegoda", "latLng": [6.8756, 79.8863] },
+  { "name": "Delkanda", "latLng": [6.8687, 79.8974] },
+  { "name": "Navinna", "latLng": [6.8601, 79.9079] },
+  { "name": "Maharagama", "latLng": [6.8488, 79.9263] },
+  { "name": "Pannipitiya", "latLng": [6.8444, 79.9419] },
+  { "name": "Kottawa", "latLng": [6.8412, 79.9652] },
+  {
+    "name": "Makumbura (Multimodal Transport Centre)",
+    "latLng": [6.8391, 79.9822]
+  },
+  { "name": "Homagama", "latLng": [6.8415, 80.0031] }
+]
