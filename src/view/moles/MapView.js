@@ -105,6 +105,11 @@ export default function MapView() {
               color="blue"
               weight={5}
               opacity={0.5}
+              eventHandlers={{
+                click: () => {
+                  navigate(`/route/${encodeURIComponent(route.route_num)}`);
+                },
+              }}
             />
           ) : null;
         })}
@@ -124,6 +129,11 @@ export default function MapView() {
               fillOpacity={0.8}
               color="darkred"
               weight={2}
+              eventHandlers={{
+                click: () => {
+                  navigate(`/bus_halt/${encodeURIComponent(halt.name)}`);
+                },
+              }}
             />
           );
         })}
