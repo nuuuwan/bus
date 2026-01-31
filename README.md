@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+# Bus (Simulator API)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository implements a discrete-event simulator for a commuter bus system. It provides a RESTful interface to manage urban transit entities and visualize real-time bus movement across a geographical coordinate system.
 
-## Available Scripts
+## Core Entities & Architecture
 
-In the project directory, you can run:
+The system is built on a graph-based model where **Bus Halts** act as nodes and **Routes** define the edges and traversal logic.
 
-### `npm start`
+### /route/::routeNum
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+A collection of ordered waypoints and halts.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* **Properties:** `distance_km`, `estimated_travel_time`, `halt_sequence`.
+* **Logic:** For the moment, we assume `route_num` follows a fixed bidirectional path between a specific `start_bus_halt` and `end_bus_halt`.
 
-### `npm test`
+### /bus_halt/::name
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A fixed geographical point where buses pick up and drop off passengers.
 
-### `npm run build`
+* **Uniqueness:** Each halt name is a unique primary key.
+* **Attributes:** `latLng`, `shelter_type`, `current_passenger_count`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### /bus/::busID
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+An active vehicle instance within the simulation.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* **State:** `current_route`, `next_halt`, `occupancy`, `status` (In-transit, Stopped, or Delayed).
 
-### `npm run eject`
+### /map/::latLng
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+A utility endpoint to query the simulation state at specific coordinates, returning the nearest halts or active buses within a defined radius.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Future Objects
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* **Depots:** Starting/Ending points for buses where maintenance and refueling occur.
+* **People:** Individual agents with "Home" and "Work" locations, driving the demand for specific routes.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Development Plan
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Stage 1: Static Geospatial Foundation
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The initial implementation focuses on the "Atlas." We render the skeleton of the city.
 
-### Code Splitting
+* Define hardcoded JSON structures for routes and halts.
+* Render static SVG/Canvas maps showing bus lines and markers for halts.
+* **Goal:** Ensure the coordinate system correctly maps to the UI.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Stage 2: Temporal Dynamics (The "Tick" System)
 
-### Analyzing the Bundle Size
+Introduce a simulation clock to move buses along the routes.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+* Implement a `update()` loop that calculates bus positions based on constant speed.
+* Buses now "teleport" or glide between halts based on the system time.
+* Basic API polling to fetch the current `latLng` of all active `busIDs`.
 
-### Making a Progressive Web App
+### Stage 3: Reactive Intelligence & Logic
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Move away from "ghost" buses and introduce real-world constraints.
 
-### Advanced Configuration
+* **Traffic Modeling:** Variable travel times based on time-of-day multipliers.
+* **Halt Logic:** Buses must stop for a defined duration at each halt.
+* **Capacity Limits:** Buses have a maximum occupancy; they can skip halts if full.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Stage 4: Passenger Agent Simulation
 
-### Deployment
+The final stage introduces autonomous "People" agents to create a closed-loop economy.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* **Demand Generation:** People spawn at halts based on a Poisson distribution.
+* **Pathfinding:** Agents choose routes based on the shortest path to their destination.
+* **Analytics:** Track metrics like "Average Wait Time" and "Route Efficiency" to optimize the bus schedule.
