@@ -6,6 +6,8 @@ import { DataProvider } from "./nonview/contexts/DataContext";
 import CustomAppBar from "./view/moles/CustomAppBar";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
 import RootRedirect from "./view/pages/RootRedirect";
+import RouteRedirect from "./view/pages/RouteRedirect";
+import BusHaltRedirect from "./view/pages/BusHaltRedirect";
 import MapPage from "./view/pages/MapPage";
 import RoutePage from "./view/pages/RoutePage";
 import BusHaltPage from "./view/pages/BusHaltPage";
@@ -26,8 +28,11 @@ function App() {
             <CustomAppBar />
             <Routes>
               <Route path="/" element={<RootRedirect />} />
+              <Route path="/map" element={<RootRedirect />} />
               <Route path="/map/:latLng" element={<MapPage />} />
+              <Route path="/route" element={<RouteRedirect />} />
               <Route path="/route/:routeNum" element={<RoutePage />} />
+              <Route path="/bus_halt" element={<BusHaltRedirect />} />
               <Route path="/bus_halt/:name" element={<BusHaltPage />} />
             </Routes>
             <CustomBottomNavigator />
