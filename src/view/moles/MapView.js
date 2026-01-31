@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { Box } from "@mui/material";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import LatLng from "../../nonview/base/LatLng";
-
+import Crosshairs from "../atoms/Crosshairs";
 // Fix for default marker icons in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -58,16 +59,19 @@ export default function MapView() {
   };
 
   return (
-    <MapContainer
-      center={center}
-      zoom={defaultZoom}
-      style={{ height: "100vh", width: "100%" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <MapController center={center} onMoveEnd={handleMoveEnd} />
-    </MapContainer>
+    <Box sx={{ position: "relative", height: "100vh", width: "100%" }}>
+      <MapContainer
+        center={center}
+        zoom={defaultZoom}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MapController center={center} onMoveEnd={handleMoveEnd} />
+      </MapContainer>
+      <Crosshairs />
+    </Box>
   );
 }
