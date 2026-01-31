@@ -22,5 +22,26 @@
       "Makumbura",
       "Homagama"
     ]
+  },
+  {
+    "route_num": "176-North-Bound",
+    "bus_halts": [
+      "Karagampitiya (Dehiwala)",
+      "Hill Street",
+      "Dehiwala Junction",
+      "Kalubowila (Colombo South Teaching Hospital)",
+      "Kohuwala",
+      "Nugegoda",
+      "Nawala",
+      "Koswatta",
+      "Rajagiriya",
+      "Ayurveda Junction",
+      "Borella",
+      "Maradana",
+      "Technical College Junction",
+      "Armor Street",
+      "Kotahena",
+      "Hettiyawatta"
+    ]
   }
 ]

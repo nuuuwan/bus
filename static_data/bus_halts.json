@@ -20,5 +20,65 @@
     "name": "Makumbura (Multimodal Transport Centre)",
     "latLng": [6.8391, 79.9822]
   },
-  { "name": "Homagama", "latLng": [6.8415, 80.0031] }
+  { "name": "Homagama", "latLng": [6.8415, 80.0031] },
+  {
+    "name": "Karagampitiya (Dehiwala)",
+    "latLng": [6.8483, 79.8698]
+  },
+  {
+    "name": "Dehiwala Junction",
+    "latLng": [6.851, 79.8632]
+  },
+  {
+    "name": "Kalubowila (Teaching Hospital)",
+    "latLng": [6.8622, 79.8751]
+  },
+  {
+    "name": "Kohuwala Junction",
+    "latLng": [6.8681, 79.8803]
+  },
+  {
+    "name": "Nugegoda (Supermarket)",
+    "latLng": [6.8756, 79.8863]
+  },
+  {
+    "name": "Nawala Junction",
+    "latLng": [6.8858, 79.8876]
+  },
+  {
+    "name": "Koswatta",
+    "latLng": [6.9034, 79.8946]
+  },
+  {
+    "name": "Rajagiriya",
+    "latLng": [6.9095, 79.8926]
+  },
+  {
+    "name": "Ayurveda Junction",
+    "latLng": [6.9152, 79.8847]
+  },
+  {
+    "name": "Borella",
+    "latLng": [6.9189, 79.8778]
+  },
+  {
+    "name": "Maradana",
+    "latLng": [6.9272, 79.8642]
+  },
+  {
+    "name": "Technical College Junction",
+    "latLng": [6.9351, 79.8584]
+  },
+  {
+    "name": "Armour Street",
+    "latLng": [6.944, 79.8653]
+  },
+  {
+    "name": "Kotahena",
+    "latLng": [6.948, 79.8612]
+  },
+  {
+    "name": "Hettiyawatta Junction",
+    "latLng": [6.9535, 79.8655]
+  }
 ]
