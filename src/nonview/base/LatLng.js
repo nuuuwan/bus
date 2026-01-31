@@ -11,7 +11,24 @@ export default class LatLng {
   }
 
   static fromString(latLngString) {
-    const [lat, lng] = latLngString.split(",").map(parseFloat);
+    const [latPart, lngPart] = latLngString.split(",");
+
+    // Parse latitude
+    let lat = parseFloat(latPart);
+    if (latPart.endsWith("S")) {
+      lat = -Math.abs(lat);
+    } else if (latPart.endsWith("N")) {
+      lat = Math.abs(lat);
+    }
+
+    // Parse longitude
+    let lng = parseFloat(lngPart);
+    if (lngPart.endsWith("W")) {
+      lng = -Math.abs(lng);
+    } else if (lngPart.endsWith("E")) {
+      lng = Math.abs(lng);
+    }
+
     return new LatLng(lat, lng);
   }
 
@@ -36,9 +53,11 @@ export default class LatLng {
   }
 
   toString() {
-    const lat = this.lat.toFixed(4);
-    const lng = this.lng.toFixed(4);
-    return `${lat},${lng}`;
+    const latAbs = Math.abs(this.lat).toFixed(4);
+    const lngAbs = Math.abs(this.lng).toFixed(4);
+    const latDir = this.lat >= 0 ? "N" : "S";
+    const lngDir = this.lng >= 0 ? "E" : "W";
+    return `${latAbs}${latDir},${lngAbs}${lngDir}`;
   }
 
   toArray() {
