@@ -6,7 +6,6 @@ import Paper from "@mui/material/Paper";
 import MapIcon from "@mui/icons-material/Map";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import PlaceIcon from "@mui/icons-material/Place";
-import LatLng from "../../nonview/base/LatLng";
 
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
@@ -28,17 +27,16 @@ export default function CustomBottomNavigator() {
 
     switch (newValue) {
       case "map":
-        // Navigate to map with default location
-        const defaultLatLng = LatLng.fromDefault();
-        navigate(`/map/${defaultLatLng.toString()}`);
+        // Navigate to map route (will auto-redirect to geolocation or default)
+        navigate("/map");
         break;
       case "routes":
-        // Navigate to first route
-        navigate("/route/138-South-Bound");
+        // Navigate to route (will auto-redirect to first route)
+        navigate("/route");
         break;
       case "halts":
-        // Navigate to first bus halt
-        navigate("/bus_halt/Pettah%20(Central%20Bus%20Stand)");
+        // Navigate to bus_halt (will auto-redirect to first bus halt)
+        navigate("/bus_halt");
         break;
       default:
         break;
