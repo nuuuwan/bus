@@ -9,16 +9,16 @@ export default function Crosshairs() {
         left: "50%",
         transform: "translate(-50%, -50%)",
         pointerEvents: "none",
-        zIndex: 1000,
+        zIndex: 10000,
       }}
     >
       {/* Vertical line */}
       <Box
         sx={{
           position: "absolute",
-          width: "1px",
+          width: "2px",
           height: "40px",
-          backgroundColor: "rgba(128, 128, 128, 0.5)",
+          backgroundColor: "rgba(64, 64, 64, 0.8)",
           left: "50%",
           top: "-20px",
           transform: "translateX(-50%)",
@@ -28,9 +28,9 @@ export default function Crosshairs() {
       <Box
         sx={{
           position: "absolute",
-          height: "1px",
+          height: "2px",
           width: "40px",
-          backgroundColor: "rgba(128, 128, 128, 0.5)",
+          backgroundColor: "rgba(64, 64, 64, 0.8)",
           top: "50%",
           left: "-20px",
           transform: "translateY(-50%)",
