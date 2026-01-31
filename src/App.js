@@ -2,6 +2,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DataProvider } from "./nonview/contexts/DataContext";
+import RootRedirect from "./view/pages/RootRedirect";
 import MapPage from "./view/pages/MapPage";
 import RoutePage from "./view/pages/RoutePage";
 import BusHaltPage from "./view/pages/BusHaltPage";
@@ -19,7 +20,7 @@ function App() {
       <DataProvider>
         <BrowserRouter basename="/bus">
           <Routes>
-            <Route path="/" element={<MapPage />} />
+            <Route path="/" element={<RootRedirect />} />
             <Route path="/map/:latLng" element={<MapPage />} />
             <Route path="/route/:routeNum" element={<RoutePage />} />
             <Route path="/bus_halt/:name" element={<BusHaltPage />} />
