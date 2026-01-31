@@ -6,7 +6,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
 } from "@mui/material";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
@@ -76,6 +78,9 @@ export default function BusHaltPage() {
                     },
                   }}
                 >
+                  <ListItemIcon>
+                    <DirectionsBusIcon />
+                  </ListItemIcon>
                   <ListItemText primary={route.route_num} />
                 </ListItem>
               ))}

@@ -6,7 +6,9 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
+  ListItemIcon,
 } from "@mui/material";
+import PlaceIcon from "@mui/icons-material/Place";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
@@ -60,6 +62,9 @@ export default function RoutePage() {
                   },
                 }}
               >
+                <ListItemIcon>
+                  <PlaceIcon />
+                </ListItemIcon>
                 <ListItemText primary={`${index + 1}. ${halt}`} />
               </ListItem>
             ))}
