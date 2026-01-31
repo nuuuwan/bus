@@ -8,7 +8,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useData } from "../../nonview/contexts/DataContext";
-import MapView from "../moles/MapView";
 
 export default function RoutePage() {
   const { selectedRoute, loading } = useData();
@@ -36,7 +35,7 @@ export default function RoutePage() {
 
   return (
     <Box display="flex" height="100vh">
-      <Box width="30%" overflow="auto" p={2}>
+      <Box width="100%" overflow="auto" p={2}>
         <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
           <Typography variant="h5" gutterBottom>
             {selectedRoute.route_num}
@@ -54,9 +53,6 @@ export default function RoutePage() {
             ))}
           </List>
         </Paper>
-      </Box>
-      <Box width="70%">
-        <MapView />
       </Box>
     </Box>
   );

@@ -1,6 +1,5 @@
 import { Box, Typography, Paper, CircularProgress } from "@mui/material";
 import { useData } from "../../nonview/contexts/DataContext";
-import MapView from "../moles/MapView";
 
 export default function BusHaltPage() {
   const { selectedBusHalt, loading } = useData();
@@ -28,7 +27,7 @@ export default function BusHaltPage() {
 
   return (
     <Box display="flex" height="100vh">
-      <Box width="30%" overflow="auto" p={2}>
+      <Box width="100%" overflow="auto" p={2}>
         <Paper elevation={3} sx={{ p: 3 }}>
           <Typography variant="h5" gutterBottom>
             {selectedBusHalt.name}
@@ -43,9 +42,6 @@ export default function BusHaltPage() {
             Longitude: {selectedBusHalt.latLng[1]}
           </Typography>
         </Paper>
-      </Box>
-      <Box width="70%">
-        <MapView />
       </Box>
     </Box>
   );
