@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { useLocation, matchPath } from "react-router-dom";
 
 const DataContext = createContext();
 
@@ -8,7 +8,7 @@ export function DataProvider({ children }) {
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const params = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     async function loadData() {
@@ -42,17 +42,27 @@ export function DataProvider({ children }) {
     loadData();
   }, []);
 
-  // Determine selected bus halt from route params
-  const selectedBusHalt = params.name
-    ? busHalts.find((halt) => halt.name === decodeURIComponent(params.name))
-    : null;
+  // Extract route params based on current location using matchPath
+  const selectedBusHalt = useMemo(() => {
+    const match = matchPath("/bus_halt/:name", location.pathname);
+    if (match?.params?.name) {
+      return busHalts.find(
+        (halt) => halt.name === decodeURIComponent(match.params.name),
+      );
+    }
+    return null;
+  }, [location.pathname, busHalts]);
 
-  // Determine selected route from route params
-  const selectedRoute = params.routeNum
-    ? routes.find(
-        (route) => route.route_num === decodeURIComponent(params.routeNum),
-      )
-    : null;
+  const selectedRoute = useMemo(() => {
+    const match = matchPath("/route/:routeNum", location.pathname);
+    if (match?.params?.routeNum) {
+      return routes.find(
+        (route) =>
+          route.route_num === decodeURIComponent(match.params.routeNum),
+      );
+    }
+    return null;
+  }, [location.pathname, routes]);
 
   const value = {
     busHalts,

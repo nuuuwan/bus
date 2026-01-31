@@ -22,8 +22,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <DataProvider>
-        <BrowserRouter basename="/bus">
+      <BrowserRouter basename="/bus">
+        <DataProvider>
           <Box sx={{ pb: 7 }}>
             <CustomAppBar />
             <Routes>
@@ -37,8 +37,8 @@ function App() {
             </Routes>
             <CustomBottomNavigator />
           </Box>
-        </BrowserRouter>
-      </DataProvider>
+        </DataProvider>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
