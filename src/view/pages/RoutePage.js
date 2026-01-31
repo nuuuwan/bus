@@ -7,6 +7,7 @@ import {
   ListItemText,
   CircularProgress,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
 export default function RoutePage() {
@@ -47,7 +48,18 @@ export default function RoutePage() {
         <Paper elevation={3}>
           <List>
             {selectedRoute.bus_halts.map((halt, index) => (
-              <ListItem key={index}>
+              <ListItem
+                key={index}
+                component={Link}
+                to={`/bus_halt/${encodeURIComponent(halt)}`}
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  "&:hover": {
+                    backgroundColor: "action.hover",
+                  },
+                }}
+              >
                 <ListItemText primary={`${index + 1}. ${halt}`} />
               </ListItem>
             ))}

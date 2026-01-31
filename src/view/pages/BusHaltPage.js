@@ -1,8 +1,22 @@
-import { Box, Typography, Paper, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
 export default function BusHaltPage() {
-  const { selectedBusHalt, loading } = useData();
+  const { selectedBusHalt, routes, loading } = useData();
+
+  // Find all routes that include this bus halt
+  const routesForHalt = selectedBusHalt
+    ? routes.filter((route) => route.bus_halts.includes(selectedBusHalt.name))
+    : [];
 
   if (loading) {
     return (
@@ -42,6 +56,32 @@ export default function BusHaltPage() {
             Longitude: {selectedBusHalt.latLng[1]}
           </Typography>
         </Paper>
+
+        {routesForHalt.length > 0 && (
+          <Paper elevation={3} sx={{ p: 3, mt: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              Routes ({routesForHalt.length})
+            </Typography>
+            <List>
+              {routesForHalt.map((route) => (
+                <ListItem
+                  key={route.route_num}
+                  component={Link}
+                  to={`/route/${encodeURIComponent(route.route_num)}`}
+                  sx={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    "&:hover": {
+                      backgroundColor: "action.hover",
+                    },
+                  }}
+                >
+                  <ListItemText primary={route.route_num} />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        )}
       </Box>
     </Box>
   );
