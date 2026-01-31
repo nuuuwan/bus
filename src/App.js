@@ -4,10 +4,7 @@ import MapPage from "./view/pages/MapPage";
 
 const theme = createTheme({
   typography: {
-    fontFamily: [
-      "Ubuntu Mono",
-      "monospace",
-    ].join(","),
+    fontFamily: ["Ubuntu Mono", "monospace"].join(","),
   },
 });
 
