@@ -11,15 +11,15 @@ import LatLng from "../../nonview/base/LatLng";
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("map");
 
   useEffect(() => {
     if (location.pathname.startsWith("/map/")) {
-      setValue(0);
+      setValue("map");
     } else if (location.pathname.startsWith("/route/")) {
-      setValue(1);
+      setValue("routes");
     } else if (location.pathname.startsWith("/bus_halt/")) {
-      setValue(2);
+      setValue("halts");
     }
   }, [location.pathname]);
 
@@ -27,16 +27,16 @@ export default function CustomBottomNavigator() {
     setValue(newValue);
 
     switch (newValue) {
-      case 0:
+      case "map":
         // Navigate to map with default location
         const defaultLatLng = LatLng.fromDefault();
         navigate(`/map/${defaultLatLng.toString()}`);
         break;
-      case 1:
+      case "routes":
         // Navigate to first route
         navigate("/route/138-South-Bound");
         break;
-      case 2:
+      case "halts":
         // Navigate to first bus halt
         navigate("/bus_halt/Pettah%20(Central%20Bus%20Stand)");
         break;
@@ -51,9 +51,17 @@ export default function CustomBottomNavigator() {
       elevation={3}
     >
       <BottomNavigation value={value} onChange={handleChange}>
-        <BottomNavigationAction label="Map" icon={<MapIcon />} />
-        <BottomNavigationAction label="Routes" icon={<DirectionsBusIcon />} />
-        <BottomNavigationAction label="Halts" icon={<PlaceIcon />} />
+        <BottomNavigationAction label="Map" icon={<MapIcon />} value="map" />
+        <BottomNavigationAction
+          label="Routes"
+          icon={<DirectionsBusIcon />}
+          value="routes"
+        />
+        <BottomNavigationAction
+          label="Halts"
+          icon={<PlaceIcon />}
+          value="halts"
+        />
       </BottomNavigation>
     </Paper>
   );
