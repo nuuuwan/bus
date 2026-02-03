@@ -69,13 +69,13 @@ export default function MapView() {
   const routesWithCoordinates = useMemo(() => {
     return routes.map((route) => {
       const coordinates = [];
-      for (const haltName of route.bus_halts) {
+      for (const haltName of route.halt_name_list) {
         const halt = busHalts.find((h) => h.name === haltName);
-        if (halt && halt.latLng) {
+        if (halt && halt.latlng) {
           // Ensure coordinates are in the correct format [lat, lng]
-          const latLng = Array.isArray(halt.latLng)
-            ? halt.latLng
-            : [halt.latLng.lat, halt.latLng.lng];
+          const latLng = Array.isArray(halt.latlng)
+            ? halt.latlng
+            : [halt.latlng.lat, halt.latlng.lng];
           coordinates.push(latLng);
         }
       }

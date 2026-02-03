@@ -44,12 +44,12 @@ export default function RoutePage() {
             {selectedRoute.route_num}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            Bus Halts ({selectedRoute.bus_halts.length})
+            Bus Halts ({selectedRoute.halt_name_list.length})
           </Typography>
         </Paper>
         <Paper elevation={3}>
           <List>
-            {selectedRoute.bus_halts.map((halt, index) => (
+            {selectedRoute.halt_name_list.map((halt, index) => (
               <ListItem
                 key={index}
                 component={Link}

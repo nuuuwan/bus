@@ -17,7 +17,9 @@ export default function BusHaltPage() {
 
   // Find all routes that include this bus halt
   const routesForHalt = selectedBusHalt
-    ? routes.filter((route) => route.bus_halts.includes(selectedBusHalt.name))
+    ? routes.filter((route) =>
+        route.halt_name_list.includes(selectedBusHalt.name),
+      )
     : [];
 
   if (loading) {
@@ -52,10 +54,10 @@ export default function BusHaltPage() {
             Coordinates
           </Typography>
           <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-            Latitude: {selectedBusHalt.latLng[0]}
+            Latitude: {selectedBusHalt.latlng[0]}
           </Typography>
           <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-            Longitude: {selectedBusHalt.latLng[1]}
+            Longitude: {selectedBusHalt.latlng[1]}
           </Typography>
         </Paper>
 

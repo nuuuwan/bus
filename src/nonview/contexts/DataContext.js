@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { useLocation, matchPath } from "react-router-dom";
+import WWW from "../base/WWW";
 
 const DataContext = createContext();
 
@@ -14,20 +15,14 @@ export function DataProvider({ children }) {
     async function loadData() {
       try {
         setLoading(true);
-        const [busHaltsResponse, routesResponse] = await Promise.all([
-          fetch("/bus/static_data/bus_halts.json"),
-          fetch("/bus/static_data/routes.json"),
-        ]);
-
-        if (!busHaltsResponse.ok || !routesResponse.ok) {
-          throw new Error("Failed to load data");
-        }
-
         const [busHaltsData, routesData] = await Promise.all([
-          busHaltsResponse.json(),
-          routesResponse.json(),
+          WWW.fetchJSON(
+            "https://raw.githubusercontent.com/nuuuwan/bus_py/refs/heads/main/data/halts.json",
+          ),
+          WWW.fetchJSON(
+            "https://raw.githubusercontent.com/nuuuwan/bus_py/refs/heads/main/data/routes.summary.json",
+          ),
         ]);
-
         setBusHalts(busHaltsData);
         setRoutes(routesData);
         setError(null);
@@ -38,7 +33,6 @@ export function DataProvider({ children }) {
         setLoading(false);
       }
     }
-
     loadData();
   }, []);
 
@@ -56,10 +50,16 @@ export function DataProvider({ children }) {
   const selectedRoute = useMemo(() => {
     const match = matchPath("/route/:routeNum", location.pathname);
     if (match?.params?.routeNum) {
-      return routes.find(
-        (route) =>
-          route.route_num === decodeURIComponent(match.params.routeNum),
+      const route = routes.find(
+        (r) => r.route_num === decodeURIComponent(match.params.routeNum),
       );
+      if (route) {
+        // Ensure halt_name_list is present and fallback to [] if missing
+        return {
+          ...route,
+          bus_halts: route.halt_name_list || [],
+        };
+      }
     }
     return null;
   }, [location.pathname, routes]);
