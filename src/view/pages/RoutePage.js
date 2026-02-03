@@ -44,7 +44,7 @@ export default function RoutePage() {
             {selectedRoute.route_num}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            Bus Halts ({selectedRoute.halt_name_list.length})
+            Halts ({selectedRoute.halt_name_list.length})
           </Typography>
         </Paper>
         <Paper elevation={3}>
@@ -53,7 +53,7 @@ export default function RoutePage() {
               <ListItem
                 key={index}
                 component={Link}
-                to={`/bus_halt/${encodeURIComponent(halt)}`}
+                to={`/halt/${encodeURIComponent(halt)}`}
                 sx={{
                   textDecoration: "none",
                   color: "inherit",

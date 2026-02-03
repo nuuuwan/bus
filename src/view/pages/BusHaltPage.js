@@ -17,9 +17,7 @@ export default function BusHaltPage() {
 
   // Find all routes that include this bus halt
   const routesForHalt = selectedBusHalt
-    ? routes.filter((route) =>
-        route.halt_name_list.includes(selectedBusHalt.name),
-      )
+    ? routes.filter((route) => route.halt_name_list.includes(selectedBusHalt.name))
     : [];
 
   if (loading) {
@@ -38,7 +36,7 @@ export default function BusHaltPage() {
   if (!selectedBusHalt) {
     return (
       <Box p={3}>
-        <Typography variant="h5">Bus halt not found</Typography>
+        <Typography variant="h5">Halt not found</Typography>
       </Box>
     );
   }

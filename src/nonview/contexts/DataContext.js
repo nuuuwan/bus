@@ -5,7 +5,7 @@ import WWW from "../base/WWW";
 const DataContext = createContext();
 
 export function DataProvider({ children }) {
-  const [busHalts, setBusHalts] = useState([]);
+  const [halts, setHalts] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ export function DataProvider({ children }) {
     async function loadData() {
       try {
         setLoading(true);
-        const [busHaltsData, routesData] = await Promise.all([
+        const [haltsData, routesData] = await Promise.all([
           WWW.fetchJSON(
             "https://raw.githubusercontent.com/nuuuwan/bus_py/refs/heads/main/data/halts.json",
           ),
@@ -23,7 +23,7 @@ export function DataProvider({ children }) {
             "https://raw.githubusercontent.com/nuuuwan/bus_py/refs/heads/main/data/routes.summary.json",
           ),
         ]);
-        setBusHalts(busHaltsData);
+        setHalts(haltsData);
         setRoutes(routesData);
         setError(null);
       } catch (err) {
@@ -37,15 +37,15 @@ export function DataProvider({ children }) {
   }, []);
 
   // Extract route params based on current location using matchPath
-  const selectedBusHalt = useMemo(() => {
-    const match = matchPath("/bus_halt/:name", location.pathname);
+  const selectedHalt = useMemo(() => {
+    const match = matchPath("/halt/:name", location.pathname);
     if (match?.params?.name) {
-      return busHalts.find(
+      return halts.find(
         (halt) => halt.name === decodeURIComponent(match.params.name),
       );
     }
     return null;
-  }, [location.pathname, busHalts]);
+  }, [location.pathname, halts]);
 
   const selectedRoute = useMemo(() => {
     const match = matchPath("/route/:routeNum", location.pathname);
@@ -57,7 +57,7 @@ export function DataProvider({ children }) {
         // Ensure halt_name_list is present and fallback to [] if missing
         return {
           ...route,
-          bus_halts: route.halt_name_list || [],
+          halts: route.halt_name_list || [],
         };
       }
     }
@@ -65,9 +65,9 @@ export function DataProvider({ children }) {
   }, [location.pathname, routes]);
 
   const value = {
-    busHalts,
+    halts,
     routes,
-    selectedBusHalt,
+    selectedHalt,
     selectedRoute,
     loading,
     error,

@@ -7,10 +7,10 @@ import CustomAppBar from "./view/moles/CustomAppBar";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
 import RootRedirect from "./view/pages/RootRedirect";
 import RouteRedirect from "./view/pages/RouteRedirect";
-import BusHaltRedirect from "./view/pages/BusHaltRedirect";
+import HaltRedirect from "./view/pages/BusHaltRedirect";
 import MapPage from "./view/pages/MapPage";
 import RoutePage from "./view/pages/RoutePage";
-import BusHaltPage from "./view/pages/BusHaltPage";
+import HaltPage from "./view/pages/BusHaltPage";
 
 const theme = createTheme({
   typography: {
@@ -32,8 +32,8 @@ function App() {
               <Route path="/map/:latLng" element={<MapPage />} />
               <Route path="/route" element={<RouteRedirect />} />
               <Route path="/route/:routeNum" element={<RoutePage />} />
-              <Route path="/bus_halt" element={<BusHaltRedirect />} />
-              <Route path="/bus_halt/:name" element={<BusHaltPage />} />
+              <Route path="/halt" element={<HaltRedirect />} />
+              <Route path="/halt/:name" element={<HaltPage />} />
             </Routes>
             <CustomBottomNavigator />
           </Box>

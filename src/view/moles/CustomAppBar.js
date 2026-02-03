@@ -11,8 +11,8 @@ export default function CustomAppBar() {
   const getTitle = () => {
     if (location.pathname.startsWith("/route/")) {
       return `Route: ${params.routeNum || ""}`;
-    } else if (location.pathname.startsWith("/bus_halt/")) {
-      return `Bus Halt: ${decodeURIComponent(params.name || "")}`;
+    } else if (location.pathname.startsWith("/halt/")) {
+      return `Halt: ${decodeURIComponent(params.name || "")}`;
     } else if (location.pathname.startsWith("/map/")) {
       return "Map";
     }

@@ -17,7 +17,7 @@ export default function CustomBottomNavigator() {
       setValue("map");
     } else if (location.pathname.startsWith("/route/")) {
       setValue("routes");
-    } else if (location.pathname.startsWith("/bus_halt/")) {
+    } else if (location.pathname.startsWith("/halt/")) {
       setValue("halts");
     }
   }, [location.pathname]);
@@ -35,8 +35,8 @@ export default function CustomBottomNavigator() {
         navigate("/route");
         break;
       case "halts":
-        // Navigate to bus_halt (will auto-redirect to first bus halt)
-        navigate("/bus_halt");
+        // Navigate to halt (will auto-redirect to first halt)
+        navigate("/halt");
         break;
       default:
         break;

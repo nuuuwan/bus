@@ -4,16 +4,16 @@ This repository implements a discrete-event simulator for a commuter bus system.
 
 ## Core Entities & Architecture
 
-The system is built on a graph-based model where **Bus Halts** act as nodes and **Routes** define the edges and traversal logic.
+The system is built on a graph-based model where **Halts** act as nodes and **Routes** define the edges and traversal logic.
 
 ### /route/::routeNum
 
 A collection of ordered waypoints and halts.
 
 * **Properties:** `distance_km`, `estimated_travel_time`, `halt_sequence`.
-* **Logic:** For the moment, we assume `route_num` follows a fixed bidirectional path between a specific `start_bus_halt` and `end_bus_halt`.
+* **Logic:** For the moment, we assume `route_num` follows a fixed bidirectional path between a specific `start_halt` and `end_halt`.
 
-### /bus_halt/::name
+### /halt/::name
 
 A fixed geographical point where buses pick up and drop off passengers.
 

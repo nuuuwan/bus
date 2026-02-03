@@ -42,7 +42,7 @@ function MapController({ onMoveEnd }) {
 export default function MapView() {
   const params = useParams();
   const navigate = useNavigate();
-  const { routes, busHalts } = useData();
+  const { routes, halts } = useData();
   const defaultZoom = 13;
 
   // Parse latLng from URL params and use ref to keep initial center stable
@@ -70,7 +70,7 @@ export default function MapView() {
     return routes.map((route) => {
       const coordinates = [];
       for (const haltName of route.halt_name_list) {
-        const halt = busHalts.find((h) => h.name === haltName);
+        const halt = halts.find((h) => h.name === haltName);
         if (halt && halt.latlng) {
           // Ensure coordinates are in the correct format [lat, lng]
           const latLng = Array.isArray(halt.latlng)
@@ -81,7 +81,7 @@ export default function MapView() {
       }
       return { ...route, coordinates };
     });
-  }, [routes, busHalts]);
+  }, [routes, halts]);
 
   return (
     <Box sx={{ position: "relative", height: "100vh", width: "100%" }}>
@@ -114,8 +114,8 @@ export default function MapView() {
           ) : null;
         })}
 
-        {/* Render all bus halts as circles */}
-        {busHalts.map((halt, index) => {
+        {/* Render all halts as circles */}
+        {halts.map((halt, index) => {
           if (!halt.latLng) return null;
           const position = Array.isArray(halt.latLng)
             ? halt.latLng
@@ -131,7 +131,7 @@ export default function MapView() {
               weight={2}
               eventHandlers={{
                 click: () => {
-                  navigate(`/bus_halt/${encodeURIComponent(halt.name)}`);
+                  navigate(`/halt/${encodeURIComponent(halt.name)}`);
                 },
               }}
             />
