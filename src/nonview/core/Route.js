@@ -1,10 +1,12 @@
 import WWW from "../base/WWW";
 import LatLng from "../base/LatLng";
+import Halt from "./Halt";
+
 export default class Route {
-  constructor(routeNum, direction, haltNameList, latLngList) {
+  constructor(routeNum, direction, haltList, latLngList) {
     this.routeNum = routeNum;
     this.direction = direction;
-    this.haltNameList = haltNameList;
+    this.haltList = haltList;
     this.latLngList = latLngList;
   }
 
@@ -13,40 +15,28 @@ export default class Route {
   }
 
   hasHalt(halt) {
-    return this.haltNameList.includes(halt.name);
+    return this.haltList.includes(halt.name);
   }
 
   get id() {
     return Route.getId(this.routeNum, this.direction);
   }
 
-  static fromPythonDict(d) {
-    return new Route(
-      d.route_num,
-      d.direction,
-      d.halt_name_list,
-      d.latlng_list
-        ? d.latlng_list.map((latlng) => LatLng.fromTuple(latlng))
-        : [],
-    );
-  }
-
   static async listAll() {
+    const halts = await Halt.listAll();
     const urlSummaryList =
       "https://raw.githubusercontent.com/nuuuwan" +
-      "/bus_py/refs/heads/main/data/routes.summary.json";
-    const routeSummaryDList = await WWW.fetchJSON(urlSummaryList);
+      "/bus_py/refs/heads/main/data/routes.json";
+    const dList = await WWW.fetchJSON(urlSummaryList);
 
-    const routePromises = routeSummaryDList.map(async (dSummary) => {
-      const id = Route.getId(dSummary.route_num, dSummary.direction);
-      const urlDetails =
-        `https://raw.githubusercontent.com` +
-        `/nuuuwan/bus_py/refs/heads/main/data/routes` +
-        `/${id}.json`;
-      const d = await WWW.fetchJSON(urlDetails);
-      return Route.fromPythonDict(d);
+    return dList.map((d) => {
+      const haltList = d.halt_id_list.map((haltId) =>
+        halts.find((halt) => halt.id === haltId),
+      );
+      const latLngTuples = d.latlng_list || d.latlng_list_length; // HACK!
+      const latLngList = latLngTuples.map((tuple) => LatLng.fromTuple(tuple));
+      return new Route(d.route_num, d.direction, haltList, latLngList);
     });
-    return Promise.all(routePromises);
   }
 
   static async fromID(id) {

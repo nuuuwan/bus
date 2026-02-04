@@ -44,16 +44,16 @@ export default function RoutePage() {
             {selectedRoute.routeNum}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            Halts ({selectedRoute.haltNameList.length})
+            Halts ({selectedRoute.haltList.length})
           </Typography>
         </Paper>
         <Paper elevation={3}>
           <List>
-            {selectedRoute.haltNameList.map((halt, index) => (
+            {selectedRoute.haltList.map((halt, index) => (
               <ListItem
                 key={index}
                 component={Link}
-                to={`/halt/${encodeURIComponent(halt)}`}
+                to={`/halt/${encodeURIComponent(halt.id)}`}
                 sx={{
                   textDecoration: "none",
                   color: "inherit",
@@ -65,7 +65,7 @@ export default function RoutePage() {
                 <ListItemIcon>
                   <PlaceIcon />
                 </ListItemIcon>
-                <ListItemText primary={`${index + 1}. ${halt}`} />
+                <ListItemText primary={`${index + 1}. ${halt.name}`} />
               </ListItem>
             ))}
           </List>
