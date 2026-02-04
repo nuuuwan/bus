@@ -112,7 +112,19 @@ export default function MapView() {
             const distToClosest = currentLatLng.distanceTo(closest.latLng);
             return distToCurrent < distToClosest ? halt : closest;
           }, null)
-      : null;
+      : currentLatLng
+        ? halts
+            .filter(
+              (halt) =>
+                halt.latLng && routes.some((route) => route.hasHalt(halt)),
+            )
+            .reduce((closest, halt) => {
+              if (!closest) return halt;
+              const distToCurrent = currentLatLng.distanceTo(halt.latLng);
+              const distToClosest = currentLatLng.distanceTo(closest.latLng);
+              return distToCurrent < distToClosest ? halt : closest;
+            }, null)
+        : null;
 
   // Create dotted line coordinates
   const dottedLinePositions =
