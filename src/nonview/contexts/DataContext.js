@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, matchPath } from "react-router-dom";
 import Halt from "../core/Halt";
 import Route from "../core/Route";
+import LatLng from "../base/LatLng";
 
 const DataContext = createContext();
 
@@ -12,6 +13,7 @@ export function DataProvider({ children }) {
   const [error, setError] = useState(null);
   const [selectedHalt, setSelectedHalt] = useState(null);
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const [currentLatLng, setCurrentLatLng] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -61,11 +63,46 @@ export function DataProvider({ children }) {
     loadSelectedRoute();
   }, [location.pathname]);
 
+  useEffect(() => {
+    // Extract latLngId from any route pattern
+    const patterns = [
+      "/:latLngId",
+      "/:latLngId/routes",
+      "/:latLngId/route",
+      "/:latLngId/route/:routeId",
+      "/:latLngId/halts",
+      "/:latLngId/halt",
+      "/:latLngId/halt/:haltId",
+    ];
+
+    let latLngId = null;
+    for (const pattern of patterns) {
+      const match = matchPath(pattern, location.pathname);
+      if (match?.params?.latLngId) {
+        latLngId = match.params.latLngId;
+        break;
+      }
+    }
+
+    if (latLngId) {
+      try {
+        const latLng = LatLng.fromString(latLngId);
+        setCurrentLatLng(latLng);
+      } catch (err) {
+        console.error("Error parsing latLngId:", err);
+        setCurrentLatLng(null);
+      }
+    } else {
+      setCurrentLatLng(null);
+    }
+  }, [location.pathname]);
+
   const value = {
     halts,
     routes,
     selectedHalt,
     selectedRoute,
+    currentLatLng,
     loading,
     error,
   };
