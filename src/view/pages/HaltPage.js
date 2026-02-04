@@ -36,8 +36,6 @@ export default function HaltPage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
-        <HaltLink halt={selectedHalt} />
-
         {routesForHalt.length > 0 && (
           <Box>
             <Box>
