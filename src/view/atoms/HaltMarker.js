@@ -7,9 +7,8 @@ import { useData } from "../../nonview/contexts/DataContext";
 import HaltsPage from "../pages/HaltsPage";
 
 export default function HaltMarker({ halt }) {
-  const params = useParams();
   const navigate = useNavigate();
-  const { selectedHalt, selectedRoute, routes } = useData();
+  const { selectedHalt, selectedRoute, routes, currentLatLng } = useData();
 
   const isNotOnSelectedRoute = selectedRoute && !selectedRoute.hasHalt(halt);
   const isNotSelectedHalt = selectedHalt && selectedHalt.id !== halt.id;
@@ -39,8 +38,7 @@ export default function HaltMarker({ halt }) {
       icon={haltIcon}
       eventHandlers={{
         click: () => {
-          const latLng = params.latLngId || "";
-          navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
+          navigate(`/${currentLatLng.id}/halt/${encodeURIComponent(halt.id)}`);
         },
       }}
     />
