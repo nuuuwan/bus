@@ -69,7 +69,7 @@ export default function MapView() {
   const routesWithCoordinates = useMemo(() => {
     return routes.map((route) => {
       const coordinates = [];
-      for (const haltName of route.halt_name_list) {
+      for (const haltName of route.haltNameList) {
         const halt = halts.find((h) => h.name === haltName);
         if (halt && halt.latlng) {
           // Ensure coordinates are in the correct format [lat, lng]

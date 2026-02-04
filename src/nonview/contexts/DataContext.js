@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { useLocation, matchPath } from "react-router-dom";
-import WWW from "../base/WWW";
+import Halt from "../core/Halt";
+import Route from "../core/Route";
 
 const DataContext = createContext();
 
@@ -15,16 +16,12 @@ export function DataProvider({ children }) {
     async function loadData() {
       try {
         setLoading(true);
-        const [haltsData, routesData] = await Promise.all([
-          WWW.fetchJSON(
-            "https://raw.githubusercontent.com/nuuuwan/bus_py/refs/heads/main/data/halts.json",
-          ),
-          WWW.fetchJSON(
-            "https://raw.githubusercontent.com/nuuuwan/bus_py/refs/heads/main/data/routes.summary.json",
-          ),
+        const [halts, routes] = await Promise.all([
+          Halt.listAll(),
+          Route.listAll(),
         ]);
-        setHalts(haltsData);
-        setRoutes(routesData);
+        setHalts(halts);
+        setRoutes(routes);
         setError(null);
       } catch (err) {
         setError(err.message);
@@ -54,10 +51,10 @@ export function DataProvider({ children }) {
         (r) => r.route_num === decodeURIComponent(match.params.routeNum),
       );
       if (route) {
-        // Ensure halt_name_list is present and fallback to [] if missing
+        // Ensure haltNameList is present and fallback to [] if missing
         return {
           ...route,
-          halts: route.halt_name_list || [],
+          halts: route.haltNameList || [],
         };
       }
     }

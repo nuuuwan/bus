@@ -7,7 +7,7 @@ export default class Halt {
     this.latLng = latLng;
   }
   static fromPythonDict(d) {
-    return new Halt(d.name, LatLng.fromTuple(d.lat_lng));
+    return new Halt(d.name, LatLng.fromTuple(d.latlng));
   }
 
   static async listAll() {
