@@ -1,6 +1,5 @@
 import { Box, Typography, CircularProgress } from "@mui/material";
-import { useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -13,45 +12,38 @@ import HaltLink from "../moles/HaltLink";
 
 export default function RoutePage() {
   const { selectedRoute, currentLatLng, loading } = useData();
-  const navigate = useNavigate();
-  const params = useParams();
-  const hasPannedRef = useRef(false);
+  const closestHaltRef = useRef(null);
+  const [closestHaltIndex, setClosestHaltIndex] = useState(-1);
 
   // Find the closest halt to current location
-  let closestHaltIndex = -1;
-  let closestHaltId = null;
-  if (currentLatLng && selectedRoute && selectedRoute.haltList.length > 0) {
-    let minDistance = Infinity;
-    selectedRoute.haltList.forEach((halt, index) => {
-      if (halt.latLng) {
-        const distance = currentLatLng.distanceTo(halt.latLng);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestHaltIndex = index;
-          closestHaltId = halt.id;
+  useEffect(() => {
+    if (currentLatLng && selectedRoute && selectedRoute.haltList.length > 0) {
+      let minDistance = Infinity;
+      let closestIndex = -1;
+      selectedRoute.haltList.forEach((halt, index) => {
+        if (halt.latLng) {
+          const distance = currentLatLng.distanceTo(halt.latLng);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
         }
-      }
-    });
-  }
-
-  // Pan to closest halt when page opens or when closest halt changes
-  useEffect(() => {
-    if (selectedRoute && closestHaltId && !hasPannedRef.current) {
-      const closestHalt = selectedRoute.haltList.find(
-        (h) => h.id === closestHaltId,
-      );
-      if (closestHalt && closestHalt.latLng) {
-        const newLatLng = closestHalt.latLng.toString();
-        navigate(`/${newLatLng}/route/${params.routeId}`, { replace: true });
-        hasPannedRef.current = true;
-      }
+      });
+      setClosestHaltIndex(closestIndex);
     }
-  }, [closestHaltId, selectedRoute, navigate, params.routeId]);
+  }, [currentLatLng, selectedRoute]);
 
-  // Reset hasPannedRef when route changes
+  // Scroll to closest halt when it changes
   useEffect(() => {
-    hasPannedRef.current = false;
-  }, [params.routeId]);
+    if (closestHaltRef.current && closestHaltIndex >= 0) {
+      setTimeout(() => {
+        closestHaltRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
+    }
+  }, [closestHaltIndex]);
 
   if (loading) {
     return (
@@ -92,7 +84,7 @@ export default function RoutePage() {
           {selectedRoute.haltList.map((halt, index) => {
             const isClosest = index === closestHaltIndex;
             return (
-              <TimelineItem key={index}>
+              <TimelineItem key={index} ref={isClosest ? closestHaltRef : null}>
                 <TimelineSeparator>
                   {index > 0 && <TimelineConnector />}
                   <TimelineDot color={isClosest ? "primary" : "grey"}>
