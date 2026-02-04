@@ -48,9 +48,7 @@ export default function HaltPage() {
         <Paper elevation={3} sx={{ p: 3 }}>
           <Box display="flex" alignItems="center" gap={1} mb={1}>
             <PlaceIcon color="error" fontSize="large" />
-            <Typography variant="h5">
-              {selectedHalt.name}
-            </Typography>
+            <Typography variant="h5">{selectedHalt.name}</Typography>
           </Box>
           <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
             {selectedHalt.latLng.toString()}

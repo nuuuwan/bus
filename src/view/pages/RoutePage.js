@@ -43,9 +43,7 @@ export default function RoutePage() {
         <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
           <Box display="flex" alignItems="center" gap={1} mb={1}>
             <DirectionsBusIcon color="primary" fontSize="large" />
-            <Typography variant="h5">
-              {selectedRoute.routeNum}
-            </Typography>
+            <Typography variant="h5">{selectedRoute.routeNum}</Typography>
           </Box>
           <Typography variant="subtitle1" color="text.secondary" gutterBottom>
             Halts ({selectedRoute.haltList.length})
