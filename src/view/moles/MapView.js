@@ -141,19 +141,21 @@ export default function MapView() {
           />
         ))}
 
-        {halts.map((halt) => (
-          <Marker
-            key={halt.name}
-            position={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
-            icon={haltIcon}
-            eventHandlers={{
-              click: () => {
-                const latLng = params.latLngId || "";
-                navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
-              },
-            }}
-          />
-        ))}
+        {halts
+          .filter((halt) => routes.some((route) => route.hasHalt(halt)))
+          .map((halt) => (
+            <Marker
+              key={halt.name}
+              position={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
+              icon={haltIcon}
+              eventHandlers={{
+                click: () => {
+                  const latLng = params.latLngId || "";
+                  navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
+                },
+              }}
+            />
+          ))}
 
         <Crosshairs />
       </MapContainer>
