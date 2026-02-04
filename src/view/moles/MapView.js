@@ -1,21 +1,15 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import {
-  MapContainer,
-  TileLayer,
-  Polyline,
-  Marker,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import { Box, IconButton } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
-import PlaceIcon from "@mui/icons-material/Place";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { renderToStaticMarkup } from "react-dom/server";
 import LatLng from "../../nonview/base/LatLng";
 import { useData } from "../../nonview/contexts/DataContext";
 import Crosshairs, { CrosshairsOverlay } from "../atoms/Crosshairs";
+import RoutePolyline from "../atoms/RoutePolyline";
+import HaltMarker from "../atoms/HaltMarker";
 // Fix for default marker icons in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -65,27 +59,8 @@ export default function MapView() {
   const { routes, halts } = useData();
   const defaultZoom = 16;
 
-  // Check if we're on a route or halt page
+  // Check if we're on a halt page
   const selectedHaltId = params.haltId;
-  const isOnHaltPage = !!selectedHaltId;
-
-  // Create custom icon for halts
-  // If on halt page: selected = black, others = white
-  // If NOT on halt page: all = black
-  const createHaltIcon = (isSelected) => {
-    let color = "black"; // Default: black for all halts
-    if (isOnHaltPage && !isSelected) {
-      color = "white"; // Only show white for non-selected when on halt page
-    }
-    return L.divIcon({
-      className: "custom-halt-icon",
-      html: renderToStaticMarkup(
-        <PlaceIcon style={{ color, fontSize: "32px" }} />,
-      ),
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-    });
-  };
 
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
@@ -141,23 +116,9 @@ export default function MapView() {
         />
         <MapController onMoveEnd={handleMoveEnd} />
 
-        {routes.map((route) => {
-          return (
-            <Polyline
-              key={`${route.routeNum}-${route.direction}`}
-              positions={route.latLngList.map((latLng) => latLng.toArray())}
-              color={route.getColor()}
-              weight={3}
-              opacity={1}
-              eventHandlers={{
-                click: () => {
-                  const latLng = params.latLngId || "";
-                  navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`);
-                },
-              }}
-            />
-          );
-        })}
+        {routes.map((route) => (
+          <RoutePolyline key={route.id} route={route} />
+        ))}
 
         {halts
           .filter((halt) => routes.some((route) => route.hasHalt(halt)))
@@ -166,19 +127,7 @@ export default function MapView() {
               selectedHaltId === halt.id ||
               selectedHaltId === encodeURIComponent(halt.id);
             return (
-              <Marker
-                key={halt.name}
-                position={
-                  halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null
-                }
-                icon={createHaltIcon(isSelected)}
-                eventHandlers={{
-                  click: () => {
-                    const latLng = params.latLngId || "";
-                    navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
-                  },
-                }}
-              />
+              <HaltMarker key={halt.id} halt={halt} isSelected={isSelected} />
             );
           })}
 
