@@ -34,7 +34,14 @@ function App() {
       <CssBaseline />
       <BrowserRouter basename="/bus">
         <DataProvider>
-          <Box sx={{ position: "relative", height: "100vh" }}>
+          <Box
+            sx={{
+              position: "relative",
+              height: "100vh",
+              maxWidth: "640px",
+              margin: "auto",
+            }}
+          >
             <CustomAppBar />
             {/* Top half - Content area */}
             <Box

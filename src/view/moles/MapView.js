@@ -144,7 +144,9 @@ export default function MapView() {
         <MapController onMoveEnd={handleMoveEnd} />
 
         {routes.map((route) => {
-          const isSelected = selectedRouteId === encodeURIComponent(route.id);
+          const isSelected =
+            selectedRouteId === route.id ||
+            selectedRouteId === encodeURIComponent(route.id);
           // If on route page: selected = route color, others = white
           // If NOT on route page: all = their colors
           let color = route.getColor(); // Default: show route color
@@ -171,7 +173,9 @@ export default function MapView() {
         {halts
           .filter((halt) => routes.some((route) => route.hasHalt(halt)))
           .map((halt) => {
-            const isSelected = selectedHaltId === encodeURIComponent(halt.id);
+            const isSelected =
+              selectedHaltId === halt.id ||
+              selectedHaltId === encodeURIComponent(halt.id);
             return (
               <Marker
                 key={halt.name}

@@ -1,4 +1,6 @@
 import { Box, Typography, CircularProgress } from "@mui/material";
+import { useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -11,6 +13,45 @@ import HaltLink from "../moles/HaltLink";
 
 export default function RoutePage() {
   const { selectedRoute, currentLatLng, loading } = useData();
+  const navigate = useNavigate();
+  const params = useParams();
+  const hasPannedRef = useRef(false);
+
+  // Find the closest halt to current location
+  let closestHaltIndex = -1;
+  let closestHaltId = null;
+  if (currentLatLng && selectedRoute && selectedRoute.haltList.length > 0) {
+    let minDistance = Infinity;
+    selectedRoute.haltList.forEach((halt, index) => {
+      if (halt.latLng) {
+        const distance = currentLatLng.distanceTo(halt.latLng);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestHaltIndex = index;
+          closestHaltId = halt.id;
+        }
+      }
+    });
+  }
+
+  // Pan to closest halt when page opens or when closest halt changes
+  useEffect(() => {
+    if (selectedRoute && closestHaltId && !hasPannedRef.current) {
+      const closestHalt = selectedRoute.haltList.find(
+        (h) => h.id === closestHaltId,
+      );
+      if (closestHalt && closestHalt.latLng) {
+        const newLatLng = closestHalt.latLng.toString();
+        navigate(`/${newLatLng}/route/${params.routeId}`, { replace: true });
+        hasPannedRef.current = true;
+      }
+    }
+  }, [closestHaltId, selectedRoute, navigate, params.routeId]);
+
+  // Reset hasPannedRef when route changes
+  useEffect(() => {
+    hasPannedRef.current = false;
+  }, [params.routeId]);
 
   if (loading) {
     return (
@@ -31,21 +72,6 @@ export default function RoutePage() {
         <Typography variant="h5">Route not found</Typography>
       </Box>
     );
-  }
-
-  // Find the closest halt to current location
-  let closestHaltIndex = -1;
-  if (currentLatLng && selectedRoute.haltList.length > 0) {
-    let minDistance = Infinity;
-    selectedRoute.haltList.forEach((halt, index) => {
-      if (halt.latLng) {
-        const distance = currentLatLng.distanceTo(halt.latLng);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestHaltIndex = index;
-        }
-      }
-    });
   }
 
   return (
