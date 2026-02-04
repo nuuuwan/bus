@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
 import { Box, IconButton } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import "leaflet/dist/leaflet.css";
@@ -56,7 +56,8 @@ export default function MapView() {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { routes, halts } = useData();
+  const { routes, halts, selectedHalt, selectedRoute, currentLatLng } =
+    useData();
   const defaultZoom = 16;
 
   // Parse latLng from URL params and use ref to keep initial center stable
@@ -99,6 +100,26 @@ export default function MapView() {
     }
   }, [navigate]);
 
+  // Calculate the target halt for the dotted line
+  const targetHalt = selectedHalt
+    ? selectedHalt
+    : selectedRoute && currentLatLng
+      ? selectedRoute.haltList
+          .filter((halt) => halt.latLng)
+          .reduce((closest, halt) => {
+            if (!closest) return halt;
+            const distToCurrent = currentLatLng.distanceTo(halt.latLng);
+            const distToClosest = currentLatLng.distanceTo(closest.latLng);
+            return distToCurrent < distToClosest ? halt : closest;
+          }, null)
+      : null;
+
+  // Create dotted line coordinates
+  const dottedLinePositions =
+    targetHalt && currentLatLng && targetHalt.latLng
+      ? [currentLatLng.toArray(), targetHalt.latLng.toArray()]
+      : null;
+
   return (
     <Box sx={{ position: "relative", height: "100%", width: "100%" }}>
       <MapContainer
@@ -122,6 +143,16 @@ export default function MapView() {
           .map((halt) => (
             <HaltMarker key={halt.id} halt={halt} />
           ))}
+
+        {dottedLinePositions && (
+          <Polyline
+            positions={dottedLinePositions}
+            color="black"
+            weight={2}
+            opacity={0.7}
+            dashArray="5, 10"
+          />
+        )}
 
         <Crosshairs />
       </MapContainer>
