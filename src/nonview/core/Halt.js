@@ -7,6 +7,10 @@ export default class Halt {
     this.latLng = latLng;
   }
 
+  get displayName() {
+    return this.name.replace(" Bus Stop", "");
+  }
+
   get nameKebabCase() {
     return this.name.toLowerCase().replace(/\s+/g, "-");
   }
