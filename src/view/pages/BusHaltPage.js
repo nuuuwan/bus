@@ -14,7 +14,6 @@ import { useData } from "../../nonview/contexts/DataContext";
 
 export default function BusHaltPage() {
   const { selectedHalt, routes, loading } = useData();
-  console.debug(selectedHalt);
 
   // Find all routes that include this bus halt
   const routesForHalt = selectedHalt

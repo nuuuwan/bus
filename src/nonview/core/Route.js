@@ -15,7 +15,7 @@ export default class Route {
   }
 
   hasHalt(halt) {
-    return this.haltList.includes(halt.name);
+    return this.haltList.map((h) => h.id).includes(halt.id);
   }
 
   get id() {
@@ -30,9 +30,9 @@ export default class Route {
     const dList = await WWW.fetchJSON(urlSummaryList);
 
     return dList.map((d) => {
-      const haltList = d.halt_id_list.map((haltId) =>
-        halts.find((halt) => halt.id === haltId),
-      );
+      const haltList = d.halt_id_list
+        .map((haltId) => halts.find((halt) => halt.id === haltId))
+        .filter((halt) => halt !== undefined);
       const latLngTuples = d.latlng_list || d.latlng_list_length; // HACK!
       const latLngList = latLngTuples.map((tuple) => LatLng.fromTuple(tuple));
       return new Route(d.route_num, d.direction, haltList, latLngList);
