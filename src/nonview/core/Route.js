@@ -22,6 +22,17 @@ export default class Route {
     return Route.getId(this.routeNum, this.direction);
   }
 
+  getColor() {
+    return (
+      {
+        10: "yellow",
+        13: "orange",
+        14: "blue",
+        15: "red",
+        17: "green",
+      }[this.routeNum.substring(0, 2)] || "gray"
+    );
+  }
   static async listAll() {
     const halts = await Halt.listAll();
     const urlSummaryList =

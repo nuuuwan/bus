@@ -78,7 +78,7 @@ export default function MapView() {
   const routePositions = useMemo(() => {
     return routes.map((route) => ({
       key: `${route.routeNum}-${route.direction}`,
-      positions: route.latLngList.map((latLng) => [latLng.lat, latLng.lng]),
+      positions: route.latLngList.map((latLng) => latLng.toArray()),
       route,
     }));
   }, [routes]);
@@ -102,9 +102,9 @@ export default function MapView() {
             <Polyline
               key={key}
               positions={positions}
-              color="blue"
-              weight={5}
-              opacity={0.5}
+              color={route.getColor()}
+              weight={3}
+              opacity={1}
               eventHandlers={{
                 click: () => {
                   navigate(`/route/${encodeURIComponent(route.id)}`);
