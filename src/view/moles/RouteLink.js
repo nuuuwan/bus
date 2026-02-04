@@ -14,7 +14,7 @@ const getDirectionIcon = (direction) => {
   return null;
 };
 
-export default function RouteView({ route }) {
+export default function RouteLink({ route }) {
   const directionIcon = getDirectionIcon(route.direction);
 
   return (

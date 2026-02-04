@@ -9,8 +9,8 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import PlaceIcon from "@mui/icons-material/Place";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
-import RouteView from "../moles/RouteView";
-import HaltView from "../moles/HaltView";
+import RouteLink from "../moles/RouteLink";
+import HaltLink from "../moles/HaltLink";
 
 export default function RoutePage() {
   const { selectedRoute, loading } = useData();
@@ -39,7 +39,7 @@ export default function RoutePage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
-        <RouteView route={selectedRoute} />
+        <RouteLink route={selectedRoute} />
 
         <Timeline position="right">
           {selectedRoute.haltList.map((halt, index) => (
@@ -66,7 +66,7 @@ export default function RoutePage() {
                   to={`/halt/${encodeURIComponent(halt.id)}`}
                   style={{ textDecoration: "none" }}
                 >
-                  <HaltView halt={halt} />
+                  <HaltLink halt={halt} />
                 </Link>
               </TimelineContent>
             </TimelineItem>

@@ -1,8 +1,8 @@
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
-import HaltView from "../moles/HaltView";
-import RouteView from "../moles/RouteView";
+import HaltLink from "../moles/HaltLink";
+import RouteLink from "../moles/RouteLink";
 
 export default function HaltPage() {
   const { selectedHalt, routes, loading } = useData();
@@ -36,7 +36,7 @@ export default function HaltPage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
-        <HaltView halt={selectedHalt} />
+        <HaltLink halt={selectedHalt} />
 
         {routesForHalt.length > 0 && (
           <Box>
@@ -47,7 +47,7 @@ export default function HaltPage() {
                   to={`/route/${encodeURIComponent(route.id)}`}
                   style={{ textDecoration: "none" }}
                 >
-                  <RouteView route={route} />
+                  <RouteLink route={route} />
                 </Link>
               ))}
             </Box>

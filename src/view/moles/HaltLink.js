@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import PlaceIcon from "@mui/icons-material/Place";
 
-export default function HaltView({ halt }) {
+export default function HaltLink({ halt }) {
   return (
     <Box
       display="flex"
