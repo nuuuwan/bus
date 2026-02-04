@@ -44,7 +44,7 @@ export default class Route {
       "/bus_py/refs/heads/main/data/routes.json";
     const dList = await WWW.fetchJSON(urlSummaryList);
 
-    return dList.map((d) => {
+    const routes = dList.map((d) => {
       const haltList = d.halt_id_list
         .map((haltId) => halts.find((halt) => halt.id === haltId))
         .filter((halt) => halt !== undefined);
@@ -52,6 +52,8 @@ export default class Route {
       const latLngList = latLngTuples.map((tuple) => LatLng.fromTuple(tuple));
       return new Route(d.route_num, d.direction, haltList, latLngList);
     });
+
+    return routes.sort((a, b) => a.id.localeCompare(b.id));
   }
 
   static async fromID(id) {

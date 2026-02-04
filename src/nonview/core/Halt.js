@@ -27,7 +27,8 @@ export default class Halt {
     const url =
       "https://raw.githubusercontent.com/nuuuwan/bus_py/refs/heads/main/data/halts.json";
     const haltDicts = await WWW.fetchJSON(url);
-    return haltDicts.map((obj) => Halt.fromPythonDict(obj));
+    const halts = haltDicts.map((obj) => Halt.fromPythonDict(obj));
+    return halts.sort((a, b) => a.id.localeCompare(b.id));
   }
 
   static async fromID(id) {
