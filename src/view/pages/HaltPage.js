@@ -47,7 +47,7 @@ export default function HaltPage() {
       <Box width="100%" overflow="auto" p={2}>
         <Paper elevation={3} sx={{ p: 3 }}>
           <Box display="flex" alignItems="center" gap={1} mb={1}>
-            <PlaceIcon color="error" fontSize="large" />
+            <PlaceIcon fontSize="large" />
             <Typography variant="h5">{selectedHalt.name}</Typography>
           </Box>
           <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
