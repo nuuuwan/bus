@@ -15,7 +15,7 @@ export default class LatLng {
   }
 
   static fromString(latLngString) {
-    const [latPart, lngPart] = latLngString.split(",");
+    const [latPart, lngPart] = latLngString.split("-");
 
     let lat = parseFloat(latPart);
     if (latPart.endsWith("S")) {
@@ -59,7 +59,7 @@ export default class LatLng {
     const lngAbs = Math.abs(this.lng).toFixed(4);
     const latDir = this.lat >= 0 ? "N" : "S";
     const lngDir = this.lng >= 0 ? "E" : "W";
-    return `${latAbs}${latDir},${lngAbs}${lngDir}`;
+    return `${latAbs}${latDir}-${lngAbs}${lngDir}`;
   }
 
   toArray() {
