@@ -21,4 +21,9 @@ export default class Halt {
     const haltDicts = await WWW.fetchJSON(url);
     return haltDicts.map((obj) => Halt.fromPythonDict(obj));
   }
+
+  static async fromID(id) {
+    const halts = await Halt.listAll();
+    return halts.find((halt) => halt.id === id);
+  }
 }
