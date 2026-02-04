@@ -5,6 +5,8 @@ import SouthIcon from "@mui/icons-material/South";
 import EastIcon from "@mui/icons-material/East";
 import WestIcon from "@mui/icons-material/West";
 import { Link, useLocation } from "react-router-dom";
+import { useData } from "../../nonview/contexts/DataContext";
+import Distance from "../atoms/Distance";
 
 const getDirectionIcon = (direction) => {
   const dir = direction?.toLowerCase() || "";
@@ -17,11 +19,22 @@ const getDirectionIcon = (direction) => {
 
 export default function RouteLink({ route }) {
   const location = useLocation();
+  const { currentLatLng } = useData();
   const directionIcon = getDirectionIcon(route.direction);
 
   // Extract latLng from current pathname
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
+
+  // Calculate distance to closest halt on this route
+  const closestDistanceKm =
+    currentLatLng && route.haltList.length > 0
+      ? Math.min(
+          ...route.haltList
+            .filter((halt) => halt.latLng)
+            .map((halt) => currentLatLng.distanceTo(halt.latLng)),
+        )
+      : null;
 
   return (
     <Link
@@ -46,6 +59,7 @@ export default function RouteLink({ route }) {
           {directionIcon}
           <Typography variant="body2">{route.direction}</Typography>
         </Box>
+        <Distance distanceKm={closestDistanceKm} />
       </Box>
     </Link>
   );

@@ -69,4 +69,19 @@ export default class LatLng {
   toArray() {
     return [this.lat, this.lng];
   }
+
+  // Calculate distance to another LatLng in kilometers using Haversine formula
+  distanceTo(other) {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = ((other.lat - this.lat) * Math.PI) / 180;
+    const dLng = ((other.lng - this.lng) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((this.lat * Math.PI) / 180) *
+        Math.cos((other.lat * Math.PI) / 180) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
 }
