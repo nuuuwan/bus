@@ -75,9 +75,14 @@ export default function HaltPage() {
                   }}
                 >
                   <ListItemIcon>
-                    <DirectionsBusIcon />
+                    <DirectionsBusIcon sx={{ color: route.getColor() }} />
                   </ListItemIcon>
-                  <ListItemText primary={route.id} />
+                  <ListItemText
+                    primary={route.id}
+                    primaryTypographyProps={{
+                      sx: { color: route.getColor(), fontWeight: 600 },
+                    }}
+                  />
                 </ListItem>
               ))}
             </List>

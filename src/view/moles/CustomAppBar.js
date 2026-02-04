@@ -16,9 +16,11 @@ export default function CustomAppBar() {
 
   const getTitle = () => {
     if (location.pathname.startsWith("/route/")) {
+      const color = selectedRoute ? selectedRoute.getColor() : undefined;
       return {
-        icon: <DirectionsBusIcon />,
+        icon: <DirectionsBusIcon sx={{ color }} />,
         text: selectedRoute ? selectedRoute.routeNum : params.id || "",
+        color,
       };
     } else if (location.pathname.startsWith("/halt/")) {
       return {
@@ -50,7 +52,11 @@ export default function CustomAppBar() {
       <Toolbar>
         <Box display="flex" alignItems="center" gap={1} sx={{ flexGrow: 1 }}>
           {title.icon}
-          <Typography variant="h6" component="div">
+          <Typography
+            variant="h6"
+            component="div"
+            sx={title.color ? { color: title.color } : undefined}
+          >
             {title.text}
           </Typography>
         </Box>

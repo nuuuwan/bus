@@ -25,10 +25,10 @@ export default class Route {
   getColor() {
     return (
       {
-        10: "yellow",
-        13: "orange",
+        10: "orange",
+        13: "red",
         14: "blue",
-        15: "red",
+        15: "brown",
         17: "green",
       }[this.routeNum.substring(0, 2)] || "gray"
     );
