@@ -1,11 +1,9 @@
-import { Marker } from "react-leaflet";
+import { CircleMarker } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
-import L from "leaflet";
-import { renderToStaticMarkup } from "react-dom/server";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useData } from "../../nonview/contexts/DataContext";
 
 export default function HaltMarker({ halt }) {
+  const RADIUS = 6;
   const navigate = useNavigate();
   const { selectedHalt, selectedRoute, routes, currentLatLng } = useData();
 
@@ -14,27 +12,21 @@ export default function HaltMarker({ halt }) {
   const isNotSelected = isNotOnSelectedRoute || isNotSelectedHalt;
 
   const routesWithHalt = routes.filter((route) => route.hasHalt(halt));
-  let color = "black";
-  if (routesWithHalt.length === 1) {
-    color = routesWithHalt[0].getColor();
-  }
+  const colors = routesWithHalt.map((route) => route.getColor());
+  const uniqueColors = [...new Set(colors)];
+  const color = uniqueColors.length === 1 ? uniqueColors[0] : "gray";
 
   const opacity = isNotSelected ? 0.1 : 1.0;
 
-  const haltIcon = L.divIcon({
-    className: "custom-halt-icon",
-    html: renderToStaticMarkup(
-      <StopCircleIcon style={{ color, fontSize: "32px", opacity }} />,
-    ),
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-  });
-
   return (
-    <Marker
-      key={halt.name}
-      position={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
-      icon={haltIcon}
+    <CircleMarker
+      center={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
+      radius={RADIUS}
+      fillColor="white"
+      fillOpacity={opacity}
+      color={color}
+      weight={RADIUS / 2}
+      opacity={opacity}
       eventHandlers={{
         click: () => {
           navigate(`/${currentLatLng.id}/halt/${encodeURIComponent(halt.id)}`);
