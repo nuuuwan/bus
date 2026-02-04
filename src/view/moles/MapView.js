@@ -24,17 +24,33 @@ L.Icon.Default.mergeOptions({
 
 function MapController({ onMoveEnd }) {
   const map = useMap();
+  const { latLngId } = useParams();
 
+  // Handle URL changes (like "Current Location" button)
   useEffect(() => {
-    map.on("moveend", () => {
-      const mapCenter = map.getCenter();
-      const newLatLng = new LatLng(mapCenter.lat, mapCenter.lng);
-      onMoveEnd(newLatLng);
-    });
+    if (latLngId) {
+      const latLng = LatLng.fromString(latLngId);
+      const currentCenter = map.getCenter();
 
-    return () => {
-      map.off("moveend");
+      // Only fly if the URL is significantly different from the current view
+      if (
+        currentCenter.lat !== latLng.lat ||
+        currentCenter.lng !== latLng.lng
+      ) {
+        map.setView([latLng.lat, latLng.lng], map.getZoom());
+      }
+    }
+  }, [latLngId, map]);
+
+  // Handle User Drags
+  useEffect(() => {
+    const onMapMove = () => {
+      const center = map.getCenter();
+      onMoveEnd(new LatLng(center.lat, center.lng));
     };
+
+    map.on("moveend", onMapMove);
+    return () => map.off("moveend", onMapMove);
   }, [map, onMoveEnd]);
 
   return null;
