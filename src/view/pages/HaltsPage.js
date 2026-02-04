@@ -22,7 +22,7 @@ export default function HaltsPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [sortedHalts]);
+  }, [currentLatLng]);
 
   if (loading) {
     return (
