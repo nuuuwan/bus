@@ -19,19 +19,6 @@ export default function HaltLink({ halt }) {
   // Find routes that serve this halt
   const servingRoutes = routes.filter((route) => route.hasHalt(halt));
 
-  // Calculate opacity based on walking time at 4 kmph
-  // < 10 min (~0.67 km): opacity = 1
-  // 10 min to 1 hr (0.67-4 km): opacity = 0.67
-  // > 1 hr (>4 km): opacity = 0.33
-  let opacity = 1;
-  if (distanceKm) {
-    if (distanceKm > 4) {
-      opacity = 0.33;
-    } else if (distanceKm >= 0.667) {
-      opacity = 0.67;
-    }
-  }
-
   return (
     <Link
       to={`/${latLng}/halt/${encodeURIComponent(halt.id)}`}
@@ -43,7 +30,6 @@ export default function HaltLink({ halt }) {
           px: 2,
           borderBottom: "1px solid",
           borderColor: "divider",
-          opacity,
         }}
       >
         <Typography variant="body1">{halt.displayName}</Typography>
