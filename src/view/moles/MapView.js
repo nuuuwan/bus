@@ -121,10 +121,10 @@ export default function MapView() {
               key={key}
               center={position}
               radius={5}
-              fillColor="red"
-              fillOpacity={0.8}
-              color="darkred"
-              weight={2}
+              fillColor="white"
+              fillOpacity={1}
+              color="black"
+              weight={3}
               eventHandlers={{
                 click: () => {
                   navigate(`/halt/${encodeURIComponent(halt.id)}`);
