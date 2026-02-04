@@ -2,10 +2,11 @@ import { Box, Typography } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import Distance from "../atoms/Distance";
+import RouteIcon from "../atoms/RouteIcon";
 
 export default function HaltLink({ halt }) {
   const location = useLocation();
-  const { currentLatLng } = useData();
+  const { currentLatLng, routes } = useData();
 
   // Extract latLng from current pathname
   const match = location.pathname.match(/^\/([^/]+)/);
@@ -14,6 +15,9 @@ export default function HaltLink({ halt }) {
   // Calculate distance if currentLatLng is available
   const distanceKm =
     currentLatLng && halt.latLng ? currentLatLng.distanceTo(halt.latLng) : null;
+
+  // Find routes that serve this halt
+  const servingRoutes = routes.filter((route) => route.hasHalt(halt));
 
   // Calculate opacity based on walking time at 4 kmph
   // < 10 min (~0.67 km): opacity = 1
@@ -36,6 +40,13 @@ export default function HaltLink({ halt }) {
       <Box sx={{ py: 1, px: 2, opacity }}>
         <Typography variant="body1">{halt.displayName}</Typography>
         <Distance distanceKm={distanceKm} />
+        {servingRoutes.length > 0 && (
+          <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
+            {servingRoutes.map((route) => (
+              <RouteIcon key={route.id} route={route} />
+            ))}
+          </Box>
+        )}
       </Box>
     </Link>
   );
