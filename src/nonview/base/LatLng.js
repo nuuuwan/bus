@@ -10,10 +10,13 @@ export default class LatLng {
     return new LatLng(LatLng.DEFAULT_COLOMBO.lat, LatLng.DEFAULT_COLOMBO.lng);
   }
 
+  static fromTuple(latLngTuple) {
+    return new LatLng(latLngTuple[0], latLngTuple[1]);
+  }
+
   static fromString(latLngString) {
     const [latPart, lngPart] = latLngString.split(",");
 
-    // Parse latitude
     let lat = parseFloat(latPart);
     if (latPart.endsWith("S")) {
       lat = -Math.abs(lat);
@@ -21,7 +24,6 @@ export default class LatLng {
       lat = Math.abs(lat);
     }
 
-    // Parse longitude
     let lng = parseFloat(lngPart);
     if (lngPart.endsWith("W")) {
       lng = -Math.abs(lng);
