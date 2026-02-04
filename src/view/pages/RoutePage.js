@@ -4,7 +4,6 @@ import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import PlaceIcon from "@mui/icons-material/Place";
 import { Link } from "react-router-dom";
@@ -38,22 +37,25 @@ export default function RoutePage() {
 
   return (
     <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto" p={2}>
+      <Box width="100%" overflow="auto" p={1}>
         <RouteLink route={selectedRoute} />
 
-        <Timeline position="right">
+        <Timeline
+          position="right"
+          sx={{
+            padding: 0,
+            margin: 0,
+            "& .MuiTimelineItem-root": {
+              "&:before": {
+                display: "none",
+              },
+            },
+          }}
+        >
           {selectedRoute.haltList.map((halt, index) => (
             <TimelineItem key={index}>
-              <TimelineOppositeContent
-                sx={{ m: "auto 0" }}
-                align="right"
-                variant="body2"
-                color="text.secondary"
-              >
-                {index + 1}
-              </TimelineOppositeContent>
               <TimelineSeparator>
-                <TimelineConnector />
+                {index > 0 && <TimelineConnector />}
                 <TimelineDot>
                   <PlaceIcon fontSize="small" />
                 </TimelineDot>
@@ -61,7 +63,7 @@ export default function RoutePage() {
                   <TimelineConnector />
                 )}
               </TimelineSeparator>
-              <TimelineContent sx={{ py: "12px", px: 2 }}>
+              <TimelineContent>
                 <Link
                   to={`/halt/${encodeURIComponent(halt.id)}`}
                   style={{ textDecoration: "none" }}
