@@ -7,8 +7,12 @@ export default class Halt {
     this.latLng = latLng;
   }
 
+  get nameKebabCase() {
+    return this.name.toLowerCase().replace(/\s+/g, "-");
+  }
+
   get id() {
-    return `${this.name}-${this.latLng.id}`;
+    return `${this.nameKebabCase}-${this.latLng.id}`;
   }
 
   static fromPythonDict(d) {
