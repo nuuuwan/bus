@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   MapContainer,
@@ -65,24 +65,6 @@ export default function MapView() {
     [params.latLng, navigate],
   );
 
-  // Convert route names to coordinates - memoized to prevent recreation
-  const routesWithCoordinates = useMemo(() => {
-    return routes.map((route) => {
-      const coordinates = [];
-      for (const haltName of route.haltNameList) {
-        const halt = halts.find((h) => h.name === haltName);
-        if (halt && halt.latlng) {
-          // Ensure coordinates are in the correct format [lat, lng]
-          const latLng = Array.isArray(halt.latlng)
-            ? halt.latlng
-            : [halt.latlng.lat, halt.latlng.lng];
-          coordinates.push(latLng);
-        }
-      }
-      return { ...route, coordinates };
-    });
-  }, [routes, halts]);
-
   return (
     <Box sx={{ position: "relative", height: "100vh", width: "100%" }}>
       <MapContainer
@@ -96,12 +78,11 @@ export default function MapView() {
         />
         <MapController onMoveEnd={handleMoveEnd} />
 
-        {/* Render all routes */}
-        {routesWithCoordinates.map((route) => {
-          return route.coordinates.length > 0 ? (
+        {routes.map((route, iRoute) => {
+          return (
             <Polyline
-              key={route.route_num}
-              positions={route.coordinates}
+              key={iRoute}
+              positions={route.latLngList}
               color="blue"
               weight={5}
               opacity={0.5}
@@ -111,18 +92,17 @@ export default function MapView() {
                 },
               }}
             />
-          ) : null;
+          );
         })}
 
-        {/* Render all halts as circles */}
-        {halts.map((halt, index) => {
+        {halts.map((halt, iHalt) => {
           if (!halt.latLng) return null;
           const position = Array.isArray(halt.latLng)
             ? halt.latLng
             : [halt.latLng.lat, halt.latLng.lng];
           return (
             <CircleMarker
-              key={halt.name}
+              key={iHalt}
               center={position}
               radius={5}
               fillColor="red"
