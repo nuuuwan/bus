@@ -11,22 +11,24 @@ export default function HaltMarker({ halt }) {
   const isNotSelectedHalt = selectedHalt && selectedHalt.id !== halt.id;
   const isNotSelected = isNotOnSelectedRoute || isNotSelectedHalt;
 
+  if (isNotSelected) {
+    return null;
+  }
+
   const routesWithHalt = routes.filter((route) => route.hasHalt(halt));
   const colors = routesWithHalt.map((route) => route.getColor());
   const uniqueColors = [...new Set(colors)];
   const color = uniqueColors.length === 1 ? uniqueColors[0] : "gray";
-
-  const opacity = isNotSelected ? 0.1 : 1.0;
 
   return (
     <CircleMarker
       center={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
       radius={RADIUS}
       fillColor="white"
-      fillOpacity={opacity}
+      fillOpacity={1}
       color={color}
       weight={RADIUS / 2}
-      opacity={opacity}
+      opacity={1}
       eventHandlers={{
         click: () => {
           navigate(`/${currentLatLng.id}/halt/${encodeURIComponent(halt.id)}`);
