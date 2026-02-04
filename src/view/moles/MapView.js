@@ -150,21 +150,21 @@ export default function MapView() {
           <RoutePolyline key={route.id} route={route} />
         ))}
 
+        {dottedLinePositions && (
+          <Polyline
+            positions={dottedLinePositions}
+            color="black"
+            weight={3}
+            opacity={1}
+            dashArray="5, 8"
+          />
+        )}
+
         {halts
           .filter((halt) => routes.some((route) => route.hasHalt(halt)))
           .map((halt) => (
             <HaltMarker key={halt.id} halt={halt} />
           ))}
-
-        {dottedLinePositions && (
-          <Polyline
-            positions={dottedLinePositions}
-            color="black"
-            weight={2}
-            opacity={0.7}
-            dashArray="5, 10"
-          />
-        )}
 
         <Crosshairs />
       </MapContainer>
