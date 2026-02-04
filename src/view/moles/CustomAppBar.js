@@ -30,9 +30,11 @@ export default function CustomAppBar() {
           : decodeURIComponent(params.id || ""),
       };
     } else if (location.pathname.startsWith("/map/")) {
+      const latLngMatch = location.pathname.match(/^\/map\/(.+)$/);
+      const latLng = latLngMatch ? decodeURIComponent(latLngMatch[1]) : null;
       return {
         icon: <MapIcon />,
-        text: "Map",
+        text: latLng || "Map",
       };
     }
     return {
