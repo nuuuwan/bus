@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   MapContainer,
@@ -11,7 +11,7 @@ import { Box, IconButton } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import PlaceIcon from "@mui/icons-material/Place";
 import "leaflet/dist/leaflet.css";
-import L, { latLng } from "leaflet";
+import L from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 import LatLng from "../../nonview/base/LatLng";
 import { useData } from "../../nonview/contexts/DataContext";
