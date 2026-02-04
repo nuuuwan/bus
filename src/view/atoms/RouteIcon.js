@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 
 export default function RouteIcon({ route }) {
   const directionLetter = route.direction
@@ -17,6 +18,7 @@ export default function RouteIcon({ route }) {
         color: route.getColor(),
       }}
     >
+      <DirectionsBusIcon sx={{ fontSize: 12 }} />
       <Typography variant="caption">
         {route.routeNum + directionLetter}
       </Typography>
