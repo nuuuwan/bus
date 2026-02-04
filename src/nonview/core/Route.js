@@ -44,4 +44,9 @@ export default class Route {
     });
     return Promise.all(routePromises);
   }
+
+  static async fromID(id) {
+    const routes = await Route.listAll();
+    return routes.find((route) => route.id === id);
+  }
 }
