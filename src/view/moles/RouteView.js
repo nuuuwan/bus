@@ -11,9 +11,6 @@ export default function RouteView({ route }) {
         </Typography>
         <Typography variant="h6">{route.direction}</Typography>
       </Box>
-      <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-        Halts ({route.haltList.length})
-      </Typography>
     </Paper>
   );
 }
