@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
@@ -61,6 +61,7 @@ function MapController({ onMoveEnd }) {
 export default function MapView() {
   const params = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { routes, halts } = useData();
   const defaultZoom = 16;
 
@@ -101,10 +102,13 @@ export default function MapView() {
 
       // Only update if the latLng has changed
       if (currentLatLng !== newLatLngString) {
-        navigate(`/${newLatLngString}`, { replace: true });
+        // Preserve the current route structure (e.g., /halts, /routes, /route/123, /halt/456)
+        // Extract everything after the latLngId
+        const pathSuffix = location.pathname.replace(/^\/[^/]+/, "");
+        navigate(`/${newLatLngString}${pathSuffix}`, { replace: true });
       }
     },
-    [params.latLngId, navigate],
+    [params.latLngId, location.pathname, navigate],
   );
 
   const handleCurrentLocation = useCallback(() => {
