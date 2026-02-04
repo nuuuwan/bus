@@ -23,7 +23,9 @@ export default function CustomAppBar() {
     } else if (location.pathname.startsWith("/halt/")) {
       return {
         icon: <PlaceIcon />,
-        text: selectedHalt ? selectedHalt.name : decodeURIComponent(params.id || ""),
+        text: selectedHalt
+          ? selectedHalt.name
+          : decodeURIComponent(params.id || ""),
       };
     } else if (location.pathname.startsWith("/map/")) {
       return {

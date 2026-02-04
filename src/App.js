@@ -13,6 +13,14 @@ import RoutePage from "./view/pages/RoutePage";
 import HaltPage from "./view/pages/HaltPage";
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#616161",
+    },
+    secondary: {
+      main: "#9e9e9e",
+    },
+  },
   typography: {
     fontFamily: ["Ubuntu Mono", "monospace"].join(","),
   },
