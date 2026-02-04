@@ -9,9 +9,9 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import PlaceIcon from "@mui/icons-material/Place";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
+import RouteView from "../moles/RouteView";
 
 export default function RoutePage() {
   const { selectedRoute, loading } = useData();
@@ -40,21 +40,7 @@ export default function RoutePage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
-        <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
-          <Box display="flex" alignItems="center" gap={1} mb={1}>
-            <DirectionsBusIcon
-              fontSize="large"
-              sx={{ color: selectedRoute.getColor() }}
-            />
-            <Typography variant="h4" sx={{ color: selectedRoute.getColor() }}>
-              {selectedRoute.routeNum}
-            </Typography>
-            <Typography variant="h6">{selectedRoute.direction}</Typography>
-          </Box>
-          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            Halts ({selectedRoute.haltList.length})
-          </Typography>
-        </Paper>
+        <RouteView route={selectedRoute} />
         <Paper elevation={3}>
           <List>
             {selectedRoute.haltList.map((halt, index) => (
