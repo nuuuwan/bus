@@ -5,21 +5,17 @@ import { useData } from "../../nonview/contexts/DataContext";
 export default function RoutePolyline({ route }) {
   const params = useParams();
   const navigate = useNavigate();
-  const { selectedRoute } = useData();
-  const isNotSelected = selectedRoute && selectedRoute?.id !== route.id;
+  const { selectedRoute, selectedHalt } = useData();
+  const isNotSelectedRoute = selectedRoute && selectedRoute.id !== route.id;
+  const isNotHaveSelectedHalt = selectedHalt && !route.hasHalt(selectedHalt);
+  const isNotSelected = isNotSelectedRoute || isNotHaveSelectedHalt;
 
-  let color = route.getColor();
-  let opacity = 1.0;
-  if (isNotSelected) {
-    color = "white";
-    opacity = 0.25;
-  }
-
+  const opacity = isNotSelected ? 0.05 : 1.0;
   return (
     <Polyline
       key={`${route.routeNum}-${route.direction}`}
       positions={route.latLngList.map((latLng) => latLng.toArray())}
-      color={color}
+      color={route.getColor()}
       weight={3}
       opacity={opacity}
       eventHandlers={{
