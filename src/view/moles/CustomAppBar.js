@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
-import PlaceIcon from "@mui/icons-material/Place";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import MapIcon from "@mui/icons-material/Map";
 import { useData } from "../../nonview/contexts/DataContext";
 
@@ -25,7 +25,7 @@ export default function CustomAppBar() {
     // Check for halts list page
     else if (location.pathname.includes("/halts")) {
       return {
-        icon: <PlaceIcon />,
+        icon: <StopCircleIcon />,
         text: "Halts",
       };
     }
@@ -39,7 +39,7 @@ export default function CustomAppBar() {
       };
     } else if (location.pathname.includes("/halt/")) {
       return {
-        icon: <PlaceIcon />,
+        icon: <StopCircleIcon />,
         text: selectedHalt
           ? selectedHalt.displayName
           : decodeURIComponent(params.haltId || ""),

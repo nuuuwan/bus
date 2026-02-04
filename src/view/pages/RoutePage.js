@@ -6,7 +6,7 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import PlaceIcon from "@mui/icons-material/Place";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useData } from "../../nonview/contexts/DataContext";
 import HaltLink from "../moles/HaltLink";
 
@@ -88,7 +88,7 @@ export default function RoutePage() {
                 <TimelineSeparator>
                   {index > 0 && <TimelineConnector />}
                   <TimelineDot color={isClosest ? "primary" : "grey"}>
-                    <PlaceIcon fontSize="small" />
+                    <StopCircleIcon fontSize="small" />
                   </TimelineDot>
                   {index < selectedRoute.haltList.length - 1 && (
                     <TimelineConnector />

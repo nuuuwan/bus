@@ -2,7 +2,7 @@ import { Marker } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
-import PlaceIcon from "@mui/icons-material/Place";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useData } from "../../nonview/contexts/DataContext";
 
 export default function HaltMarker({ halt }) {
@@ -24,7 +24,7 @@ export default function HaltMarker({ halt }) {
   const haltIcon = L.divIcon({
     className: "custom-halt-icon",
     html: renderToStaticMarkup(
-      <PlaceIcon style={{ color, fontSize: "32px", opacity }} />,
+      <StopCircleIcon style={{ color, fontSize: "32px", opacity }} />,
     ),
     iconSize: [32, 32],
     iconAnchor: [16, 32],

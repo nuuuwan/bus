@@ -4,7 +4,7 @@ import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
-import PlaceIcon from "@mui/icons-material/Place";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ export default function CustomBottomNavigator() {
         />
         <BottomNavigationAction
           label="Halts"
-          icon={<PlaceIcon />}
+          icon={<StopCircleIcon />}
           value="halts"
         />
       </BottomNavigation>
