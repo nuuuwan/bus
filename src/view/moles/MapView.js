@@ -81,7 +81,7 @@ export default function MapView() {
         {routes.map((route, iRoute) => {
           return (
             <Polyline
-              key={iRoute}
+              key={"route-" + iRoute}
               positions={route.latLngList}
               color="blue"
               weight={5}
@@ -96,14 +96,10 @@ export default function MapView() {
         })}
 
         {halts.map((halt, iHalt) => {
-          if (!halt.latLng) return null;
-          const position = Array.isArray(halt.latLng)
-            ? halt.latLng
-            : [halt.latLng.lat, halt.latLng.lng];
           return (
             <CircleMarker
-              key={iHalt}
-              center={position}
+              key={"halt-" + iHalt}
+              center={halt.latLng.toArray()}
               radius={5}
               fillColor="red"
               fillOpacity={0.8}
