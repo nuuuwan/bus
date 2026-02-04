@@ -9,6 +9,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import PlaceIcon from "@mui/icons-material/Place";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
@@ -45,9 +46,12 @@ export default function HaltPage() {
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
         <Paper elevation={3} sx={{ p: 3 }}>
-          <Typography variant="h5" gutterBottom>
-            {selectedHalt.name}
-          </Typography>
+          <Box display="flex" alignItems="center" gap={1} mb={1}>
+            <PlaceIcon color="error" fontSize="large" />
+            <Typography variant="h5">
+              {selectedHalt.name}
+            </Typography>
+          </Box>
           <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
             {selectedHalt.latLng.toString()}
           </Typography>

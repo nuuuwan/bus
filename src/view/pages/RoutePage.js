@@ -9,6 +9,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import PlaceIcon from "@mui/icons-material/Place";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
@@ -40,9 +41,12 @@ export default function RoutePage() {
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
         <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
-          <Typography variant="h5" gutterBottom>
-            {selectedRoute.routeNum}
-          </Typography>
+          <Box display="flex" alignItems="center" gap={1} mb={1}>
+            <DirectionsBusIcon color="primary" fontSize="large" />
+            <Typography variant="h5">
+              {selectedRoute.routeNum}
+            </Typography>
+          </Box>
           <Typography variant="subtitle1" color="text.secondary" gutterBottom>
             Halts ({selectedRoute.haltList.length})
           </Typography>
