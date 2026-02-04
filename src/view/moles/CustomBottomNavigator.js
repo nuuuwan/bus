@@ -15,9 +15,15 @@ export default function CustomBottomNavigator() {
   useEffect(() => {
     if (location.pathname.startsWith("/map/")) {
       setValue("map");
-    } else if (location.pathname.startsWith("/route/")) {
+    } else if (
+      location.pathname.startsWith("/routes") ||
+      location.pathname.startsWith("/route/")
+    ) {
       setValue("routes");
-    } else if (location.pathname.startsWith("/halt/")) {
+    } else if (
+      location.pathname.startsWith("/halts") ||
+      location.pathname.startsWith("/halt/")
+    ) {
       setValue("halts");
     }
   }, [location.pathname]);
@@ -31,12 +37,12 @@ export default function CustomBottomNavigator() {
         navigate("/map");
         break;
       case "routes":
-        // Navigate to route (will auto-redirect to first route)
-        navigate("/route");
+        // Navigate to routes list page
+        navigate("/routes");
         break;
       case "halts":
-        // Navigate to halt (will auto-redirect to first halt)
-        navigate("/halt");
+        // Navigate to halts list page
+        navigate("/halts");
         break;
       default:
         break;

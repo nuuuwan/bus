@@ -11,6 +11,8 @@ import HaltRedirect from "./view/pages/HaltRedirect";
 import MapPage from "./view/pages/MapPage";
 import RoutePage from "./view/pages/RoutePage";
 import HaltPage from "./view/pages/HaltPage";
+import RoutesPage from "./view/pages/RoutesPage";
+import HaltsPage from "./view/pages/HaltsPage";
 
 const theme = createTheme({
   palette: {
@@ -38,8 +40,10 @@ function App() {
               <Route path="/" element={<RootRedirect />} />
               <Route path="/map" element={<RootRedirect />} />
               <Route path="/map/:latLng" element={<MapPage />} />
+              <Route path="/routes" element={<RoutesPage />} />
               <Route path="/route" element={<RouteRedirect />} />
               <Route path="/route/:id" element={<RoutePage />} />
+              <Route path="/halts" element={<HaltsPage />} />
               <Route path="/halt" element={<HaltRedirect />} />
               <Route path="/halt/:id" element={<HaltPage />} />
             </Routes>
