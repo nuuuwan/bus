@@ -1,4 +1,10 @@
-import { Box, Typography, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  List,
+  ListItem,
+} from "@mui/material";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteLink from "../moles/RouteLink";
 
@@ -56,15 +62,15 @@ export default function HaltPage() {
 
   return (
     <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto" p={2}>
+      <Box width="100%" overflow="auto">
         {sortedRoutes.length > 0 && (
-          <Box>
-            <Box>
-              {sortedRoutes.map((route) => (
-                <RouteLink key={route.routeNum} route={route} />
-              ))}
-            </Box>
-          </Box>
+          <List sx={{ p: 1, m: 1 }}>
+            {sortedRoutes.map((route) => (
+              <ListItem key={route.routeNum} disablePadding>
+                <RouteLink route={route} />
+              </ListItem>
+            ))}
+          </List>
         )}
       </Box>
     </Box>

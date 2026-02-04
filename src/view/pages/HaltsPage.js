@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, List, ListItem } from "@mui/material";
 import { useData } from "../../nonview/contexts/DataContext";
 import HaltLink from "../moles/HaltLink";
 
@@ -34,10 +34,14 @@ export default function HaltsPage() {
 
   return (
     <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto" p={2}>
-        {sortedHalts.map((halt) => (
-          <HaltLink key={halt.name} halt={halt} />
-        ))}
+      <Box width="100%" overflow="auto">
+        <List sx={{ p: 1, m: 1 }}>
+          {sortedHalts.map((halt) => (
+            <ListItem key={halt.name} disablePadding>
+              <HaltLink halt={halt} />
+            </ListItem>
+          ))}
+        </List>
       </Box>
     </Box>
   );

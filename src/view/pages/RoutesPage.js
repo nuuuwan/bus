@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, List, ListItem } from "@mui/material";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteLink from "../moles/RouteLink";
 
@@ -43,13 +43,17 @@ export default function RoutesPage() {
 
   return (
     <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto" p={2}>
-        {sortedRoutes.map((route) => (
-          <RouteLink
-            key={`${route.routeNum}-${route.direction}`}
-            route={route}
-          />
-        ))}
+      <Box width="100%" overflow="auto">
+        <List sx={{ p: 1, m: 1 }}>
+          {sortedRoutes.map((route) => (
+            <ListItem
+              key={`${route.routeNum}-${route.direction}`}
+              disablePadding
+            >
+              <RouteLink route={route} />
+            </ListItem>
+          ))}
+        </List>
       </Box>
     </Box>
   );
