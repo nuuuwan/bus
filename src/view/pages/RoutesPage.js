@@ -1,4 +1,5 @@
 import { Box, CircularProgress, List, ListItem } from "@mui/material";
+import { useEffect } from "react";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteLink from "../moles/RouteLink";
 
@@ -27,6 +28,10 @@ export default function RoutesPage() {
         return closestA - closestB;
       })
     : routes;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [sortedRoutes]);
 
   if (loading) {
     return (
