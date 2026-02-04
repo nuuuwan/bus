@@ -83,8 +83,6 @@ export default function MapView() {
     }
   }, [navigate]);
 
-  console.log(halts.length);
-
   return (
     <Box sx={{ position: "relative", height: "100vh", width: "100%" }}>
       <MapContainer
