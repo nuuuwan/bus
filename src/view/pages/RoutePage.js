@@ -1,17 +1,8 @@
-import {
-  Box,
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
-  ListItemIcon,
-} from "@mui/material";
-import PlaceIcon from "@mui/icons-material/Place";
+import { Box, Typography, Paper, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteView from "../moles/RouteView";
+import HaltView from "../moles/HaltView";
 
 export default function RoutePage() {
   const { selectedRoute, loading } = useData();
@@ -42,27 +33,31 @@ export default function RoutePage() {
       <Box width="100%" overflow="auto" p={2}>
         <RouteView route={selectedRoute} />
         <Paper elevation={3}>
-          <List>
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              Halts ({selectedRoute.haltList.length})
+            </Typography>
             {selectedRoute.haltList.map((halt, index) => (
-              <ListItem
+              <Link
                 key={index}
-                component={Link}
                 to={`/halt/${encodeURIComponent(halt.id)}`}
-                sx={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  "&:hover": {
-                    backgroundColor: "action.hover",
-                  },
-                }}
+                style={{ textDecoration: "none" }}
               >
-                <ListItemIcon>
-                  <PlaceIcon />
-                </ListItemIcon>
-                <ListItemText primary={`${index + 1}. ${halt.name}`} />
-              </ListItem>
+                <Box display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ minWidth: "30px" }}
+                  >
+                    {index + 1}.
+                  </Typography>
+                  <Box sx={{ flex: 1 }}>
+                    <HaltView halt={halt} />
+                  </Box>
+                </Box>
+              </Link>
             ))}
-          </List>
+          </Box>
         </Paper>
       </Box>
     </Box>
