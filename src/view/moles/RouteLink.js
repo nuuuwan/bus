@@ -36,6 +36,19 @@ export default function RouteLink({ route }) {
         )
       : null;
 
+  // Calculate opacity based on walking time at 4 kmph
+  // < 10 min (~0.67 km): opacity = 1
+  // 10 min to 1 hr (0.67-4 km): opacity = 0.67
+  // > 1 hr (>4 km): opacity = 0.33
+  let opacity = 1;
+  if (closestDistanceKm) {
+    if (closestDistanceKm > 4) {
+      opacity = 0.33;
+    } else if (closestDistanceKm >= 0.667) {
+      opacity = 0.67;
+    }
+  }
+
   return (
     <Link
       to={`/${latLng}/route/${encodeURIComponent(route.id)}`}
@@ -47,6 +60,7 @@ export default function RouteLink({ route }) {
           px: 2,
           borderBottom: "1px solid",
           borderColor: "divider",
+          opacity,
         }}
       >
         <Box display="flex" alignItems="center" gap={1}>

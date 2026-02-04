@@ -23,18 +23,23 @@ export default function Distance({ distanceKm }) {
 
   // Calculate walking time at 4 kmph
   const walkingSpeedKmph = 4;
-  const timeHours = distanceKm / walkingSpeedKmph;
-  const timeMinutes = Math.round(timeHours * 60);
 
   let timeText;
-  if (timeMinutes < 1) {
-    timeText = "<1 min";
-  } else if (timeMinutes < 60) {
-    timeText = `${timeMinutes} min`;
+  if (distanceKm > 4) {
+    timeText = ">1h";
   } else {
-    const hours = Math.floor(timeMinutes / 60);
-    const mins = timeMinutes % 60;
-    timeText = mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+    const timeHours = distanceKm / walkingSpeedKmph;
+    const timeMinutes = Math.round(timeHours * 60);
+
+    if (timeMinutes < 1) {
+      timeText = "<1 min";
+    } else if (timeMinutes < 60) {
+      timeText = `${timeMinutes} min`;
+    } else {
+      const hours = Math.floor(timeMinutes / 60);
+      const mins = timeMinutes % 60;
+      timeText = mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+    }
   }
 
   return (

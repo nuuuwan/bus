@@ -15,12 +15,25 @@ export default function HaltLink({ halt }) {
   const distanceKm =
     currentLatLng && halt.latLng ? currentLatLng.distanceTo(halt.latLng) : null;
 
+  // Calculate opacity based on walking time at 4 kmph
+  // < 10 min (~0.67 km): opacity = 1
+  // 10 min to 1 hr (0.67-4 km): opacity = 0.67
+  // > 1 hr (>4 km): opacity = 0.33
+  let opacity = 1;
+  if (distanceKm) {
+    if (distanceKm > 4) {
+      opacity = 0.33;
+    } else if (distanceKm >= 0.667) {
+      opacity = 0.67;
+    }
+  }
+
   return (
     <Link
       to={`/${latLng}/halt/${encodeURIComponent(halt.id)}`}
       style={{ textDecoration: "none", width: "100%", color: "inherit" }}
     >
-      <Box sx={{ py: 1, px: 2 }}>
+      <Box sx={{ py: 1, px: 2, opacity }}>
         <Typography variant="body1">{halt.displayName}</Typography>
         <Distance distanceKm={distanceKm} />
       </Box>

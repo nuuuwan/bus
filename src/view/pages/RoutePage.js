@@ -81,6 +81,8 @@ export default function RoutePage() {
                     display: "flex",
                     alignItems: "center",
                     fontWeight: isClosest ? "bold" : "normal",
+                    backgroundColor: isClosest ? "action.hover" : "transparent",
+                    borderRadius: 1,
                   }}
                 >
                   <HaltLink halt={halt} />
