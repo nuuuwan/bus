@@ -43,7 +43,7 @@ export default function MapView() {
   const params = useParams();
   const navigate = useNavigate();
   const { routes, halts } = useData();
-  const defaultZoom = 13;
+  const defaultZoom = 16;
 
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
