@@ -13,7 +13,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import LatLng from "../../nonview/base/LatLng";
 import { useData } from "../../nonview/contexts/DataContext";
-import Crosshairs from "../atoms/Crosshairs";
+import Crosshairs, { CrosshairsOverlay } from "../atoms/Crosshairs";
 // Fix for default marker icons in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -156,8 +156,10 @@ export default function MapView() {
             />
           );
         })}
+
+        <Crosshairs />
       </MapContainer>
-      <Crosshairs />
+      <CrosshairsOverlay />
       <IconButton
         onClick={handleCurrentLocation}
         sx={{

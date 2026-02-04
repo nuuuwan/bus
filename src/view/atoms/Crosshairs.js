@@ -1,6 +1,56 @@
+import { Circle, useMap } from "react-leaflet";
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 
 export default function Crosshairs() {
+  const map = useMap();
+  const [center, setCenter] = useState(map.getCenter());
+
+  useEffect(() => {
+    const updateCenter = () => {
+      setCenter(map.getCenter());
+    };
+
+    map.on("move", updateCenter);
+    return () => {
+      map.off("move", updateCenter);
+    };
+  }, [map]);
+
+  // Walking speed: 4 kmph
+  // 5 min = 0.333 km = 333 m
+  // 10 min = 0.667 km = 667 m
+  const centerPosition = [center.lat, center.lng];
+
+  return (
+    <>
+      {/* 10 min circle (667m) */}
+      <Circle
+        center={centerPosition}
+        radius={667}
+        pathOptions={{
+          color: "#404040",
+          weight: 2,
+          fillColor: "transparent",
+          opacity: 0.5,
+        }}
+      />
+      {/* 5 min circle (333m) */}
+      <Circle
+        center={centerPosition}
+        radius={333}
+        pathOptions={{
+          color: "#404040",
+          weight: 2,
+          fillColor: "transparent",
+          opacity: 0.6,
+        }}
+      />
+    </>
+  );
+}
+
+export function CrosshairsOverlay() {
   return (
     <Box
       sx={{
