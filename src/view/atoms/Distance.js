@@ -16,7 +16,7 @@ export default function Distance({ distanceKm }) {
     if (meters < 10) {
       displayText = "<10m";
     } else {
-      displayText = `${Math.round(meters)} m`;
+      displayText = `${Math.round(meters / 10) * 10} m`;
     }
   }
 
