@@ -1,4 +1,5 @@
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
+import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 
 export default function Distance({ distanceKm }) {
   if (distanceKm === null || distanceKm === undefined) {
@@ -20,9 +21,28 @@ export default function Distance({ distanceKm }) {
     }
   }
 
+  // Calculate walking time at 4 kmph
+  const walkingSpeedKmph = 4;
+  const timeHours = distanceKm / walkingSpeedKmph;
+  const timeMinutes = Math.round(timeHours * 60);
+
+  let timeText;
+  if (timeMinutes < 1) {
+    timeText = "<1 min";
+  } else if (timeMinutes < 60) {
+    timeText = `${timeMinutes} min`;
+  } else {
+    const hours = Math.floor(timeMinutes / 60);
+    const mins = timeMinutes % 60;
+    timeText = mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+  }
+
   return (
-    <Typography variant="body2" color="text.secondary">
-      ({displayText})
-    </Typography>
+    <Box display="flex" alignItems="center" gap={0.5}>
+      <DirectionsWalkIcon fontSize="small" color="action" />
+      <Typography variant="body2" color="text.secondary">
+        {displayText} · {timeText}
+      </Typography>
+    </Box>
   );
 }

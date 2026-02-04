@@ -39,25 +39,25 @@ export default function RouteLink({ route }) {
   return (
     <Link
       to={`/${latLng}/route/${encodeURIComponent(route.id)}`}
-      style={{ textDecoration: "none", width: "100%" }}
+      style={{ textDecoration: "none", width: "100%", color: "inherit" }}
     >
       <Box
-        display="flex"
-        alignItems="center"
-        gap={1}
         sx={{
           py: 1.5,
+          px: 2,
           borderBottom: "1px solid",
           borderColor: "divider",
         }}
       >
-        <DirectionsBusIcon sx={{ color: route.getColor() }} />
-        <Typography variant="h6" sx={{ color: route.getColor() }}>
-          {route.routeNum}
-        </Typography>
-        <Box display="flex" alignItems="center" gap={0.5}>
-          {directionIcon}
-          <Typography variant="body2">{route.direction}</Typography>
+        <Box display="flex" alignItems="center" gap={1}>
+          <DirectionsBusIcon sx={{ color: route.getColor() }} />
+          <Typography variant="h6" sx={{ color: route.getColor() }}>
+            {route.routeNum}
+          </Typography>
+          <Box display="flex" alignItems="center" gap={0.5}>
+            {directionIcon}
+            <Typography variant="body2">{route.direction}</Typography>
+          </Box>
         </Box>
         <Distance distanceKm={closestDistanceKm} />
       </Box>

@@ -10,7 +10,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import HaltLink from "../moles/HaltLink";
 
 export default function RoutePage() {
-  const { selectedRoute, loading } = useData();
+  const { selectedRoute, currentLatLng, loading } = useData();
 
   if (loading) {
     return (
@@ -33,6 +33,21 @@ export default function RoutePage() {
     );
   }
 
+  // Find the closest halt to current location
+  let closestHaltIndex = -1;
+  if (currentLatLng && selectedRoute.haltList.length > 0) {
+    let minDistance = Infinity;
+    selectedRoute.haltList.forEach((halt, index) => {
+      if (halt.latLng) {
+        const distance = currentLatLng.distanceTo(halt.latLng);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestHaltIndex = index;
+        }
+      }
+    });
+  }
+
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={1}>
@@ -48,22 +63,31 @@ export default function RoutePage() {
             },
           }}
         >
-          {selectedRoute.haltList.map((halt, index) => (
-            <TimelineItem key={index}>
-              <TimelineSeparator>
-                {index > 0 && <TimelineConnector />}
-                <TimelineDot>
-                  <PlaceIcon fontSize="small" />
-                </TimelineDot>
-                {index < selectedRoute.haltList.length - 1 && (
-                  <TimelineConnector />
-                )}
-              </TimelineSeparator>
-              <TimelineContent sx={{ display: "flex", alignItems: "center" }}>
-                <HaltLink halt={halt} />
-              </TimelineContent>
-            </TimelineItem>
-          ))}
+          {selectedRoute.haltList.map((halt, index) => {
+            const isClosest = index === closestHaltIndex;
+            return (
+              <TimelineItem key={index}>
+                <TimelineSeparator>
+                  {index > 0 && <TimelineConnector />}
+                  <TimelineDot color={isClosest ? "primary" : "grey"}>
+                    <PlaceIcon fontSize="small" />
+                  </TimelineDot>
+                  {index < selectedRoute.haltList.length - 1 && (
+                    <TimelineConnector />
+                  )}
+                </TimelineSeparator>
+                <TimelineContent
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontWeight: isClosest ? "bold" : "normal",
+                  }}
+                >
+                  <HaltLink halt={halt} />
+                </TimelineContent>
+              </TimelineItem>
+            );
+          })}
         </Timeline>
       </Box>
     </Box>

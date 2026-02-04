@@ -20,7 +20,7 @@ export default function HaltLink({ halt }) {
       to={`/${latLng}/halt/${encodeURIComponent(halt.id)}`}
       style={{ textDecoration: "none", width: "100%", color: "inherit" }}
     >
-      <Box display="flex" alignItems="center" gap={1} sx={{}}>
+      <Box sx={{ py: 1, px: 2 }}>
         <Typography variant="body1">{halt.displayName}</Typography>
         <Distance distanceKm={distanceKm} />
       </Box>
