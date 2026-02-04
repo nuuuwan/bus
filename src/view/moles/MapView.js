@@ -58,7 +58,7 @@ export default function MapView() {
   const location = useLocation();
   const { routes, halts, selectedHalt, selectedRoute, currentLatLng } =
     useData();
-  const defaultZoom = 16;
+  const defaultZoom = 14;
 
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
