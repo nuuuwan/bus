@@ -57,7 +57,7 @@ function App() {
             >
               <Routes>
                 <Route path="/" element={<RootRedirect />} />
-                <Route path="/:latLngId" element={<RoutesPage />} />
+                <Route path="/:latLngId" element={<RootRedirect />} />
                 <Route path="/:latLngId/routes" element={<RoutesPage />} />
                 <Route path="/:latLngId/route" element={<RouteRedirect />} />
                 <Route
