@@ -15,10 +15,10 @@ import HaltPage from "./view/pages/HaltPage";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#616161",
+      main: "#ccc",
     },
     secondary: {
-      main: "#9e9e9e",
+      main: "#aaa",
     },
   },
   typography: {
