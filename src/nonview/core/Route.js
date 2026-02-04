@@ -25,7 +25,7 @@ export default class Route {
     const routePromises = routeSummaryDList.map(async (d) => {
       const latLngUrl =
         `https://raw.githubusercontent.com` +
-        `nuuuwan/bus_py/refs/heads/main/data/routes` +
+        `/nuuuwan/bus_py/refs/heads/main/data/routes` +
         `/${d.route_num}-${d.direction}.json`;
       const latLngList = await WWW.fetchJSON(latLngUrl);
       return new Route(d.route_num, d.direction, d.halt_name_list, latLngList);
