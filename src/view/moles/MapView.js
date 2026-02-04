@@ -7,7 +7,8 @@ import {
   CircleMarker,
   useMap,
 } from "react-leaflet";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import LatLng from "../../nonview/base/LatLng";
@@ -64,6 +65,23 @@ export default function MapView() {
     },
     [params.latLngId, navigate],
   );
+
+  const handleCurrentLocation = useCallback(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newLatLng = new LatLng(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
+          navigate(`/${newLatLng.toString()}`, { replace: true });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        },
+      );
+    }
+  }, [navigate]);
 
   // Memoize halt positions to prevent recreation on every render
   const haltPositions = useMemo(() => {
@@ -140,6 +158,22 @@ export default function MapView() {
         })}
       </MapContainer>
       <Crosshairs />
+      <IconButton
+        onClick={handleCurrentLocation}
+        sx={{
+          position: "absolute",
+          bottom: 100,
+          right: 16,
+          backgroundColor: "white",
+          boxShadow: 2,
+          "&:hover": {
+            backgroundColor: "#f5f5f5",
+          },
+          zIndex: 1000,
+        }}
+      >
+        <MyLocationIcon />
+      </IconButton>
     </Box>
   );
 }
