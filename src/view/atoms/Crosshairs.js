@@ -11,9 +11,9 @@ export default function Crosshairs() {
       setCenter(map.getCenter());
     };
 
-    map.on("move", updateCenter);
+    map.on("moveend", updateCenter);
     return () => {
-      map.off("move", updateCenter);
+      map.off("moveend", updateCenter);
     };
   }, [map]);
 
