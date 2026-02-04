@@ -11,15 +11,12 @@ export default function HaltMarker({ halt }) {
   const { selectedHalt } = useData();
   const isNotSelected = selectedHalt && selectedHalt.id !== halt.id;
 
-  let color = "black";
-  if (isNotSelected) {
-    color = "white";
-  }
+  const opacity = isNotSelected ? 0.25 : 1.0;
 
   const haltIcon = L.divIcon({
     className: "custom-halt-icon",
     html: renderToStaticMarkup(
-      <PlaceIcon style={{ color, fontSize: "32px" }} />,
+      <PlaceIcon style={{ color: "black", fontSize: "32px", opacity }} />,
     ),
     iconSize: [32, 32],
     iconAnchor: [16, 32],

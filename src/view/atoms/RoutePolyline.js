@@ -9,8 +9,10 @@ export default function RoutePolyline({ route }) {
   const isNotSelected = selectedRoute && selectedRoute?.id !== route.id;
 
   let color = route.getColor();
+  let opacity = 1.0;
   if (isNotSelected) {
     color = "white";
+    opacity = 0.25;
   }
 
   return (
@@ -19,7 +21,7 @@ export default function RoutePolyline({ route }) {
       positions={route.latLngList.map((latLng) => latLng.toArray())}
       color={color}
       weight={3}
-      opacity={1}
+      opacity={opacity}
       eventHandlers={{
         click: () => {
           const latLng = params.latLngId || "";
