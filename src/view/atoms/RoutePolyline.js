@@ -1,15 +1,23 @@
 import { Polyline } from "react-leaflet";
 import { useParams, useNavigate } from "react-router-dom";
+import { useData } from "../../nonview/contexts/DataContext";
 
 export default function RoutePolyline({ route }) {
   const params = useParams();
   const navigate = useNavigate();
+  const { selectedRoute } = useData();
+  const isNotSelected = selectedRoute && selectedRoute?.id !== route.id;
+
+  let color = route.getColor();
+  if (isNotSelected) {
+    color = "white";
+  }
 
   return (
     <Polyline
       key={`${route.routeNum}-${route.direction}`}
       positions={route.latLngList.map((latLng) => latLng.toArray())}
-      color={route.getColor()}
+      color={color}
       weight={3}
       opacity={1}
       eventHandlers={{

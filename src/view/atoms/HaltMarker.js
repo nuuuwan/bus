@@ -3,19 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import L from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 import PlaceIcon from "@mui/icons-material/Place";
+import { useData } from "../../nonview/contexts/DataContext";
 
-export default function HaltMarker({ halt, isSelected }) {
+export default function HaltMarker({ halt }) {
   const params = useParams();
   const navigate = useNavigate();
-  const selectedHaltId = params.haltId;
-  const isOnHaltPage = !!selectedHaltId;
+  const { selectedHalt } = useData();
+  const isNotSelected = selectedHalt && selectedHalt.id !== halt.id;
 
-  // Create custom icon for halts
-  // If on halt page: selected = black, others = white
-  // If NOT on halt page: all = black
-  let color = "black"; // Default: black for all halts
-  if (isOnHaltPage && !isSelected) {
-    color = "white"; // Only show white for non-selected when on halt page
+  let color = "black";
+  if (isNotSelected) {
+    color = "white";
   }
 
   const haltIcon = L.divIcon({

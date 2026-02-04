@@ -59,9 +59,6 @@ export default function MapView() {
   const { routes, halts } = useData();
   const defaultZoom = 16;
 
-  // Check if we're on a halt page
-  const selectedHaltId = params.haltId;
-
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
     params.latLngId
@@ -122,14 +119,9 @@ export default function MapView() {
 
         {halts
           .filter((halt) => routes.some((route) => route.hasHalt(halt)))
-          .map((halt) => {
-            const isSelected =
-              selectedHaltId === halt.id ||
-              selectedHaltId === encodeURIComponent(halt.id);
-            return (
-              <HaltMarker key={halt.id} halt={halt} isSelected={isSelected} />
-            );
-          })}
+          .map((halt) => (
+            <HaltMarker key={halt.id} halt={halt} />
+          ))}
 
         <Crosshairs />
       </MapContainer>
