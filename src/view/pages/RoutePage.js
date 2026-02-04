@@ -7,7 +7,6 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useData } from "../../nonview/contexts/DataContext";
-import RouteLink from "../moles/RouteLink";
 import HaltLink from "../moles/HaltLink";
 
 export default function RoutePage() {

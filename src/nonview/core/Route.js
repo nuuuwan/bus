@@ -10,6 +10,10 @@ export default class Route {
     this.latLngList = latLngList;
   }
 
+  get displayName() {
+    return `${this.routeNum} ${this.direction}`;
+  }
+
   static getId(routeNum, direction) {
     return `${routeNum}-${direction}`;
   }

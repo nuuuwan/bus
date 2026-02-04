@@ -1,7 +1,5 @@
 import { Box, Typography, CircularProgress } from "@mui/material";
-import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
-import HaltLink from "../moles/HaltLink";
 import RouteLink from "../moles/RouteLink";
 
 export default function HaltPage() {
@@ -40,13 +38,7 @@ export default function HaltPage() {
           <Box>
             <Box>
               {routesForHalt.map((route) => (
-                <Link
-                  key={route.routeNum}
-                  to={`/route/${encodeURIComponent(route.id)}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <RouteLink route={route} />
-                </Link>
+                <RouteLink key={route.routeNum} route={route} />
               ))}
             </Box>
           </Box>

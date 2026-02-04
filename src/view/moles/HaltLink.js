@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import PlaceIcon from "@mui/icons-material/Place";
 import { Link } from "react-router-dom";
 
 export default function HaltLink({ halt }) {

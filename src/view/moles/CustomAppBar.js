@@ -19,14 +19,14 @@ export default function CustomAppBar() {
       const color = selectedRoute ? selectedRoute.getColor() : undefined;
       return {
         icon: <DirectionsBusIcon sx={{ color }} />,
-        text: selectedRoute ? selectedRoute.routeNum : params.id || "",
+        text: selectedRoute ? selectedRoute.displayName : params.id || "",
         color,
       };
     } else if (location.pathname.startsWith("/halt/")) {
       return {
         icon: <PlaceIcon />,
         text: selectedHalt
-          ? selectedHalt.name
+          ? selectedHalt.displayName
           : decodeURIComponent(params.id || ""),
       };
     } else if (location.pathname.startsWith("/map/")) {
