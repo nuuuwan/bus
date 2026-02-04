@@ -9,11 +9,11 @@ export default function RootRedirect() {
     async function redirect() {
       try {
         const latLng = await LatLng.fromGeolocation();
-        navigate(`/map/${latLng.toString()}`, { replace: true });
+        navigate(`/${latLng.toString()}`, { replace: true });
       } catch (error) {
         // Geolocation failed or not supported, use default
         const defaultLatLng = LatLng.fromDefault();
-        navigate(`/map/${defaultLatLng.toString()}`, { replace: true });
+        navigate(`/${defaultLatLng.toString()}`, { replace: true });
       }
     }
 

@@ -4,7 +4,7 @@ import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import EastIcon from "@mui/icons-material/East";
 import WestIcon from "@mui/icons-material/West";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const getDirectionIcon = (direction) => {
   const dir = direction?.toLowerCase() || "";
@@ -16,11 +16,16 @@ const getDirectionIcon = (direction) => {
 };
 
 export default function RouteLink({ route }) {
+  const location = useLocation();
   const directionIcon = getDirectionIcon(route.direction);
+
+  // Extract latLng from current pathname
+  const match = location.pathname.match(/^\/([^/]+)/);
+  const latLng = match ? match[1] : "";
 
   return (
     <Link
-      to={`/route/${encodeURIComponent(route.id)}`}
+      to={`/${latLng}/route/${encodeURIComponent(route.id)}`}
       style={{ textDecoration: "none", width: "100%" }}
     >
       <Box

@@ -13,16 +13,20 @@ export default function CustomBottomNavigator() {
   const [value, setValue] = useState("map");
 
   useEffect(() => {
-    if (location.pathname.startsWith("/map/")) {
+    // Extract latLng from pathname - it's the first segment after basename
+    const match = location.pathname.match(/^\/([^/]+)/);
+    const latLng = match ? match[1] : "";
+
+    if (location.pathname === `/${latLng}`) {
       setValue("map");
     } else if (
-      location.pathname.startsWith("/routes") ||
-      location.pathname.startsWith("/route/")
+      location.pathname.includes("/routes") ||
+      location.pathname.includes("/route/")
     ) {
       setValue("routes");
     } else if (
-      location.pathname.startsWith("/halts") ||
-      location.pathname.startsWith("/halt/")
+      location.pathname.includes("/halts") ||
+      location.pathname.includes("/halt/")
     ) {
       setValue("halts");
     }
@@ -31,18 +35,22 @@ export default function CustomBottomNavigator() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
 
+    // Extract latLng from current pathname
+    const match = location.pathname.match(/^\/([^/]+)/);
+    const latLng = match ? match[1] : "";
+
     switch (newValue) {
       case "map":
-        // Navigate to map route (will auto-redirect to geolocation or default)
-        navigate("/map");
+        // Navigate to map at current location
+        navigate(`/${latLng}`);
         break;
       case "routes":
         // Navigate to routes list page
-        navigate("/routes");
+        navigate(`/${latLng}/routes`);
         break;
       case "halts":
         // Navigate to halts list page
-        navigate("/halts");
+        navigate(`/${latLng}/halts`);
         break;
       default:
         break;

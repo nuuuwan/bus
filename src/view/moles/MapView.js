@@ -59,7 +59,7 @@ export default function MapView() {
 
       // Only update if the latLng has changed
       if (currentLatLng !== newLatLngString) {
-        navigate(`/map/${newLatLngString}`, { replace: true });
+        navigate(`/${newLatLngString}`, { replace: true });
       }
     },
     [params.latLng, navigate],
@@ -110,7 +110,8 @@ export default function MapView() {
               opacity={1}
               eventHandlers={{
                 click: () => {
-                  navigate(`/route/${encodeURIComponent(route.id)}`);
+                  const latLng = params.latLng || "";
+                  navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`);
                 },
               }}
             />
@@ -130,7 +131,8 @@ export default function MapView() {
               weight={3}
               eventHandlers={{
                 click: () => {
-                  navigate(`/halt/${encodeURIComponent(halt.id)}`);
+                  const latLng = params.latLng || "";
+                  navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
                 },
               }}
             />

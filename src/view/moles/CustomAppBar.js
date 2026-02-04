@@ -15,32 +15,30 @@ export default function CustomAppBar() {
   const { selectedHalt, selectedRoute } = useData();
 
   const getTitle = () => {
-    if (location.pathname.startsWith("/route/")) {
+    // Check if we're on a route page (with latLng prefix)
+    if (location.pathname.includes("/route/")) {
       const color = selectedRoute ? selectedRoute.getColor() : undefined;
       return {
         icon: <DirectionsBusIcon sx={{ color }} />,
         text: selectedRoute ? selectedRoute.displayName : params.id || "",
         color,
       };
-    } else if (location.pathname.startsWith("/halt/")) {
+    } else if (location.pathname.includes("/halt/")) {
       return {
         icon: <PlaceIcon />,
         text: selectedHalt
           ? selectedHalt.displayName
           : decodeURIComponent(params.id || ""),
       };
-    } else if (location.pathname.startsWith("/map/")) {
-      const latLngMatch = location.pathname.match(/^\/map\/(.+)$/);
+    } else {
+      // Map view - extract latLng from path (first segment)
+      const latLngMatch = location.pathname.match(/^\/([^/]+)$/);
       const latLng = latLngMatch ? decodeURIComponent(latLngMatch[1]) : null;
       return {
         icon: <MapIcon />,
         text: latLng || "Map",
       };
     }
-    return {
-      icon: <DirectionsBusIcon />,
-      text: "Bus",
-    };
   };
 
   const title = getTitle();

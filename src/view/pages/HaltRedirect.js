@@ -1,19 +1,21 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
 export default function HaltRedirect() {
   const navigate = useNavigate();
+  const params = useParams();
   const { halts, loading } = useData();
 
   useEffect(() => {
     if (!loading && halts.length > 0) {
       // Navigate to the first halt
-      navigate(`/halt/${encodeURIComponent(halts[0].id)}`, {
+      const latLng = params.latLng || "";
+      navigate(`/${latLng}/halt/${encodeURIComponent(halts[0].id)}`, {
         replace: true,
       });
     }
-  }, [loading, halts, navigate]);
+  }, [loading, halts, navigate, params.latLng]);
 
   return null; // Don't render anything while redirecting
 }
