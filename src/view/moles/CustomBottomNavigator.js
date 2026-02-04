@@ -3,25 +3,19 @@ import { useNavigate, useLocation } from "react-router-dom";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
-import MapIcon from "@mui/icons-material/Map";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import PlaceIcon from "@mui/icons-material/Place";
 
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [value, setValue] = useState("map");
+  const [value, setValue] = useState("routes");
 
   useEffect(() => {
-    // Extract latLng from pathname - it's the first segment after basename
-    const match = location.pathname.match(/^\/([^/]+)/);
-    const latLng = match ? match[1] : "";
-
-    if (location.pathname === `/${latLng}`) {
-      setValue("map");
-    } else if (
+    if (
       location.pathname.includes("/routes") ||
-      location.pathname.includes("/route/")
+      location.pathname.includes("/route/") ||
+      location.pathname.match(/^\/[^/]+$/)
     ) {
       setValue("routes");
     } else if (
@@ -40,10 +34,6 @@ export default function CustomBottomNavigator() {
     const latLng = match ? match[1] : "";
 
     switch (newValue) {
-      case "map":
-        // Navigate to map at current location
-        navigate(`/${latLng}`);
-        break;
       case "routes":
         // Navigate to routes list page
         navigate(`/${latLng}/routes`);
@@ -63,7 +53,6 @@ export default function CustomBottomNavigator() {
       elevation={3}
     >
       <BottomNavigation value={value} onChange={handleChange}>
-        <BottomNavigationAction label="Map" icon={<MapIcon />} value="map" />
         <BottomNavigationAction
           label="Routes"
           icon={<DirectionsBusIcon />}
