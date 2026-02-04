@@ -63,10 +63,10 @@ export default function RoutePage() {
                   <TimelineConnector />
                 )}
               </TimelineSeparator>
-              <TimelineContent>
+              <TimelineContent sx={{ display: "flex", alignItems: "center" }}>
                 <Link
                   to={`/halt/${encodeURIComponent(halt.id)}`}
-                  style={{ textDecoration: "none" }}
+                  style={{ textDecoration: "none", width: "100%" }}
                 >
                   <HaltLink halt={halt} />
                 </Link>
