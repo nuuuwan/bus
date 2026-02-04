@@ -12,6 +12,10 @@ export default class Route {
     return `${routeNum}-${direction}`;
   }
 
+  hasHalt(halt) {
+    return this.haltNameList.includes(halt.name);
+  }
+
   get id() {
     return Route.getId(this.routeNum, this.direction);
   }

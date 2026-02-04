@@ -11,7 +11,7 @@ The system is built on a graph-based model where **Halts** act as nodes and **Ro
 A collection of ordered waypoints and halts.
 
 * **Properties:** `distance_km`, `estimated_travel_time`, `halt_sequence`.
-* **Logic:** For the moment, we assume `route_num` follows a fixed bidirectional path between a specific `start_halt` and `end_halt`.
+* **Logic:** For the moment, we assume `routeNum` follows a fixed bidirectional path between a specific `start_halt` and `end_halt`.
 
 ### /halt/::name
 

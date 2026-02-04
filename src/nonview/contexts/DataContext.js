@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, matchPath } from "react-router-dom";
 import Halt from "../core/Halt";
 import Route from "../core/Route";
@@ -10,6 +10,8 @@ export function DataProvider({ children }) {
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedHalt, setSelectedHalt] = useState(null);
+  const [selectedRoute, setSelectedRoute] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -33,15 +35,30 @@ export function DataProvider({ children }) {
     loadData();
   }, []);
 
-  // Extract route params based on current location using matchPath
-  const selectedHalt = useMemo(() => {
-    const match = matchPath("/halt/:id", location.pathname);
-    return Halt.fromID(match?.params?.id);
+  useEffect(() => {
+    async function loadSelectedHalt() {
+      const match = matchPath("/halt/:id", location.pathname);
+      if (match?.params?.id) {
+        const halt = await Halt.fromID(match.params.id);
+        setSelectedHalt(halt);
+      } else {
+        setSelectedHalt(null);
+      }
+    }
+    loadSelectedHalt();
   }, [location.pathname]);
 
-  const selectedRoute = useMemo(() => {
-    const match = matchPath("/route/:id", location.pathname);
-    return Route.fromID(match?.params?.id);
+  useEffect(() => {
+    async function loadSelectedRoute() {
+      const match = matchPath("/route/:id", location.pathname);
+      if (match?.params?.id) {
+        const route = await Route.fromID(match.params.id);
+        setSelectedRoute(route);
+      } else {
+        setSelectedRoute(null);
+      }
+    }
+    loadSelectedRoute();
   }, [location.pathname]);
 
   const value = {

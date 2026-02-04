@@ -1,6 +1,6 @@
 [
   {
-    "route_num": "138-South-Bound",
+    "routeNum": "138-South-Bound",
     "bus_halts": [
       "Pettah (Central Bus Stand)",
       "Fort (Bastian Mawatha)",
@@ -24,7 +24,7 @@
     ]
   },
   {
-    "route_num": "176-North-Bound",
+    "routeNum": "176-North-Bound",
     "bus_halts": [
       "Karagampitiya (Dehiwala)",
       "Hill Street",

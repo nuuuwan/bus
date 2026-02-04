@@ -13,13 +13,12 @@ import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
 export default function BusHaltPage() {
-  const { selectedBusHalt, routes, loading } = useData();
+  const { selectedHalt, routes, loading } = useData();
+  console.debug(selectedHalt);
 
   // Find all routes that include this bus halt
-  const routesForHalt = selectedBusHalt
-    ? routes.filter((route) =>
-        route.haltNameList.includes(selectedBusHalt.name),
-      )
+  const routesForHalt = selectedHalt
+    ? routes.filter((route) => route.hasHalt(selectedHalt))
     : [];
 
   if (loading) {
@@ -35,7 +34,7 @@ export default function BusHaltPage() {
     );
   }
 
-  if (!selectedBusHalt) {
+  if (!selectedHalt) {
     return (
       <Box p={3}>
         <Typography variant="h5">Halt not found</Typography>
@@ -48,16 +47,10 @@ export default function BusHaltPage() {
       <Box width="100%" overflow="auto" p={2}>
         <Paper elevation={3} sx={{ p: 3 }}>
           <Typography variant="h5" gutterBottom>
-            {selectedBusHalt.name}
-          </Typography>
-          <Typography variant="body1" color="text.secondary" gutterBottom>
-            Coordinates
+            {selectedHalt.name}
           </Typography>
           <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-            Latitude: {selectedBusHalt.latlng[0]}
-          </Typography>
-          <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-            Longitude: {selectedBusHalt.latlng[1]}
+            {selectedHalt.latLng.toString()}
           </Typography>
         </Paper>
 
@@ -69,9 +62,9 @@ export default function BusHaltPage() {
             <List>
               {routesForHalt.map((route) => (
                 <ListItem
-                  key={route.route_num}
+                  key={route.routeNum}
                   component={Link}
-                  to={`/route/${encodeURIComponent(route.route_num)}`}
+                  to={`/route/${encodeURIComponent(route.id)}`}
                   sx={{
                     textDecoration: "none",
                     color: "inherit",
@@ -83,7 +76,7 @@ export default function BusHaltPage() {
                   <ListItemIcon>
                     <DirectionsBusIcon />
                   </ListItemIcon>
-                  <ListItemText primary={route.route_num} />
+                  <ListItemText primary={route.id} />
                 </ListItem>
               ))}
             </List>

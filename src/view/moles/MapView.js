@@ -106,7 +106,7 @@ export default function MapView() {
               opacity={0.5}
               eventHandlers={{
                 click: () => {
-                  navigate(`/route/${encodeURIComponent(route.routeNum)}`);
+                  navigate(`/route/${encodeURIComponent(route.id)}`);
                 },
               }}
             />
@@ -126,7 +126,7 @@ export default function MapView() {
               weight={2}
               eventHandlers={{
                 click: () => {
-                  navigate(`/halt/${encodeURIComponent(halt.name)}`);
+                  navigate(`/halt/${encodeURIComponent(halt.id)}`);
                 },
               }}
             />

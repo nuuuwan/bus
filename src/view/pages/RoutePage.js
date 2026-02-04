@@ -41,7 +41,7 @@ export default function RoutePage() {
       <Box width="100%" overflow="auto" p={2}>
         <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
           <Typography variant="h5" gutterBottom>
-            {selectedRoute.route_num}
+            {selectedRoute.routeNum}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" gutterBottom>
             Halts ({selectedRoute.haltNameList.length})
