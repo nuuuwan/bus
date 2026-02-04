@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useMemo } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   MapContainer,
@@ -10,7 +10,7 @@ import {
 import { Box, IconButton } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import L, { latLng } from "leaflet";
 import LatLng from "../../nonview/base/LatLng";
 import { useData } from "../../nonview/contexts/DataContext";
 import Crosshairs, { CrosshairsOverlay } from "../atoms/Crosshairs";
@@ -83,26 +83,7 @@ export default function MapView() {
     }
   }, [navigate]);
 
-  // Memoize halt positions to prevent recreation on every render
-  const haltPositions = useMemo(() => {
-    // Filter halts to only show those associated with at least one route
-    return halts
-      .filter((halt) => routes.some((route) => route.hasHalt(halt)))
-      .map((halt) => ({
-        key: halt.name,
-        position: halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null,
-        halt,
-      }));
-  }, [halts, routes]);
-
-  // Memoize route positions to ensure they're arrays
-  const routePositions = useMemo(() => {
-    return routes.map((route) => ({
-      key: `${route.routeNum}-${route.direction}`,
-      positions: route.latLngList.map((latLng) => latLng.toArray()),
-      route,
-    }));
-  }, [routes]);
+  console.log(halts.length);
 
   return (
     <Box sx={{ position: "relative", height: "100vh", width: "100%" }}>
@@ -118,44 +99,39 @@ export default function MapView() {
         />
         <MapController onMoveEnd={handleMoveEnd} />
 
-        {routePositions.map(({ key, positions, route }) => {
-          return (
-            <Polyline
-              key={key}
-              positions={positions}
-              color={route.getColor()}
-              weight={3}
-              opacity={1}
-              eventHandlers={{
-                click: () => {
-                  const latLng = params.latLngId || "";
-                  navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`);
-                },
-              }}
-            />
-          );
-        })}
+        {routes.map((route) => (
+          <Polyline
+            key={`${route.routeNum}-${route.direction}`}
+            positions={route.latLngList.map((latLng) => latLng.toArray())}
+            color={route.getColor()}
+            weight={3}
+            opacity={1}
+            eventHandlers={{
+              click: () => {
+                const latLng = params.latLngId || "";
+                navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`);
+              },
+            }}
+          />
+        ))}
 
-        {haltPositions.map(({ key, position, halt }) => {
-          if (!position) return null;
-          return (
-            <CircleMarker
-              key={key}
-              center={position}
-              radius={5}
-              fillColor="white"
-              fillOpacity={1}
-              color="black"
-              weight={3}
-              eventHandlers={{
-                click: () => {
-                  const latLng = params.latLngId || "";
-                  navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
-                },
-              }}
-            />
-          );
-        })}
+        {halts.map((halt) => (
+          <CircleMarker
+            key={halt.name}
+            center={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
+            radius={5}
+            fillColor="white"
+            fillOpacity={1}
+            color="black"
+            weight={3}
+            eventHandlers={{
+              click: () => {
+                const latLng = params.latLngId || "";
+                navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
+              },
+            }}
+          />
+        ))}
 
         <Crosshairs />
       </MapContainer>
