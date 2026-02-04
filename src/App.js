@@ -31,9 +31,9 @@ function App() {
               <Route path="/map" element={<RootRedirect />} />
               <Route path="/map/:latLng" element={<MapPage />} />
               <Route path="/route" element={<RouteRedirect />} />
-              <Route path="/route/:routeNum" element={<RoutePage />} />
+              <Route path="/route/:id" element={<RoutePage />} />
               <Route path="/halt" element={<HaltRedirect />} />
-              <Route path="/halt/:name" element={<HaltPage />} />
+              <Route path="/halt/:id" element={<HaltPage />} />
             </Routes>
             <CustomBottomNavigator />
           </Box>
