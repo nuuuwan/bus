@@ -6,6 +6,18 @@ export default class LatLng {
     this.lng = lng;
   }
 
+  toString() {
+    const latAbs = Math.abs(this.lat).toFixed(4);
+    const lngAbs = Math.abs(this.lng).toFixed(4);
+    const latDir = this.lat >= 0 ? "N" : "S";
+    const lngDir = this.lng >= 0 ? "E" : "W";
+    return `${latAbs}${latDir}-${lngAbs}${lngDir}`;
+  }
+
+  get id() {
+    return this.toString();
+  }
+
   static fromDefault() {
     return new LatLng(LatLng.DEFAULT_COLOMBO.lat, LatLng.DEFAULT_COLOMBO.lng);
   }
@@ -52,14 +64,6 @@ export default class LatLng {
         },
       );
     });
-  }
-
-  toString() {
-    const latAbs = Math.abs(this.lat).toFixed(4);
-    const lngAbs = Math.abs(this.lng).toFixed(4);
-    const latDir = this.lat >= 0 ? "N" : "S";
-    const lngDir = this.lng >= 0 ? "E" : "W";
-    return `${latAbs}${latDir}-${lngAbs}${lngDir}`;
   }
 
   toArray() {
