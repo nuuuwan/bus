@@ -18,7 +18,7 @@ export default function HaltLink({ halt }) {
   return (
     <Link
       to={`/${latLng}/halt/${encodeURIComponent(halt.id)}`}
-      style={{ textDecoration: "none", width: "100%" }}
+      style={{ textDecoration: "none", width: "100%", color: "inherit" }}
     >
       <Box display="flex" alignItems="center" gap={1} sx={{}}>
         <Typography variant="body1">{halt.displayName}</Typography>
