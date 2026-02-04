@@ -1,17 +1,8 @@
-import {
-  Box,
-  Typography,
-  Paper,
-  CircularProgress,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-} from "@mui/material";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import { Box, Typography, Paper, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import HaltView from "../moles/HaltView";
+import RouteView from "../moles/RouteView";
 
 export default function HaltPage() {
   const { selectedHalt, routes, loading } = useData();
@@ -52,32 +43,17 @@ export default function HaltPage() {
             <Typography variant="h6" gutterBottom>
               Routes ({routesForHalt.length})
             </Typography>
-            <List>
+            <Box>
               {routesForHalt.map((route) => (
-                <ListItem
+                <Link
                   key={route.routeNum}
-                  component={Link}
                   to={`/route/${encodeURIComponent(route.id)}`}
-                  sx={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    "&:hover": {
-                      backgroundColor: "action.hover",
-                    },
-                  }}
+                  style={{ textDecoration: "none" }}
                 >
-                  <ListItemIcon>
-                    <DirectionsBusIcon sx={{ color: route.getColor() }} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={route.id}
-                    primaryTypographyProps={{
-                      sx: { color: route.getColor(), fontWeight: 600 },
-                    }}
-                  />
-                </ListItem>
+                  <RouteView route={route} />
+                </Link>
               ))}
-            </List>
+            </Box>
           </Paper>
         )}
       </Box>
