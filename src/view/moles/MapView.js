@@ -1,16 +1,18 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
   Polyline,
-  CircleMarker,
+  Marker,
   useMap,
 } from "react-leaflet";
 import { Box, IconButton } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
+import PlaceIcon from "@mui/icons-material/Place";
 import "leaflet/dist/leaflet.css";
 import L, { latLng } from "leaflet";
+import { renderToStaticMarkup } from "react-dom/server";
 import LatLng from "../../nonview/base/LatLng";
 import { useData } from "../../nonview/contexts/DataContext";
 import Crosshairs, { CrosshairsOverlay } from "../atoms/Crosshairs";
@@ -61,6 +63,16 @@ export default function MapView() {
   const navigate = useNavigate();
   const { routes, halts } = useData();
   const defaultZoom = 16;
+
+  // Create custom icon for halts
+  const haltIcon = L.divIcon({
+    className: "custom-halt-icon",
+    html: renderToStaticMarkup(
+      <PlaceIcon style={{ color: "black", fontSize: "32px" }} />,
+    ),
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+  });
 
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
@@ -130,14 +142,10 @@ export default function MapView() {
         ))}
 
         {halts.map((halt) => (
-          <CircleMarker
+          <Marker
             key={halt.name}
-            center={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
-            radius={5}
-            fillColor="white"
-            fillOpacity={1}
-            color="black"
-            weight={3}
+            position={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
+            icon={haltIcon}
             eventHandlers={{
               click: () => {
                 const latLng = params.latLngId || "";

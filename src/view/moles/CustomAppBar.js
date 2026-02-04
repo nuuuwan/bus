@@ -15,8 +15,22 @@ export default function CustomAppBar() {
   const { selectedHalt, selectedRoute } = useData();
 
   const getTitle = () => {
+    // Check for routes list page
+    if (location.pathname.includes("/routes")) {
+      return {
+        icon: <DirectionsBusIcon />,
+        text: "Routes",
+      };
+    }
+    // Check for halts list page
+    else if (location.pathname.includes("/halts")) {
+      return {
+        icon: <PlaceIcon />,
+        text: "Halts",
+      };
+    }
     // Check if we're on a route page (with latLng prefix)
-    if (location.pathname.includes("/route/")) {
+    else if (location.pathname.includes("/route/")) {
       const color = selectedRoute ? selectedRoute.getColor() : undefined;
       return {
         icon: <DirectionsBusIcon sx={{ color }} />,
