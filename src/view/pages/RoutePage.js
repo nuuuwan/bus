@@ -1,4 +1,12 @@
 import { Box, Typography, CircularProgress } from "@mui/material";
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
+import TimelineDot from "@mui/lab/TimelineDot";
+import PlaceIcon from "@mui/icons-material/Place";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteView from "../moles/RouteView";
@@ -33,19 +41,37 @@ export default function RoutePage() {
       <Box width="100%" overflow="auto" p={2}>
         <RouteView route={selectedRoute} />
 
-        <Box>
+        <Timeline position="right">
           {selectedRoute.haltList.map((halt, index) => (
-            <Link
-              key={index}
-              to={`/halt/${encodeURIComponent(halt.id)}`}
-              style={{ textDecoration: "none" }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <HaltView halt={halt} />
-              </Box>
-            </Link>
+            <TimelineItem key={index}>
+              <TimelineOppositeContent
+                sx={{ m: "auto 0" }}
+                align="right"
+                variant="body2"
+                color="text.secondary"
+              >
+                {index + 1}
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineConnector />
+                <TimelineDot>
+                  <PlaceIcon fontSize="small" />
+                </TimelineDot>
+                {index < selectedRoute.haltList.length - 1 && (
+                  <TimelineConnector />
+                )}
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "12px", px: 2 }}>
+                <Link
+                  to={`/halt/${encodeURIComponent(halt.id)}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <HaltView halt={halt} />
+                </Link>
+              </TimelineContent>
+            </TimelineItem>
           ))}
-        </Box>
+        </Timeline>
       </Box>
     </Box>
   );
