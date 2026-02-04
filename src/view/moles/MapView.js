@@ -68,6 +68,7 @@ export default function MapView() {
   // Check if we're on a route or halt page
   const selectedRouteId = params.routeId;
   const selectedHaltId = params.haltId;
+  const isOnRoutePage = !!selectedRouteId;
   const isOnHaltPage = !!selectedHaltId;
 
   // Create custom icon for halts
@@ -144,11 +145,17 @@ export default function MapView() {
 
         {routes.map((route) => {
           const isSelected = selectedRouteId === encodeURIComponent(route.id);
+          // If on route page: selected = route color, others = white
+          // If NOT on route page: all = their colors
+          let color = route.getColor(); // Default: show route color
+          if (isOnRoutePage && !isSelected) {
+            color = "white"; // Only show white for non-selected when on route page
+          }
           return (
             <Polyline
               key={`${route.routeNum}-${route.direction}`}
               positions={route.latLngList.map((latLng) => latLng.toArray())}
-              color={isSelected ? route.getColor() : "white"}
+              color={color}
               weight={3}
               opacity={1}
               eventHandlers={{
