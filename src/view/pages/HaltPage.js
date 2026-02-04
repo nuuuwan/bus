@@ -63,15 +63,13 @@ export default function HaltPage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto">
-        {sortedRoutes.length > 0 && (
-          <List sx={{ p: 1, m: 1 }}>
-            {sortedRoutes.map((route) => (
-              <ListItem key={route.routeNum} disablePadding>
-                <RouteLink route={route} />
-              </ListItem>
-            ))}
-          </List>
-        )}
+        <List sx={{ p: 1, m: 1 }}>
+          {sortedRoutes.map((route) => (
+            <ListItem key={route.id} disablePadding>
+              <RouteLink route={route} />
+            </ListItem>
+          ))}
+        </List>
       </Box>
     </Box>
   );
