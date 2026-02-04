@@ -3,12 +3,35 @@ import { useData } from "../../nonview/contexts/DataContext";
 import RouteLink from "../moles/RouteLink";
 
 export default function HaltPage() {
-  const { selectedHalt, routes, loading } = useData();
+  const { selectedHalt, routes, currentLatLng, loading } = useData();
 
   // Find all routes that include this bus halt
   const routesForHalt = selectedHalt
     ? routes.filter((route) => route.hasHalt(selectedHalt))
     : [];
+
+  // Sort by distance to closest halt if currentLatLng is available
+  const sortedRoutes = currentLatLng
+    ? [...routesForHalt].sort((a, b) => {
+        const closestA =
+          a.haltList.length > 0
+            ? Math.min(
+                ...a.haltList
+                  .filter((halt) => halt.latLng)
+                  .map((halt) => currentLatLng.distanceTo(halt.latLng)),
+              )
+            : Infinity;
+        const closestB =
+          b.haltList.length > 0
+            ? Math.min(
+                ...b.haltList
+                  .filter((halt) => halt.latLng)
+                  .map((halt) => currentLatLng.distanceTo(halt.latLng)),
+              )
+            : Infinity;
+        return closestA - closestB;
+      })
+    : routesForHalt;
 
   if (loading) {
     return (
@@ -34,10 +57,10 @@ export default function HaltPage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
-        {routesForHalt.length > 0 && (
+        {sortedRoutes.length > 0 && (
           <Box>
             <Box>
-              {routesForHalt.map((route) => (
+              {sortedRoutes.map((route) => (
                 <RouteLink key={route.routeNum} route={route} />
               ))}
             </Box>

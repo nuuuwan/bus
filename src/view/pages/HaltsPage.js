@@ -3,12 +3,21 @@ import { useData } from "../../nonview/contexts/DataContext";
 import HaltLink from "../moles/HaltLink";
 
 export default function HaltsPage() {
-  const { halts, routes, loading } = useData();
+  const { halts, routes, currentLatLng, loading } = useData();
 
   // Filter halts to only show those associated with at least one route
   const filteredHalts = halts.filter((halt) =>
     routes.some((route) => route.hasHalt(halt)),
   );
+
+  // Sort by distance if currentLatLng is available
+  const sortedHalts = currentLatLng
+    ? [...filteredHalts].sort((a, b) => {
+        const distA = a.latLng ? currentLatLng.distanceTo(a.latLng) : Infinity;
+        const distB = b.latLng ? currentLatLng.distanceTo(b.latLng) : Infinity;
+        return distA - distB;
+      })
+    : filteredHalts;
 
   if (loading) {
     return (
@@ -26,7 +35,7 @@ export default function HaltsPage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
-        {filteredHalts.map((halt) => (
+        {sortedHalts.map((halt) => (
           <HaltLink key={halt.name} halt={halt} />
         ))}
       </Box>
