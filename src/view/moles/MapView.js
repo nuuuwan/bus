@@ -67,12 +67,15 @@ export default function MapView() {
 
   // Memoize halt positions to prevent recreation on every render
   const haltPositions = useMemo(() => {
-    return halts.map((halt) => ({
-      key: halt.name,
-      position: halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null,
-      halt,
-    }));
-  }, [halts]);
+    // Filter halts to only show those associated with at least one route
+    return halts
+      .filter((halt) => routes.some((route) => route.hasHalt(halt)))
+      .map((halt) => ({
+        key: halt.name,
+        position: halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null,
+        halt,
+      }));
+  }, [halts, routes]);
 
   // Memoize route positions to ensure they're arrays
   const routePositions = useMemo(() => {
