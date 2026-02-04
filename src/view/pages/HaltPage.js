@@ -9,9 +9,9 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
-import PlaceIcon from "@mui/icons-material/Place";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
+import HaltView from "../moles/HaltView";
 
 export default function HaltPage() {
   const { selectedHalt, routes, loading } = useData();
@@ -45,15 +45,7 @@ export default function HaltPage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <Box display="flex" alignItems="center" gap={1} mb={1}>
-            <PlaceIcon fontSize="large" />
-            <Typography variant="h5">{selectedHalt.name}</Typography>
-          </Box>
-          <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-            {selectedHalt.latLng.toString()}
-          </Typography>
-        </Paper>
+        <HaltView halt={selectedHalt} />
 
         {routesForHalt.length > 0 && (
           <Paper elevation={3} sx={{ p: 3, mt: 2 }}>
