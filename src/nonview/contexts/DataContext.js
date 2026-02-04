@@ -35,31 +35,14 @@ export function DataProvider({ children }) {
 
   // Extract route params based on current location using matchPath
   const selectedHalt = useMemo(() => {
-    const match = matchPath("/halt/:name", location.pathname);
-    if (match?.params?.name) {
-      return halts.find(
-        (halt) => halt.name === decodeURIComponent(match.params.name),
-      );
-    }
-    return null;
-  }, [location.pathname, halts]);
+    const match = matchPath("/halt/:id", location.pathname);
+    return Halt.fromID(match?.params?.id);
+  }, [location.pathname]);
 
   const selectedRoute = useMemo(() => {
-    const match = matchPath("/route/:routeNum", location.pathname);
-    if (match?.params?.routeNum) {
-      const route = routes.find(
-        (r) => r.route_num === decodeURIComponent(match.params.routeNum),
-      );
-      if (route) {
-        // Ensure haltNameList is present and fallback to [] if missing
-        return {
-          ...route,
-          halts: route.haltNameList || [],
-        };
-      }
-    }
-    return null;
-  }, [location.pathname, routes]);
+    const match = matchPath("/route/:id", location.pathname);
+    return Route.fromID(match?.params?.id);
+  }, [location.pathname]);
 
   const value = {
     halts,
