@@ -1,10 +1,9 @@
 import { Marker } from "react-leaflet";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useData } from "../../nonview/contexts/DataContext";
-import HaltsPage from "../pages/HaltsPage";
 
 export default function HaltMarker({ halt }) {
   const navigate = useNavigate();
