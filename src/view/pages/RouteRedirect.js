@@ -9,7 +9,7 @@ export default function RouteRedirect() {
   useEffect(() => {
     if (!loading && routes.length > 0) {
       // Navigate to the first route
-      navigate(`/route/${encodeURIComponent(routes[0].routeNum)}`, {
+      navigate(`/route/${encodeURIComponent(routes[0].id)}`, {
         replace: true,
       });
     }

@@ -9,7 +9,7 @@ export default function BusHaltRedirect() {
   useEffect(() => {
     if (!loading && halts.length > 0) {
       // Navigate to the first halt
-      navigate(`/halt/${encodeURIComponent(halts[0].name)}`, {
+      navigate(`/halt/${encodeURIComponent(halts[0].id)}`, {
         replace: true,
       });
     }
