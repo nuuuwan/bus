@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   MapContainer,
@@ -65,6 +65,24 @@ export default function MapView() {
     [params.latLng, navigate],
   );
 
+  // Memoize halt positions to prevent recreation on every render
+  const haltPositions = useMemo(() => {
+    return halts.map((halt) => ({
+      key: halt.name,
+      position: halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null,
+      halt,
+    }));
+  }, [halts]);
+
+  // Memoize route positions to ensure they're arrays
+  const routePositions = useMemo(() => {
+    return routes.map((route) => ({
+      key: `${route.routeNum}-${route.direction}`,
+      positions: route.latLngList.map((latLng) => [latLng.lat, latLng.lng]),
+      route,
+    }));
+  }, [routes]);
+
   return (
     <Box sx={{ position: "relative", height: "100vh", width: "100%" }}>
       <MapContainer
@@ -78,28 +96,29 @@ export default function MapView() {
         />
         <MapController onMoveEnd={handleMoveEnd} />
 
-        {routes.map((route, iRoute) => {
+        {routePositions.map(({ key, positions, route }) => {
           return (
             <Polyline
-              key={"route-" + iRoute}
-              positions={route.latLngList}
+              key={key}
+              positions={positions}
               color="blue"
               weight={5}
               opacity={0.5}
               eventHandlers={{
                 click: () => {
-                  navigate(`/route/${encodeURIComponent(route.route_num)}`);
+                  navigate(`/route/${encodeURIComponent(route.routeNum)}`);
                 },
               }}
             />
           );
         })}
 
-        {halts.map((halt, iHalt) => {
+        {haltPositions.map(({ key, position, halt }) => {
+          if (!position) return null;
           return (
             <CircleMarker
-              key={"halt-" + iHalt}
-              center={halt.latLng.toArray()}
+              key={key}
+              center={position}
               radius={5}
               fillColor="red"
               fillOpacity={0.8}
