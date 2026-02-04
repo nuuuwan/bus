@@ -7,10 +7,10 @@ import CustomAppBar from "./view/moles/CustomAppBar";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
 import RootRedirect from "./view/pages/RootRedirect";
 import RouteRedirect from "./view/pages/RouteRedirect";
-import HaltRedirect from "./view/pages/BusHaltRedirect";
+import HaltRedirect from "./view/pages/HaltRedirect";
 import MapPage from "./view/pages/MapPage";
 import RoutePage from "./view/pages/RoutePage";
-import HaltPage from "./view/pages/BusHaltPage";
+import HaltPage from "./view/pages/HaltPage";
 
 const theme = createTheme({
   typography: {

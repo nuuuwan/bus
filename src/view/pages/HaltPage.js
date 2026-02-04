@@ -12,7 +12,7 @@ import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
-export default function BusHaltPage() {
+export default function HaltPage() {
   const { selectedHalt, routes, loading } = useData();
 
   // Find all routes that include this bus halt

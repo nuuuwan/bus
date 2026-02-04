@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
-export default function BusHaltRedirect() {
+export default function HaltRedirect() {
   const navigate = useNavigate();
   const { halts, loading } = useData();
 
