@@ -64,15 +64,28 @@ export default function MapView() {
   const { routes, halts } = useData();
   const defaultZoom = 16;
 
+  // Check if we're on a route or halt page
+  const selectedRouteId = params.routeId;
+  const selectedHaltId = params.haltId;
+  const isOnHaltPage = !!selectedHaltId;
+
   // Create custom icon for halts
-  const haltIcon = L.divIcon({
-    className: "custom-halt-icon",
-    html: renderToStaticMarkup(
-      <PlaceIcon style={{ color: "black", fontSize: "32px" }} />,
-    ),
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-  });
+  // If on halt page: selected = black, others = white
+  // If NOT on halt page: all = black
+  const createHaltIcon = (isSelected) => {
+    let color = "black"; // Default: black for all halts
+    if (isOnHaltPage && !isSelected) {
+      color = "white"; // Only show white for non-selected when on halt page
+    }
+    return L.divIcon({
+      className: "custom-halt-icon",
+      html: renderToStaticMarkup(
+        <PlaceIcon style={{ color, fontSize: "32px" }} />,
+      ),
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+    });
+  };
 
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
@@ -125,37 +138,45 @@ export default function MapView() {
         />
         <MapController onMoveEnd={handleMoveEnd} />
 
-        {routes.map((route) => (
-          <Polyline
-            key={`${route.routeNum}-${route.direction}`}
-            positions={route.latLngList.map((latLng) => latLng.toArray())}
-            color={route.getColor()}
-            weight={3}
-            opacity={1}
-            eventHandlers={{
-              click: () => {
-                const latLng = params.latLngId || "";
-                navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`);
-              },
-            }}
-          />
-        ))}
-
-        {halts
-          .filter((halt) => routes.some((route) => route.hasHalt(halt)))
-          .map((halt) => (
-            <Marker
-              key={halt.name}
-              position={halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null}
-              icon={haltIcon}
+        {routes.map((route) => {
+          const isSelected = selectedRouteId === encodeURIComponent(route.id);
+          return (
+            <Polyline
+              key={`${route.routeNum}-${route.direction}`}
+              positions={route.latLngList.map((latLng) => latLng.toArray())}
+              color={isSelected ? route.getColor() : "white"}
+              weight={3}
+              opacity={1}
               eventHandlers={{
                 click: () => {
                   const latLng = params.latLngId || "";
-                  navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
+                  navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`);
                 },
               }}
             />
-          ))}
+          );
+        })}
+
+        {halts
+          .filter((halt) => routes.some((route) => route.hasHalt(halt)))
+          .map((halt) => {
+            const isSelected = selectedHaltId === encodeURIComponent(halt.id);
+            return (
+              <Marker
+                key={halt.name}
+                position={
+                  halt.latLng ? [halt.latLng.lat, halt.latLng.lng] : null
+                }
+                icon={createHaltIcon(isSelected)}
+                eventHandlers={{
+                  click: () => {
+                    const latLng = params.latLngId || "";
+                    navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
+                  },
+                }}
+              />
+            );
+          })}
 
         <Crosshairs />
       </MapContainer>
