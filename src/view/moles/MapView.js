@@ -47,14 +47,14 @@ export default function MapView() {
 
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
-    params.latLng
-      ? LatLng.fromString(params.latLng).toArray()
+    params.latLngId
+      ? LatLng.fromString(params.latLngId).toArray()
       : LatLng.fromDefault().toArray(),
   );
 
   const handleMoveEnd = useCallback(
     (newLatLng) => {
-      const currentLatLng = params.latLng;
+      const currentLatLng = params.latLngId;
       const newLatLngString = newLatLng.toString();
 
       // Only update if the latLng has changed
@@ -62,7 +62,7 @@ export default function MapView() {
         navigate(`/${newLatLngString}`, { replace: true });
       }
     },
-    [params.latLng, navigate],
+    [params.latLngId, navigate],
   );
 
   // Memoize halt positions to prevent recreation on every render
@@ -110,7 +110,7 @@ export default function MapView() {
               opacity={1}
               eventHandlers={{
                 click: () => {
-                  const latLng = params.latLng || "";
+                  const latLng = params.latLngId || "";
                   navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`);
                 },
               }}
@@ -131,7 +131,7 @@ export default function MapView() {
               weight={3}
               eventHandlers={{
                 click: () => {
-                  const latLng = params.latLng || "";
+                  const latLng = params.latLngId || "";
                   navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`);
                 },
               }}

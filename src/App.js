@@ -38,13 +38,13 @@ function App() {
             <CustomAppBar />
             <Routes>
               <Route path="/" element={<RootRedirect />} />
-              <Route path="/:latLng" element={<MapPage />} />
-              <Route path="/:latLng/routes" element={<RoutesPage />} />
-              <Route path="/:latLng/route" element={<RouteRedirect />} />
-              <Route path="/:latLng/route/:id" element={<RoutePage />} />
-              <Route path="/:latLng/halts" element={<HaltsPage />} />
+              <Route path="/:latLngId" element={<MapPage />} />
+              <Route path="/:latLngId/routes" element={<RoutesPage />} />
+              <Route path="/:latLngId/route" element={<RouteRedirect />} />
+              <Route path="/:latLngId/route/:routeId" element={<RoutePage />} />
+              <Route path="/:latLngId/halts" element={<HaltsPage />} />
               <Route path="/:latLng/halt" element={<HaltRedirect />} />
-              <Route path="/:latLng/halt/:id" element={<HaltPage />} />
+              <Route path="/:latLngId/halt/:haltId" element={<HaltPage />} />
             </Routes>
             <CustomBottomNavigator />
           </Box>

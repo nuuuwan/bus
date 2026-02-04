@@ -10,12 +10,12 @@ export default function RouteRedirect() {
   useEffect(() => {
     if (!loading && routes.length > 0) {
       // Navigate to the first route
-      const latLng = params.latLng || "";
+      const latLng = params.latLngId || "";
       navigate(`/${latLng}/route/${encodeURIComponent(routes[0].id)}`, {
         replace: true,
       });
     }
-  }, [loading, routes, navigate, params.latLng]);
+  }, [loading, routes, navigate, params.latLngId]);
 
   return null; // Don't render anything while redirecting
 }

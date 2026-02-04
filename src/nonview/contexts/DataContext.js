@@ -37,9 +37,9 @@ export function DataProvider({ children }) {
 
   useEffect(() => {
     async function loadSelectedHalt() {
-      const match = matchPath("/halt/:id", location.pathname);
-      if (match?.params?.id) {
-        const halt = await Halt.fromID(match.params.id);
+      const match = matchPath("/:latLngId/halt/:haltId", location.pathname);
+      if (match?.params?.haltId) {
+        const halt = await Halt.fromID(match.params.haltId);
         setSelectedHalt(halt);
       } else {
         setSelectedHalt(null);
@@ -50,9 +50,9 @@ export function DataProvider({ children }) {
 
   useEffect(() => {
     async function loadSelectedRoute() {
-      const match = matchPath("/route/:id", location.pathname);
-      if (match?.params?.id) {
-        const route = await Route.fromID(match.params.id);
+      const match = matchPath("/:latLngId/route/:routeId", location.pathname);
+      if (match?.params?.routeId) {
+        const route = await Route.fromID(match.params.routeId);
         setSelectedRoute(route);
       } else {
         setSelectedRoute(null);

@@ -20,7 +20,7 @@ export default function CustomAppBar() {
       const color = selectedRoute ? selectedRoute.getColor() : undefined;
       return {
         icon: <DirectionsBusIcon sx={{ color }} />,
-        text: selectedRoute ? selectedRoute.displayName : params.id || "",
+        text: selectedRoute ? selectedRoute.displayName : params.routeId || "",
         color,
       };
     } else if (location.pathname.includes("/halt/")) {
@@ -28,7 +28,7 @@ export default function CustomAppBar() {
         icon: <PlaceIcon />,
         text: selectedHalt
           ? selectedHalt.displayName
-          : decodeURIComponent(params.id || ""),
+          : decodeURIComponent(params.haltId || ""),
       };
     } else {
       // Map view - extract latLng from path (first segment)

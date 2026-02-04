@@ -10,12 +10,12 @@ export default function HaltRedirect() {
   useEffect(() => {
     if (!loading && halts.length > 0) {
       // Navigate to the first halt
-      const latLng = params.latLng || "";
+      const latLng = params.latLngId || "";
       navigate(`/${latLng}/halt/${encodeURIComponent(halts[0].id)}`, {
         replace: true,
       });
     }
-  }, [loading, halts, navigate, params.latLng]);
+  }, [loading, halts, navigate, params.latLngId]);
 
   return null; // Don't render anything while redirecting
 }
