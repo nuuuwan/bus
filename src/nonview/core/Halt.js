@@ -6,6 +6,11 @@ export default class Halt {
     this.name = name;
     this.latLng = latLng;
   }
+
+  get id() {
+    return `${this.name}-${this.latLng.id}`;
+  }
+
   static fromPythonDict(d) {
     return new Halt(d.name, LatLng.fromTuple(d.latlng));
   }
