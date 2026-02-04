@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import HaltView from "../moles/HaltView";
@@ -39,10 +39,7 @@ export default function HaltPage() {
         <HaltView halt={selectedHalt} />
 
         {routesForHalt.length > 0 && (
-          <Paper elevation={3} sx={{ p: 3, mt: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Routes ({routesForHalt.length})
-            </Typography>
+          <Box>
             <Box>
               {routesForHalt.map((route) => (
                 <Link
@@ -54,7 +51,7 @@ export default function HaltPage() {
                 </Link>
               ))}
             </Box>
-          </Paper>
+          </Box>
         )}
       </Box>
     </Box>

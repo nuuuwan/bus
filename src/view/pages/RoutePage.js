@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteView from "../moles/RouteView";
@@ -32,33 +32,20 @@ export default function RoutePage() {
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={2}>
         <RouteView route={selectedRoute} />
-        <Paper elevation={3}>
-          <Box sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Halts ({selectedRoute.haltList.length})
-            </Typography>
-            {selectedRoute.haltList.map((halt, index) => (
-              <Link
-                key={index}
-                to={`/halt/${encodeURIComponent(halt.id)}`}
-                style={{ textDecoration: "none" }}
-              >
-                <Box display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ minWidth: "30px" }}
-                  >
-                    {index + 1}.
-                  </Typography>
-                  <Box sx={{ flex: 1 }}>
-                    <HaltView halt={halt} />
-                  </Box>
-                </Box>
-              </Link>
-            ))}
-          </Box>
-        </Paper>
+
+        <Box>
+          {selectedRoute.haltList.map((halt, index) => (
+            <Link
+              key={index}
+              to={`/halt/${encodeURIComponent(halt.id)}`}
+              style={{ textDecoration: "none" }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <HaltView halt={halt} />
+              </Box>
+            </Link>
+          ))}
+        </Box>
       </Box>
     </Box>
   );
