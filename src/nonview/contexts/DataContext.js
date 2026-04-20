@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, matchPath } from "react-router-dom";
 import Halt from "../core/Halt";
 import Route from "../core/Route";
+import Bus from "../core/Bus";
 import LatLng from "../base/LatLng";
 
 const DataContext = createContext();
@@ -9,6 +10,7 @@ const DataContext = createContext();
 export function DataProvider({ children }) {
   const [halts, setHalts] = useState([]);
   const [routes, setRoutes] = useState([]);
+  const [buses, setBuses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedHalt, setSelectedHalt] = useState(null);
@@ -26,6 +28,7 @@ export function DataProvider({ children }) {
         ]);
         setHalts(halts);
         setRoutes(routes);
+        setBuses(Bus.fromRoutes(routes));
         setError(null);
       } catch (err) {
         setError(err.message);
@@ -100,6 +103,7 @@ export function DataProvider({ children }) {
   const value = {
     halts,
     routes,
+    buses,
     selectedHalt,
     selectedRoute,
     currentLatLng,

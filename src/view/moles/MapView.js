@@ -10,6 +10,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import Crosshairs, { CrosshairsOverlay } from "../atoms/Crosshairs";
 import RoutePolyline from "../atoms/RoutePolyline";
 import HaltMarker from "../atoms/HaltMarker";
+import BusMarker from "../atoms/BusMarker";
 // Fix for default marker icons in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -56,7 +57,7 @@ export default function MapView() {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { routes, halts, selectedHalt, selectedRoute, currentLatLng } =
+  const { routes, halts, buses, selectedHalt, selectedRoute, currentLatLng } =
     useData();
   const defaultZoom = 14;
 
@@ -165,6 +166,10 @@ export default function MapView() {
           .map((halt) => (
             <HaltMarker key={halt.id} halt={halt} />
           ))}
+
+        {buses.map((bus) => (
+          <BusMarker key={bus.id} bus={bus} />
+        ))}
 
         <Crosshairs />
       </MapContainer>
