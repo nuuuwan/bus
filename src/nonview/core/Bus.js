@@ -36,9 +36,7 @@ export default class Bus {
     if (this.route.latLngList && this.route.latLngList.length > 1) {
       return this.route.latLngList;
     }
-    return this.route.haltList
-      .filter((h) => h.latLng)
-      .map((h) => h.latLng);
+    return this.route.haltList.filter((h) => h.latLng).map((h) => h.latLng);
   }
 
   /**
@@ -118,9 +116,10 @@ export default class Bus {
   static fromRoutes(routes) {
     const buses = [];
     for (const route of routes) {
-      const path = route.latLngList?.length > 1
-        ? route.latLngList
-        : route.haltList.filter((h) => h.latLng).map((h) => h.latLng);
+      const path =
+        route.latLngList?.length > 1
+          ? route.latLngList
+          : route.haltList.filter((h) => h.latLng).map((h) => h.latLng);
       if (path.length < 2) continue;
 
       for (let i = 0; i < Bus.BUSES_PER_ROUTE; i++) {

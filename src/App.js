@@ -21,6 +21,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { DataProvider, useData } from "./nonview/contexts/DataContext";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
 import MapView from "./view/moles/MapView";
+import Clock from "./view/atoms/Clock";
 import RootRedirect from "./view/pages/RootRedirect";
 import RouteRedirect from "./view/pages/RouteRedirect";
 import HaltRedirect from "./view/pages/HaltRedirect";
@@ -108,6 +109,7 @@ function AppContent() {
       </Routes>
 
       <MapView />
+      <Clock />
 
       <Drawer
         anchor="right"

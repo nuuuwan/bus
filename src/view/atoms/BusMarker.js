@@ -39,7 +39,12 @@ export default function BusMarker({ bus }) {
 
   return (
     <Marker position={[latLng.lat, latLng.lng]} icon={icon}>
-      <Tooltip direction="top" offset={[0, -12]} opacity={0.9} permanent={false}>
+      <Tooltip
+        direction="top"
+        offset={[0, -12]}
+        opacity={0.9}
+        permanent={false}
+      >
         {bus.route.displayName}
       </Tooltip>
     </Marker>
