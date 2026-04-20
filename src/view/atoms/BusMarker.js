@@ -1,22 +1,15 @@
-import { useEffect, useState } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
-
-/**
- * Renders a single animated Bus on the map.
- * Position is recalculated every BUS_TICK_MS milliseconds.
- */
-const BUS_TICK_MS = 5_000; // refresh every 5 s
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import { useClock } from "../../nonview/contexts/ClockContext";
 
 function buildBusIcon(color) {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="11" fill="${color}" stroke="white" stroke-width="2"/>
-      <text x="12" y="16" text-anchor="middle" font-size="12" font-family="sans-serif" fill="white">🚌</text>
-    </svg>`.trim();
-
+  const iconHtml = renderToStaticMarkup(
+    <DirectionsBusIcon style={{ color, fontSize: 24 }} />,
+  );
   return L.divIcon({
-    html: svg,
+    html: `<div style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6));line-height:0">${iconHtml}</div>`,
     className: "",
     iconSize: [24, 24],
     iconAnchor: [12, 12],
@@ -24,14 +17,8 @@ function buildBusIcon(color) {
 }
 
 export default function BusMarker({ bus }) {
-  const [latLng, setLatLng] = useState(() => bus.latLngAt(Date.now()));
-
-  useEffect(() => {
-    const tick = () => setLatLng(bus.latLngAt(Date.now()));
-
-    const timer = setInterval(tick, BUS_TICK_MS);
-    return () => clearInterval(timer);
-  }, [bus]);
+  const now = useClock();
+  const latLng = bus.latLngAt(now);
 
   if (!latLng) return null;
 
@@ -39,12 +26,7 @@ export default function BusMarker({ bus }) {
 
   return (
     <Marker position={[latLng.lat, latLng.lng]} icon={icon}>
-      <Tooltip
-        direction="top"
-        offset={[0, -12]}
-        opacity={0.9}
-        permanent={false}
-      >
+      <Tooltip direction="top" offset={[0, -12]} opacity={0.9}>
         {bus.route.displayName}
       </Tooltip>
     </Marker>

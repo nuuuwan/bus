@@ -19,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { DataProvider, useData } from "./nonview/contexts/DataContext";
+import { ClockProvider } from "./nonview/contexts/ClockContext";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
 import MapView from "./view/moles/MapView";
 import Clock from "./view/atoms/Clock";
@@ -141,7 +142,9 @@ function App() {
       <CssBaseline />
       <BrowserRouter basename="/bus">
         <DataProvider>
-          <AppContent />
+          <ClockProvider>
+            <AppContent />
+          </ClockProvider>
         </DataProvider>
       </BrowserRouter>
     </ThemeProvider>

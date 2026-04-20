@@ -1,13 +1,9 @@
-import { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import { useClock } from "../../nonview/contexts/ClockContext";
 
 export default function Clock() {
-  const [now, setNow] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const nowMs = useClock();
+  const now = new Date(nowMs);
 
   const time = now.toLocaleTimeString([], {
     hour: "2-digit",
