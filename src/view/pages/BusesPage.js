@@ -52,9 +52,7 @@ export default function BusesPage() {
           {sortedBuses.map((bus) => {
             const pos = bus.latLngAt(now);
             const distanceKm =
-              currentLatLng && pos
-                ? currentLatLng.distanceTo(pos)
-                : null;
+              currentLatLng && pos ? currentLatLng.distanceTo(pos) : null;
 
             return (
               <ListItem key={bus.id} disablePadding>
@@ -77,7 +75,11 @@ export default function BusesPage() {
                   />
                   <Box flex={1} minWidth={0}>
                     <RouteIcon route={bus.route} />
-                    <Typography variant="caption" display="block" color="text.secondary">
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      color="text.secondary"
+                    >
                       Bus #{bus.busIndex + 1}
                     </Typography>
                     <Distance distanceKm={distanceKm} />
