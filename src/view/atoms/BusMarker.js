@@ -1,12 +1,12 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import RouteIcon from "@mui/icons-material/Route";
 import { useClock } from "../../nonview/contexts/ClockContext";
 
 function buildBusIcon(color) {
   const iconHtml = renderToStaticMarkup(
-    <DirectionsBusIcon style={{ color, fontSize: 24 }} />,
+    <RouteIcon style={{ color, fontSize: 24 }} />,
   );
   return L.divIcon({
     html: `<div style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6));line-height:0">${iconHtml}</div>`,
