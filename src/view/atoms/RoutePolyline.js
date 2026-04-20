@@ -9,7 +9,6 @@ export default function RoutePolyline({ route }) {
   const { selectedRoute, selectedHalt, currentLatLng } = useData();
 
   const isSelected =
-    (!selectedRoute && !selectedHalt) ||
     (selectedRoute && selectedRoute.id === route.id) ||
     (selectedHalt && route.hasHalt(selectedHalt));
 
