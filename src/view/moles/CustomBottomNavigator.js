@@ -27,19 +27,27 @@ export default function CustomBottomNavigator() {
   }, [location.pathname]);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-
-    // Extract latLng from current pathname
     const match = location.pathname.match(/^\/([^/]+)/);
     const latLng = match ? match[1] : "";
+    const pathParts = location.pathname.split("/").filter(Boolean);
+    const isDrawerOpen = pathParts.length > 1;
+
+    // Tapping the active list tab while the drawer is open closes it
+    const isOnListPage =
+      location.pathname.endsWith("/routes") ||
+      location.pathname.endsWith("/halts");
+    if (newValue === value && isOnListPage && isDrawerOpen) {
+      navigate(`/${latLng}`);
+      return;
+    }
+
+    setValue(newValue);
 
     switch (newValue) {
       case "routes":
-        // Navigate to routes list page
         navigate(`/${latLng}/routes`);
         break;
       case "halts":
-        // Navigate to halts list page
         navigate(`/${latLng}/halts`);
         break;
       default:
