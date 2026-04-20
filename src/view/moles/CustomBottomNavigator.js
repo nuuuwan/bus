@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 
@@ -68,7 +68,7 @@ export default function CustomBottomNavigator() {
       elevation={3}
     >
       <BottomNavigation value={value} onChange={handleChange}>
-        <BottomNavigationAction icon={<DirectionsBusIcon />} value="routes" />
+        <BottomNavigationAction icon={<RouteIcon />} value="routes" />
         <BottomNavigationAction icon={<StopCircleIcon />} value="halts" />
         <BottomNavigationAction icon={<AirportShuttleIcon />} value="buses" />
       </BottomNavigation>

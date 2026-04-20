@@ -16,7 +16,7 @@ import {
   Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import { DataProvider, useData } from "./nonview/contexts/DataContext";
@@ -54,14 +54,14 @@ function DrawerHeader({ onClose }) {
   let icon, text, color;
 
   if (location.pathname.includes("/routes")) {
-    icon = <DirectionsBusIcon />;
+    icon = <RouteIcon />;
     text = "Routes";
   } else if (location.pathname.includes("/halts")) {
     icon = <StopCircleIcon />;
     text = "Halts";
   } else if (location.pathname.includes("/route/")) {
     color = selectedRoute ? selectedRoute.getColor() : undefined;
-    icon = <DirectionsBusIcon sx={color ? { color } : undefined} />;
+    icon = <RouteIcon sx={color ? { color } : undefined} />;
     text = selectedRoute ? selectedRoute.displayName : "";
   } else if (location.pathname.includes("/halt/")) {
     icon = <StopCircleIcon />;

@@ -4,7 +4,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import MapIcon from "@mui/icons-material/Map";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -18,7 +18,7 @@ export default function CustomAppBar() {
     // Check for routes list page
     if (location.pathname.includes("/routes")) {
       return {
-        icon: <DirectionsBusIcon />,
+        icon: <RouteIcon />,
         text: "Routes",
       };
     }
@@ -33,7 +33,7 @@ export default function CustomAppBar() {
     else if (location.pathname.includes("/route/")) {
       const color = selectedRoute ? selectedRoute.getColor() : undefined;
       return {
-        icon: <DirectionsBusIcon sx={{ color }} />,
+        icon: <RouteIcon sx={{ color }} />,
         text: selectedRoute ? selectedRoute.displayName : params.routeId || "",
         color,
       };

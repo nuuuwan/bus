@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import RouteIcon from "@mui/icons-material/Route";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import EastIcon from "@mui/icons-material/East";
@@ -64,7 +64,7 @@ export default function RouteLink({ route }) {
         }}
       >
         <Box display="flex" alignItems="center" gap={1}>
-          <DirectionsBusIcon sx={{ color: route.getColor() }} />
+          <RouteIcon sx={{ color: route.getColor() }} />
           <Typography variant="h6" sx={{ color: route.getColor() }}>
             {route.routeNum}
           </Typography>
