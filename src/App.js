@@ -18,6 +18,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import { DataProvider, useData } from "./nonview/contexts/DataContext";
 import { ClockProvider } from "./nonview/contexts/ClockContext";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
@@ -30,6 +31,7 @@ import RoutePage from "./view/pages/RoutePage";
 import HaltPage from "./view/pages/HaltPage";
 import RoutesPage from "./view/pages/RoutesPage";
 import HaltsPage from "./view/pages/HaltsPage";
+import BusesPage from "./view/pages/BusesPage";
 
 const theme = createTheme({
   palette: {
@@ -64,6 +66,9 @@ function DrawerHeader({ onClose }) {
   } else if (location.pathname.includes("/halt/")) {
     icon = <StopCircleIcon />;
     text = selectedHalt ? selectedHalt.displayName : "";
+  } else if (location.pathname.includes("/buses")) {
+    icon = <AirportShuttleIcon />;
+    text = "Buses";
   } else {
     return null;
   }
@@ -128,6 +133,7 @@ function AppContent() {
           <Route path="/:latLngId/route/:routeId" element={<RoutePage />} />
           <Route path="/:latLngId/halts" element={<HaltsPage />} />
           <Route path="/:latLngId/halt/:haltId" element={<HaltPage />} />
+          <Route path="/:latLngId/buses" element={<BusesPage />} />
         </Routes>
       </Drawer>
 

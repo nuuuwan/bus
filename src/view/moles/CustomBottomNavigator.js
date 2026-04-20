@@ -5,6 +5,7 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ export default function CustomBottomNavigator() {
       location.pathname.includes("/halt/")
     ) {
       setValue("halts");
+    } else if (location.pathname.includes("/buses")) {
+      setValue("buses");
     }
   }, [location.pathname]);
 
@@ -35,7 +38,8 @@ export default function CustomBottomNavigator() {
     // Tapping the active list tab while the drawer is open closes it
     const isOnListPage =
       location.pathname.endsWith("/routes") ||
-      location.pathname.endsWith("/halts");
+      location.pathname.endsWith("/halts") ||
+      location.pathname.endsWith("/buses");
     if (newValue === value && isOnListPage && isDrawerOpen) {
       navigate(`/${latLng}`);
       return;
@@ -50,6 +54,9 @@ export default function CustomBottomNavigator() {
       case "halts":
         navigate(`/${latLng}/halts`);
         break;
+      case "buses":
+        navigate(`/${latLng}/buses`);
+        break;
       default:
         break;
     }
@@ -63,6 +70,7 @@ export default function CustomBottomNavigator() {
       <BottomNavigation value={value} onChange={handleChange}>
         <BottomNavigationAction icon={<DirectionsBusIcon />} value="routes" />
         <BottomNavigationAction icon={<StopCircleIcon />} value="halts" />
+        <BottomNavigationAction icon={<AirportShuttleIcon />} value="buses" />
       </BottomNavigation>
     </Paper>
   );
