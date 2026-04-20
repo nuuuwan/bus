@@ -7,8 +7,18 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { Box, Drawer } from "@mui/material";
-import { DataProvider } from "./nonview/contexts/DataContext";
+import {
+  Box,
+  Drawer,
+  Toolbar,
+  Typography,
+  IconButton,
+  Divider,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
+import { DataProvider, useData } from "./nonview/contexts/DataContext";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
 import MapView from "./view/moles/MapView";
 import RootRedirect from "./view/pages/RootRedirect";
@@ -32,6 +42,48 @@ const theme = createTheme({
     fontFamily: ["Ubuntu Mono", "monospace"].join(","),
   },
 });
+
+function DrawerHeader({ onClose }) {
+  const location = useLocation();
+  const { selectedHalt, selectedRoute } = useData();
+
+  let icon, text, color;
+
+  if (location.pathname.includes("/routes")) {
+    icon = <DirectionsBusIcon />;
+    text = "Routes";
+  } else if (location.pathname.includes("/halts")) {
+    icon = <StopCircleIcon />;
+    text = "Halts";
+  } else if (location.pathname.includes("/route/")) {
+    color = selectedRoute ? selectedRoute.getColor() : undefined;
+    icon = <DirectionsBusIcon sx={color ? { color } : undefined} />;
+    text = selectedRoute ? selectedRoute.displayName : "";
+  } else if (location.pathname.includes("/halt/")) {
+    icon = <StopCircleIcon />;
+    text = selectedHalt ? selectedHalt.displayName : "";
+  } else {
+    return null;
+  }
+
+  return (
+    <>
+      <Toolbar sx={{ gap: 1 }}>
+        {icon}
+        <Typography
+          variant="h6"
+          sx={{ flexGrow: 1, ...(color ? { color } : {}) }}
+        >
+          {text}
+        </Typography>
+        <IconButton edge="end" onClick={onClose} aria-label="close">
+          <CloseIcon />
+        </IconButton>
+      </Toolbar>
+      <Divider />
+    </>
+  );
+}
 
 function AppContent() {
   const location = useLocation();
@@ -67,6 +119,7 @@ function AppContent() {
           },
         }}
       >
+        <DrawerHeader onClose={handleDrawerClose} />
         <Routes>
           <Route path="/:latLngId/routes" element={<RoutesPage />} />
           <Route path="/:latLngId/route/:routeId" element={<RoutePage />} />
