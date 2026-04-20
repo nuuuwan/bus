@@ -1,18 +1,25 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
-import RouteIcon from "@mui/icons-material/Route";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import { useClock } from "../../nonview/contexts/ClockContext";
 
-function buildBusIcon(color) {
+function buildBusIcon(color, heading) {
   const iconHtml = renderToStaticMarkup(
-    <RouteIcon style={{ color, fontSize: 24 }} />,
+    <AirportShuttleIcon
+      style={{
+        color,
+        fontSize: 24,
+        transform: `rotate(${heading - 90}deg)`,
+        display: "block",
+      }}
+    />,
   );
   return L.divIcon({
-    html: `<div style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6));line-height:0">${iconHtml}</div>`,
+    html: `<div style="background:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.5)">${iconHtml}</div>`,
     className: "",
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
   });
 }
 
@@ -22,7 +29,7 @@ export default function BusMarker({ bus }) {
 
   if (!latLng) return null;
 
-  const icon = buildBusIcon(bus.route.getColor());
+  const icon = buildBusIcon(bus.route.getColor(), bus.headingAt(now));
 
   return (
     <Marker position={[latLng.lat, latLng.lng]} icon={icon}>

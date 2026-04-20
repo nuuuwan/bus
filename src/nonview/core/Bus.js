@@ -103,6 +103,30 @@ export default class Bus {
     return this._latLngAtProgress(this._progressAt(nowMs));
   }
 
+  /**
+   * Bearing (degrees clockwise from north) of travel at the given timestamp.
+   */
+  headingAt(nowMs = Date.now()) {
+    const path = this._path;
+    if (path.length < 2) return 0;
+    const progress = this._progressAt(nowMs);
+    const target = progress * this._totalLength;
+    let accumulated = 0;
+    for (let i = 0; i < path.length - 1; i++) {
+      const segLen = path[i].distanceTo(path[i + 1]);
+      if (accumulated + segLen >= target) {
+        const from = path[i];
+        const to = path[i + 1];
+        const dLng = to.lng - from.lng;
+        const dLat = to.lat - from.lat;
+        const angle = Math.atan2(dLng, dLat) * (180 / Math.PI);
+        return (angle + 360) % 360;
+      }
+      accumulated += segLen;
+    }
+    return 0;
+  }
+
   // ── Factory ──────────────────────────────────────────────────────────────
 
   /** Number of simulated buses spawned per route. */
