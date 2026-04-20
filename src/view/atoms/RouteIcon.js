@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import RouteIcon from "@mui/icons-material/Route";
 
-export default function RouteIcon({ route }) {
+export default function RouteIconView({ route }) {
   const directionLetter = route.direction
     ? route.direction.charAt(0).toUpperCase()
     : "";
@@ -18,7 +18,7 @@ export default function RouteIcon({ route }) {
         color: route.getColor(),
       }}
     >
-      <DirectionsBusIcon sx={{ fontSize: 12 }} />
+      <RouteIcon sx={{ fontSize: 12 }} />
       <Typography variant="caption">
         {route.routeNum + directionLetter}
       </Typography>
