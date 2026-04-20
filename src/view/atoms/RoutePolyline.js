@@ -2,7 +2,7 @@ import { Polyline } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 
-const NEUTRAL_COLOR = "#aaa";
+const NEUTRAL_COLOR = "#000";
 
 export default function RoutePolyline({ route }) {
   const navigate = useNavigate();
