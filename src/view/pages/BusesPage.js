@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  Divider,
   List,
   ListItemButton,
   Typography,
@@ -67,6 +68,7 @@ export default function BusesPage() {
       >
         {busItems.length} buses
       </Typography>
+      <Divider />
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
           {busItems.map(({ bus, distanceKm, approachArrow }) => {
