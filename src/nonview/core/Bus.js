@@ -262,7 +262,7 @@ export default class Bus {
   // ── Factory ──────────────────────────────────────────────────────────────
 
   /** Number of simulated buses spawned per route. */
-  static BUSES_PER_ROUTE = 3;
+  static BUSES_PER_ROUTE = 8;
 
   /**
    * Generate all simulated buses for an array of routes.
