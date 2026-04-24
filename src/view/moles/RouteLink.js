@@ -22,7 +22,7 @@ const getDirectionIcon = (direction) => {
 
 export default function RouteLink({ route, nextArrivalMs }) {
   const location = useLocation();
-  const { currentLatLng } = useData();
+  const { currentLatLng, buses } = useData();
   const now = useClock();
   const directionIcon = getDirectionIcon(route.direction);
 
@@ -57,7 +57,7 @@ export default function RouteLink({ route, nextArrivalMs }) {
     }
   }
 
-  // Arrival display (used when nextArrivalMs is provided)
+  // Arrival display (used when nextArrivalMs is provided — halt view)
   let arrivalTimeStr = null;
   let durationStr = null;
   if (nextArrivalMs !== null && nextArrivalMs !== undefined) {
@@ -67,6 +67,19 @@ export default function RouteLink({ route, nextArrivalMs }) {
       minute: "2-digit",
     });
   }
+
+  // Next 3 arrivals at closest halt (used in routes list when no nextArrivalMs)
+  const next3Arrivals =
+    nextArrivalMs === null || nextArrivalMs === undefined
+      ? (() => {
+          if (!closestHalt?.latLng || !buses?.length) return [];
+          const routeBuses = buses.filter((b) => b.route.id === route.id);
+          return routeBuses
+            .map((b) => b.nextArrivalAt(closestHalt.latLng, now))
+            .sort((a, b) => a - b)
+            .slice(0, 3);
+        })()
+      : [];
 
   return (
     <Link
@@ -107,6 +120,16 @@ export default function RouteLink({ route, nextArrivalMs }) {
               </Typography>
             )}
             <Distance distanceKm={closestDistanceKm} />
+            {next3Arrivals.length > 0 && (
+              <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
+                <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+                <Typography variant="caption" color="text.secondary">
+                  {next3Arrivals
+                    .map((ms) => formatDuration(Math.max(0, ms - now)))
+                    .join(" · ")}
+                </Typography>
+              </Box>
+            )}
           </>
         )}
       </Box>
