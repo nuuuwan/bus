@@ -1,5 +1,6 @@
 import { Typography, Box } from "@mui/material";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { formatDuration } from "../../nonview/base/Duration";
 
 export default function Distance({ distanceKm }) {
@@ -22,7 +23,11 @@ export default function Distance({ distanceKm }) {
     <Box display="flex" alignItems="center" gap={0.5}>
       <DirectionsWalkIcon fontSize="small" color="action" />
       <Typography variant="body2" color="text.secondary">
-        {displayText} · {timeText}
+        {displayText}
+      </Typography>
+      <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+      <Typography variant="body2" color="text.secondary">
+        {timeText}
       </Typography>
     </Box>
   );
