@@ -1,4 +1,4 @@
-import { Box, CircularProgress, List, ListItemButton } from "@mui/material";
+import { Box, CircularProgress, List, ListItemButton, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -43,8 +43,15 @@ export default function BusesPage() {
   }
 
   return (
-    <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto">
+    <Box display="flex" flexDirection="column" height="100vh">
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
+      >
+        {busItems.length} buses
+      </Typography>
+      <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
           {busItems.map(({ bus, distanceKm }) => {
             return (
