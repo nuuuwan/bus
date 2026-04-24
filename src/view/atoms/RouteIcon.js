@@ -16,7 +16,9 @@ export default function RouteIconView({ route }) {
       }}
     >
       <RouteIcon sx={{ fontSize: 12 }} />
-      <Typography variant="caption" sx={{ fontWeight: 600 }}>{route.shortLabel}</Typography>
+      <Typography variant="caption" sx={{ fontWeight: 600 }}>
+        {route.shortLabel}
+      </Typography>
     </Box>
   );
 }
