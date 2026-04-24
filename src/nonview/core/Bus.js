@@ -83,15 +83,13 @@ export default class Bus {
    * Example: WP · BA-3847
    */
   get numberPlate() {
-    const provinces = ["WP", "CP", "SP", "NP", "EP", "NW", "NC", "SB", "UV"];
     const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // no I/O to avoid confusion
-    const prov = provinces[Bus._seededInt(`${this.id}:prov`, provinces.length)];
     const l1 = letters[Bus._seededInt(`${this.id}:l1`, letters.length)];
     const l2 = letters[Bus._seededInt(`${this.id}:l2`, letters.length)];
     const num = (Bus._seededInt(`${this.id}:num`, 9999) + 1)
       .toString()
       .padStart(4, "0");
-    return `${prov} ${l1}${l2}-${num}`;
+    return `${l1}${l2}-${num}`;
   }
 
   /**
