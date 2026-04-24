@@ -25,14 +25,17 @@ export default function BusesPage() {
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
 
+  const _totalTimeMs = (bus) => {
+    const nextHalt = bus.nextHaltArrival(now);
+    if (!nextHalt || !currentLatLng || !nextHalt.halt.latLng) return Infinity;
+    const walkDistKm = currentLatLng.distanceTo(nextHalt.halt.latLng);
+    const walkMs = (walkDistKm / 4) * 60 * 60 * 1000;
+    const waitMs = Math.max(0, nextHalt.arrivalMs - now);
+    return walkMs + waitMs;
+  };
+
   const sortedBuses = currentLatLng
-    ? [...buses].sort((a, b) => {
-        const posA = a.latLngAt(now);
-        const posB = b.latLngAt(now);
-        const distA = posA ? currentLatLng.distanceTo(posA) : Infinity;
-        const distB = posB ? currentLatLng.distanceTo(posB) : Infinity;
-        return distA - distB;
-      })
+    ? [...buses].sort((a, b) => _totalTimeMs(a) - _totalTimeMs(b))
     : buses;
 
   if (loading) {
