@@ -25,7 +25,7 @@ export default function NumberPlate({ bus }) {
       }}
     >
       <AirportShuttleIcon sx={{ fontSize: "0.9rem" }} />
-      {bus.numberPlate}
+      {bus.route.shortLabel} · {bus.numberPlate}
     </Box>
   );
 }

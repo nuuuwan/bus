@@ -13,7 +13,6 @@ import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
-import RouteIcon from "../atoms/RouteIcon";
 import NumberPlate from "../atoms/NumberPlate";
 
 export default function BusesPage() {
@@ -94,9 +93,6 @@ export default function BusesPage() {
                   <Box flex={1} minWidth={0}>
                     <Box display="flex" alignItems="center" gap={0.5}>
                       <NumberPlate bus={bus} />
-                    </Box>
-                    <Box mt={0.5}>
-                      <RouteIcon route={bus.route} />
                     </Box>
                     <Box mt={0.5}>
                       <Distance distanceKm={catchHaltDistKm} />

@@ -35,7 +35,7 @@ export default function BusMarker({ bus }) {
   const icon = buildBusIcon(
     bus.route.getColor(),
     bus.headingAt(now),
-    bus.route.shortLabel,
+    `${bus.route.shortLabel} · ${bus.numberPlate}`,
   );
 
   return (
