@@ -9,13 +9,10 @@ export default function Distance({ distanceKm }) {
 
   let displayText;
 
-  if (distanceKm >= 10) {
-    displayText = `${Math.round(distanceKm)} km`;
-  } else if (distanceKm >= 1) {
-    displayText = `${distanceKm.toFixed(1)} km`;
+  if (distanceKm >= 1) {
+    displayText = `${parseFloat(distanceKm.toPrecision(2))} km`;
   } else {
-    const meters = Math.round(distanceKm * 1000);
-    displayText = `${meters} m`;
+    displayText = `${parseFloat((distanceKm * 1000).toPrecision(2))} m`;
   }
 
   const walkingMs = (distanceKm / 4) * 60 * 60 * 1000;
