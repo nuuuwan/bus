@@ -26,15 +26,21 @@ export default function RouteLink({ route }) {
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
 
-  // Calculate distance to closest halt on this route
-  const closestDistanceKm =
-    currentLatLng && route.haltList.length > 0
-      ? Math.min(
-          ...route.haltList
-            .filter((halt) => halt.latLng)
-            .map((halt) => currentLatLng.distanceTo(halt.latLng)),
+  // Find closest halt on this route and its distance
+  const haltsWithLatLng =
+    currentLatLng ? route.haltList.filter((halt) => halt.latLng) : [];
+  const closestHalt =
+    haltsWithLatLng.length > 0
+      ? haltsWithLatLng.reduce((best, halt) =>
+          currentLatLng.distanceTo(halt.latLng) <
+          currentLatLng.distanceTo(best.latLng)
+            ? halt
+            : best,
         )
       : null;
+  const closestDistanceKm = closestHalt
+    ? currentLatLng.distanceTo(closestHalt.latLng)
+    : null;
 
   // Calculate opacity based on walking time at 4 kmph
   // < 10 min (~0.67 km): opacity = 1
@@ -74,6 +80,11 @@ export default function RouteLink({ route }) {
           </Box>
         </Box>
         <Distance distanceKm={closestDistanceKm} />
+        {closestHalt && (
+          <Typography variant="caption" color="text.secondary">
+            via {closestHalt.displayName}
+          </Typography>
+        )}
       </Box>
     </Link>
   );
