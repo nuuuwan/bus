@@ -53,20 +53,20 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   // nextBuses: [{bus, arrivalMs}, ...] — used in halt view when multiple buses
   const hasNextBuses = nextBuses && nextBuses.length > 0;
 
-  // Next 3 arrivals at closest halt (used in routes list when no nextArrivalMs)
-  const next3Arrivals =
-    nextArrivalMs === null || nextArrivalMs === undefined
-      ? (() => {
-          if (!closestHalt?.latLng || !buses?.length) return [];
-          const routeBuses = buses.filter((b) => b.route.id === route.id);
-          return routeBuses
-            .map((b) => b.nextArrivalAt(closestHalt.latLng, now))
-            .sort((a, b) => a - b)
-            .slice(0, 1);
-        })()
-      : [];
-
-  const nextArrival = next3Arrivals[0] ?? null;
+  // Closest bus on this route (by physical distance to user)
+  const closestBus = (() => {
+    if (!currentLatLng || !buses?.length) return null;
+    const routeBuses = buses.filter((b) => b.route.id === route.id);
+    if (routeBuses.length === 0) return null;
+    return routeBuses.reduce((best, bus) => {
+      const pos = bus.latLngAt(now);
+      if (!pos) return best;
+      const d = currentLatLng.distanceTo(pos);
+      const bestPos = best ? best.bus.latLngAt(now) : null;
+      const bestD = bestPos ? currentLatLng.distanceTo(bestPos) : Infinity;
+      return d < bestD ? { bus, arrivalMs: closestHalt?.latLng ? bus.nextArrivalAt(closestHalt.latLng, now) : null } : best;
+    }, null);
+  })();
 
   return (
     <Link
@@ -125,22 +125,22 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
           </Box>
         ) : (
           <>
-            {closestHalt && (
-              <Typography variant="caption" color="text.secondary">
-                via {closestHalt.displayName}
-              </Typography>
+            {closestBus && (
+              <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
+                <NumberPlate bus={closestBus.bus} />
+                {closestBus.arrivalMs !== null && (
+                  <>
+                    <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+                    <Typography variant="caption" color="text.secondary">
+                      {formatArrival(closestBus.arrivalMs, now)}
+                    </Typography>
+                  </>
+                )}
+              </Box>
             )}
             <Box mt={0.5}>
               <Distance distanceKm={closestDistanceKm} />
             </Box>
-            {nextArrival !== null && (
-              <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-                <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-                <Typography variant="caption" color="text.secondary">
-                  {formatArrival(nextArrival, now)}
-                </Typography>
-              </Box>
-            )}
           </>
         )}
       </Box>
