@@ -238,25 +238,28 @@ export default class Bus {
    * Returns { halt, arrivalMs } for the next halt this bus will reach.
    */
   nextHaltArrival(nowMs = Date.now()) {
+    const results = this.nextHaltArrivals(1, nowMs);
+    return results.length > 0 ? results[0] : null;
+  }
+
+  /**
+   * Returns up to n { halt, arrivalMs } objects for the next halts this bus will reach,
+   * in order of arrival.
+   */
+  nextHaltArrivals(n = 3, nowMs = Date.now()) {
     const halts = this.route.haltList.filter((h) => h.latLng);
-    if (halts.length === 0) return null;
+    if (halts.length === 0) return [];
     const currentProgress = this._progressAt(nowMs);
-    let bestHalt = null;
-    let bestDelta = Infinity;
-    for (const halt of halts) {
-      const haltProgress = this._progressOfLatLng(halt.latLng);
-      let delta = haltProgress - currentProgress;
-      if (delta <= 0) delta += 1;
-      if (delta < bestDelta) {
-        bestDelta = delta;
-        bestHalt = halt;
-      }
-    }
-    if (!bestHalt) return null;
-    return {
-      halt: bestHalt,
-      arrivalMs: nowMs + bestDelta * Bus.CYCLE_MINUTES * 60_000,
-    };
+    const cycleMs = this._cycleMinutes() * 60_000;
+    return halts
+      .map((halt) => {
+        const haltProgress = this._progressOfLatLng(halt.latLng);
+        let delta = haltProgress - currentProgress;
+        if (delta <= 0) delta += 1;
+        return { halt, arrivalMs: nowMs + delta * cycleMs };
+      })
+      .sort((a, b) => a.arrivalMs - b.arrivalMs)
+      .slice(0, n);
   }
 
   // ── Factory ──────────────────────────────────────────────────────────────

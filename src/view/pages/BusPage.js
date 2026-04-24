@@ -38,10 +38,7 @@ export default function BusPage() {
   const pos = bus.latLngAt(now);
   const distanceKm =
     currentLatLng && pos ? currentLatLng.distanceTo(pos) : null;
-  const nextHalt = bus.nextHaltArrival(now);
-  const nextHaltDuration = nextHalt
-    ? formatDuration(Math.max(0, nextHalt.arrivalMs - now))
-    : null;
+  const nextHalts = bus.nextHaltArrivals(3, now);
 
   return (
     <Box p={2} display="flex" flexDirection="column" gap={2}>
@@ -79,8 +76,8 @@ export default function BusPage() {
         </Box>
       </Box>
 
-      {/* Next halt */}
-      {nextHalt && (
+      {/* Next halts */}
+      {nextHalts.length > 0 && (
         <Box
           sx={{
             p: 1.5,
@@ -95,18 +92,26 @@ export default function BusPage() {
             display="block"
             lineHeight={1.5}
           >
-            Next Halt
+            Next Halts
           </Typography>
-          <Box display="flex" alignItems="center" gap={1} mt={0.5}>
-            <StopCircleIcon color="action" />
-            <Typography variant="body1">{nextHalt.halt.displayName}</Typography>
-          </Box>
-          <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-            <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-            <Typography variant="body2" color="text.secondary">
-              {nextHaltDuration}
-            </Typography>
-          </Box>
+          {nextHalts.map(({ halt, arrivalMs }, i) => (
+            <Box
+              key={halt.id ?? i}
+              display="flex"
+              alignItems="center"
+              gap={1}
+              mt={0.75}
+            >
+              <StopCircleIcon color="action" sx={{ fontSize: 16 }} />
+              <Typography variant="body2" sx={{ flex: 1 }}>
+                {halt.displayName}
+              </Typography>
+              <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+              <Typography variant="body2" color="text.secondary">
+                {formatDuration(Math.max(0, arrivalMs - now))}
+              </Typography>
+            </Box>
+          ))}
         </Box>
       )}
     </Box>
