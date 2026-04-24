@@ -7,9 +7,12 @@ import {
   Typography,
 } from "@mui/material";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
+import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteIcon from "../atoms/RouteIcon";
 
@@ -53,6 +56,16 @@ export default function BusesPage() {
             const pos = bus.latLngAt(now);
             const distanceKm =
               currentLatLng && pos ? currentLatLng.distanceTo(pos) : null;
+            const nextHalt = bus.nextHaltArrival(now);
+            const nextHaltDuration = nextHalt
+              ? formatDuration(Math.max(0, nextHalt.arrivalMs - now))
+              : null;
+            const nextHaltTime = nextHalt
+              ? new Date(nextHalt.arrivalMs).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : null;
 
             return (
               <ListItem key={bus.id} disablePadding>
@@ -83,6 +96,18 @@ export default function BusesPage() {
                       {bus.numberPlate}
                     </Typography>
                     <Distance distanceKm={distanceKm} />
+                    {nextHalt && (
+                      <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
+                        <StopCircleIcon sx={{ fontSize: 13 }} color="action" />
+                        <Typography variant="caption" color="text.secondary">
+                          {nextHalt.halt.displayName}
+                        </Typography>
+                        <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
+                        <Typography variant="caption" color="text.secondary">
+                          {nextHaltTime} · {nextHaltDuration}
+                        </Typography>
+                      </Box>
+                    )}
                   </Box>
                 </ListItemButton>
               </ListItem>

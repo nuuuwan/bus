@@ -214,6 +214,28 @@ export default class Bus {
     return nowMs + delta * Bus.CYCLE_MINUTES * 60_000;
   }
 
+  /**
+   * Returns { halt, arrivalMs } for the next halt this bus will reach.
+   */
+  nextHaltArrival(nowMs = Date.now()) {
+    const halts = this.route.haltList.filter((h) => h.latLng);
+    if (halts.length === 0) return null;
+    const currentProgress = this._progressAt(nowMs);
+    let bestHalt = null;
+    let bestDelta = Infinity;
+    for (const halt of halts) {
+      const haltProgress = this._progressOfLatLng(halt.latLng);
+      let delta = haltProgress - currentProgress;
+      if (delta <= 0) delta += 1;
+      if (delta < bestDelta) {
+        bestDelta = delta;
+        bestHalt = halt;
+      }
+    }
+    if (!bestHalt) return null;
+    return { halt: bestHalt, arrivalMs: nowMs + bestDelta * Bus.CYCLE_MINUTES * 60_000 };
+  }
+
   // ── Factory ──────────────────────────────────────────────────────────────
 
   /** Number of simulated buses spawned per route. */
