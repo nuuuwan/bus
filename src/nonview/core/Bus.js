@@ -52,10 +52,26 @@ export default class Bus {
   }
 
   /**
+   * A deterministic pseudo-random float in [0, 1) derived from a string seed.
+   * Uses a simple djb2-style hash so the value is always the same for the
+   * same seed — no Math.random() involved.
+   */
+  static _seededFloat(seed) {
+    let h = 2166136261; // FNV-1a 32-bit offset basis
+    for (let i = 0; i < seed.length; i++) {
+      h ^= seed.charCodeAt(i);
+      h = Math.imul(h, 16777619) >>> 0; // FNV prime, keep 32-bit unsigned
+    }
+    return (h >>> 0) / 4294967296; // map to [0, 1)
+  }
+
+  /**
    * Current progress along the path [0, 1).
    *
-   * One full traversal takes CYCLE_MINUTES minutes.  Each bus is offset by
-   * (busIndex / totalBusesOnRoute) so they are evenly spread.
+   * One full traversal takes CYCLE_MINUTES minutes.  Each bus is offset by a
+   * seeded pseudo-random value derived from its route id and bus index, so
+   * buses are irregularly spread but the positions are identical on every
+   * page refresh.
    */
   static CYCLE_MINUTES = 60; // one full route traversal in this many minutes
 
@@ -63,7 +79,7 @@ export default class Bus {
     const minutesOfDay = (nowMs / 60_000) % (24 * 60);
     const cycleProgress =
       (minutesOfDay % Bus.CYCLE_MINUTES) / Bus.CYCLE_MINUTES;
-    const offset = this.busIndex / this.totalBusesOnRoute;
+    const offset = Bus._seededFloat(`${this.route.id}:${this.busIndex}`);
     return (cycleProgress + offset) % 1;
   }
 
