@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
@@ -54,7 +55,10 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
           borderColor: "divider",
         }}
       >
-        <Typography variant="body1">{halt.displayName}</Typography>
+        <Box display="flex" alignItems="center" gap={0.5}>
+          <StopCircleIcon sx={{ fontSize: 16 }} color="action" />
+          <Typography variant="body1">{halt.displayName}</Typography>
+        </Box>
         {nextBus && (
           <Box display="flex" alignItems="center" gap={0.5}>
             <NumberPlate bus={nextBus.bus} />
