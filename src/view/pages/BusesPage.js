@@ -3,15 +3,11 @@ import {
   CircularProgress,
   List,
   ListItemButton,
-  Typography,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import NumberPlate from "../atoms/NumberPlate";
 
@@ -24,27 +20,18 @@ export default function BusesPage() {
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
 
-  // For each bus, find the first upcoming halt where the user can walk in time.
-  // Buses where no such halt exists (all missed) are hidden.
+  // Sort buses by physical distance from the user to the bus's current position.
   const busItems = (() => {
-    if (!currentLatLng) {
-      return buses.map((bus) => ({ bus, catchable: null, walkingMs: null }));
-    }
     return buses
-      .flatMap((bus) => {
-        const upcoming = bus.nextHaltArrivals(bus.route.haltList.length, now);
-        const catchable = upcoming.find(({ halt, arrivalMs }) => {
-          if (!halt.latLng) return false;
-          const walkingMs =
-            (currentLatLng.distanceTo(halt.latLng) / 4) * 3_600_000;
-          return arrivalMs - now > walkingMs;
-        });
-        if (!catchable) return [];
-        const walkingMs =
-          (currentLatLng.distanceTo(catchable.halt.latLng) / 4) * 3_600_000;
-        return [{ bus, catchable, walkingMs }];
+      .map((bus) => {
+        const busLatLng = bus.latLngAt(now);
+        const distanceKm =
+          currentLatLng && busLatLng
+            ? currentLatLng.distanceTo(busLatLng)
+            : Infinity;
+        return { bus, busLatLng, distanceKm };
       })
-      .sort((a, b) => a.walkingMs - b.walkingMs);
+      .sort((a, b) => a.distanceKm - b.distanceKm);
   })();
 
   if (loading) {
@@ -64,14 +51,7 @@ export default function BusesPage() {
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto">
         <List sx={{ p: 0 }}>
-          {busItems.map(({ bus, catchable, walkingMs }) => {
-            const catchHaltDistKm = catchable
-              ? currentLatLng.distanceTo(catchable.halt.latLng)
-              : null;
-            const busArrivalDuration = catchable
-              ? formatArrival(catchable.arrivalMs, now)
-              : null;
-
+          {busItems.map(({ bus, distanceKm }) => {
             return (
               <motion.div
                 key={bus.id}
@@ -95,25 +75,8 @@ export default function BusesPage() {
                       <NumberPlate bus={bus} />
                     </Box>
                     <Box mt={0.5}>
-                      <Distance distanceKm={catchHaltDistKm} />
+                      <Distance distanceKm={distanceKm === Infinity ? null : distanceKm} />
                     </Box>
-                    {catchable && (
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        gap={0.5}
-                        mt={0.5}
-                      >
-                        <StopCircleIcon sx={{ fontSize: 13 }} color="action" />
-                        <Typography variant="caption" color="text.secondary">
-                          {catchable.halt.displayName}
-                        </Typography>
-                        <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
-                        <Typography variant="caption" color="text.secondary">
-                          {busArrivalDuration}
-                        </Typography>
-                      </Box>
-                    )}
                   </Box>
                 </ListItemButton>
               </motion.div>

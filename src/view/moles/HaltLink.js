@@ -20,7 +20,10 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
     nextBus ??
     (halt.latLng && buses.length > 0
       ? buses
-          .map((b) => ({ bus: b, arrivalMs: b.nextArrivalAt(halt.latLng, now) }))
+          .map((b) => ({
+            bus: b,
+            arrivalMs: b.nextArrivalAt(halt.latLng, now),
+          }))
           .sort((a, b) => a.arrivalMs - b.arrivalMs)[0]
       : null);
 
