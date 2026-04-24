@@ -84,10 +84,23 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
         }}
       >
         <Box display="flex" alignItems="center" gap={1}>
-          <RouteIcon sx={{ color: route.getColor() }} />
-          <Typography variant="h6" sx={{ color: route.getColor() }}>
-            {route.shortLabel}
-          </Typography>
+          <Box
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 0.5,
+              px: 1,
+              py: 0.4,
+              borderRadius: 2,
+              backgroundColor: route.getColor(),
+              color: "#fff",
+            }}
+          >
+            <RouteIcon sx={{ fontSize: 16 }} />
+            <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+              {route.shortLabel}
+            </Typography>
+          </Box>
         </Box>
         {hasNextBuses ? (
           <Box mt={0.25}>

@@ -8,14 +8,15 @@ export default function RouteIconView({ route }) {
         display: "inline-flex",
         alignItems: "center",
         gap: 0.25,
-        px: 0.5,
+        px: 0.75,
         py: 0.25,
-        borderRadius: 0.5,
-        color: route.getColor(),
+        borderRadius: 2,
+        backgroundColor: route.getColor(),
+        color: "#fff",
       }}
     >
       <RouteIcon sx={{ fontSize: 12 }} />
-      <Typography variant="caption">{route.shortLabel}</Typography>
+      <Typography variant="caption" sx={{ fontWeight: 600 }}>{route.shortLabel}</Typography>
     </Box>
   );
 }
