@@ -102,13 +102,35 @@ export default class Bus {
    * buses are irregularly spread but the positions are identical on every
    * page refresh.
    */
+  /**
+   * CYCLE_MINUTES is the base travel time for one full route traversal.
+   * SPEED_VARIATION controls how much each bus's speed can differ (±fraction).
+   */
   static CYCLE_MINUTES = 60;
+  static SPEED_VARIATION = 0.25; // ±25%
+
+  /**
+   * Per-bus cycle duration (minutes) — gives each bus a slightly different speed.
+   */
+  _cycleMinutes() {
+    const variation = Bus._seededFloat(`${this.id}:speed`);
+    // Maps [0, 1) → [CYCLE*(1-VAR), CYCLE*(1+VAR)]
+    return (
+      Bus.CYCLE_MINUTES *
+      (1 - Bus.SPEED_VARIATION + variation * 2 * Bus.SPEED_VARIATION)
+    );
+  }
 
   _progressAt(nowMs) {
-    const minutesOfDay = (nowMs / 60_000) % (24 * 60);
-    const cycleProgress =
-      (minutesOfDay % Bus.CYCLE_MINUTES) / Bus.CYCLE_MINUTES;
-    const offset = Bus._seededFloat(`${this.route.id}:${this.busIndex}`);
+    const cycleMs = this._cycleMinutes() * 60_000;
+    const cycleProgress = (nowMs % cycleMs) / cycleMs;
+    // Evenly space buses around the route, then add a small jitter so they
+    // don't look mechanical. Jitter is at most 10% of the even spacing.
+    const baseOffset = this.busIndex / this.totalBusesOnRoute;
+    const jitter =
+      Bus._seededFloat(`${this.route.id}:${this.busIndex}:jitter`) *
+      (0.1 / Math.max(this.totalBusesOnRoute, 1));
+    const offset = (baseOffset + jitter) % 1;
     return (cycleProgress + offset) % 1;
   }
 
@@ -211,7 +233,7 @@ export default class Bus {
     const currentProgress = this._progressAt(nowMs);
     let delta = haltProgress - currentProgress;
     if (delta <= 0) delta += 1;
-    return nowMs + delta * Bus.CYCLE_MINUTES * 60_000;
+    return nowMs + delta * this._cycleMinutes() * 60_000;
   }
 
   /**
