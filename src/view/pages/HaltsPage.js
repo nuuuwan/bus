@@ -1,4 +1,10 @@
-import { Box, CircularProgress, Divider, List, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  List,
+  Typography,
+} from "@mui/material";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
