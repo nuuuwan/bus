@@ -48,15 +48,15 @@ export default function RoutesPage() {
   }
 
   return (
-    <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto">
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ px: 2, pt: 1, display: "block" }}
-        >
-          {sortedRoutes.length} routes
-        </Typography>
+    <Box display="flex" flexDirection="column" height="100vh">
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
+      >
+        {sortedRoutes.length} routes
+      </Typography>
+      <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 1, m: 1 }}>
           <AnimatePresence>
             {sortedRoutes.map((route) => (
