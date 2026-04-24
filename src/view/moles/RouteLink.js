@@ -95,17 +95,18 @@ export default function RouteLink({ route, nextArrivalMs }) {
           <Box display="flex" alignItems="center" gap={0.5}>
             <AccessTimeIcon fontSize="small" color="action" />
             <Typography variant="body2" color="text.secondary">
-              {arrivalTimeStr} · {minsUntil === 0 ? "arriving" : `${minsUntil} min`}
+              {arrivalTimeStr} ·{" "}
+              {minsUntil === 0 ? "arriving" : `${minsUntil} min`}
             </Typography>
           </Box>
         ) : (
           <>
-            <Distance distanceKm={closestDistanceKm} />
             {closestHalt && (
               <Typography variant="caption" color="text.secondary">
                 via {closestHalt.displayName}
               </Typography>
             )}
+            <Distance distanceKm={closestDistanceKm} />
           </>
         )}
       </Box>

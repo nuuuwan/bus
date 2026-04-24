@@ -30,9 +30,7 @@ export default function HaltPage() {
     const nextArrivalMs =
       routeBuses.length > 0 && selectedHalt?.latLng
         ? Math.min(
-            ...routeBuses.map((b) =>
-              b.nextArrivalAt(selectedHalt.latLng, now),
-            ),
+            ...routeBuses.map((b) => b.nextArrivalAt(selectedHalt.latLng, now)),
           )
         : null;
     return { route, nextArrivalMs };
