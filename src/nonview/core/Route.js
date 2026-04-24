@@ -11,7 +11,7 @@ export default class Route {
   }
 
   get displayName() {
-    return `${this.routeNum} ${this.direction}`;
+    return this.shortLabel;
   }
 
   get shortLabel() {
