@@ -29,7 +29,10 @@ export default function HaltPage() {
     const routeBuses = buses.filter((b) => b.route.id === route.id);
     const next3 = selectedHalt?.latLng
       ? routeBuses
-          .map((b) => ({ bus: b, arrivalMs: b.nextArrivalAt(selectedHalt.latLng, now) }))
+          .map((b) => ({
+            bus: b,
+            arrivalMs: b.nextArrivalAt(selectedHalt.latLng, now),
+          }))
           .sort((a, b) => a.arrivalMs - b.arrivalMs)
           .slice(0, 3)
       : [];
