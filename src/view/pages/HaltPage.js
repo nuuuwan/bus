@@ -3,48 +3,42 @@ import {
   Typography,
   CircularProgress,
   List,
-  ListItem,
+  ListItemButton,
 } from "@mui/material";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import RouteLink from "../moles/RouteLink";
+import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
+import NumberPlate from "../atoms/NumberPlate";
 
 export default function HaltPage() {
   const { selectedHalt, routes, buses, currentLatLng, loading } = useData();
   const now = useClock();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const routesForHalt = selectedHalt
-    ? routes.filter((route) => route.hasHalt(selectedHalt))
-    : [];
+  const match = location.pathname.match(/^\/([^/]+)/);
+  const latLng = match ? match[1] : "";
 
-  // Distance from user to the selected halt (shared for all routes)
+  // Distance from user to the selected halt
   const haltDistanceKm =
     currentLatLng && selectedHalt?.latLng
       ? currentLatLng.distanceTo(selectedHalt.latLng)
       : null;
 
-  // For each route, find up to 3 next buses and their arrivals at this halt
-  const routesWithBuses = routesForHalt.map((route) => {
-    const routeBuses = buses.filter((b) => b.route.id === route.id);
-    const next3 = selectedHalt?.latLng
-      ? routeBuses
-          .map((b) => ({
-            bus: b,
-            arrivalMs: b.nextArrivalAt(selectedHalt.latLng, now),
-          }))
-          .sort((a, b) => a.arrivalMs - b.arrivalMs)
-          .slice(0, 3)
-      : [];
-    return { route, nextBuses: next3 };
-  });
-
-  // Sort by earliest arrival
-  const sorted = [...routesWithBuses].sort((a, b) => {
-    const aMs = a.nextBuses[0]?.arrivalMs ?? Infinity;
-    const bMs = b.nextBuses[0]?.arrivalMs ?? Infinity;
-    return aMs - bMs;
-  });
+  // Flat list of all buses serving this halt, sorted by next arrival
+  const busItems = selectedHalt?.latLng
+    ? routes
+        .filter((route) => route.hasHalt(selectedHalt))
+        .flatMap((route) => buses.filter((b) => b.route.id === route.id))
+        .map((bus) => ({
+          bus,
+          arrivalMs: bus.nextArrivalAt(selectedHalt.latLng, now),
+        }))
+        .sort((a, b) => a.arrivalMs - b.arrivalMs)
+    : [];
 
   if (loading) {
     return (
@@ -75,11 +69,27 @@ export default function HaltPage() {
             <Distance distanceKm={haltDistanceKm} />
           </Box>
         )}
-        <List sx={{ p: 1, m: 1 }}>
-          {sorted.map(({ route, nextBuses }) => (
-            <ListItem key={route.id} disablePadding>
-              <RouteLink route={route} nextBuses={nextBuses} />
-            </ListItem>
+        <List sx={{ p: 0 }}>
+          {busItems.map(({ bus, arrivalMs }) => (
+            <ListItemButton
+              key={bus.id}
+              onClick={() =>
+                navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
+              }
+              sx={{
+                py: 1.5,
+                px: 2,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+                gap: 1,
+              }}
+            >
+              <NumberPlate bus={bus} />
+              <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+              <Typography variant="caption" color="text.secondary">
+                {formatDuration(Math.max(0, arrivalMs - now))}
+              </Typography>
+            </ListItemButton>
           ))}
         </List>
       </Box>
