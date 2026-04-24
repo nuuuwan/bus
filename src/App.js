@@ -70,7 +70,7 @@ function DrawerHeader({ onClose }) {
   } else if (location.pathname.includes("/buses")) {
     icon = <AirportShuttleIcon />;
     text = "Buses";
-  } else if (location.pathname.match(/\/bus\//) ) {
+  } else if (location.pathname.match(/\/bus\//)) {
     const color = selectedBus ? selectedBus.route.getColor() : undefined;
     icon = <AirportShuttleIcon sx={color ? { color } : undefined} />;
     text = selectedBus ? selectedBus.numberPlate : "";

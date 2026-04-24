@@ -99,9 +99,7 @@ export default function BusPage() {
           </Typography>
           <Box display="flex" alignItems="center" gap={1} mt={0.5}>
             <StopCircleIcon color="action" />
-            <Typography variant="body1">
-              {nextHalt.halt.displayName}
-            </Typography>
+            <Typography variant="body1">{nextHalt.halt.displayName}</Typography>
           </Box>
           <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
             <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />

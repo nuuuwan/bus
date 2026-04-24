@@ -68,9 +68,7 @@ export default function BusesPage() {
               <ListItem key={bus.id} disablePadding>
                 <ListItemButton
                   onClick={() =>
-                    navigate(
-                      `/${latLng}/bus/${encodeURIComponent(bus.id)}`,
-                    )
+                    navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
                   }
                   sx={{
                     py: 1.5,
