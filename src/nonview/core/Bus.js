@@ -66,6 +66,35 @@ export default class Bus {
   }
 
   /**
+   * A deterministic integer in [0, max) derived from a string seed.
+   */
+  static _seededInt(seed, max) {
+    return Math.floor(Bus._seededFloat(seed) * max);
+  }
+
+  /**
+   * Sri-Lanka-style number plate, deterministically generated from the bus id.
+   *
+   * Format: <province> <LL>-<NNNN>
+   *   province — one of the SL provincial abbreviations
+   *   LL       — two uppercase letters
+   *   NNNN     — four-digit number (0001–9999)
+   *
+   * Example: WP · BA-3847
+   */
+  get numberPlate() {
+    const provinces = ["WP", "CP", "SP", "NP", "EP", "NW", "NC", "SB", "UV"];
+    const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // no I/O to avoid confusion
+    const prov = provinces[Bus._seededInt(`${this.id}:prov`, provinces.length)];
+    const l1 = letters[Bus._seededInt(`${this.id}:l1`, letters.length)];
+    const l2 = letters[Bus._seededInt(`${this.id}:l2`, letters.length)];
+    const num = (Bus._seededInt(`${this.id}:num`, 9999) + 1)
+      .toString()
+      .padStart(4, "0");
+    return `${prov} ${l1}${l2}-${num}`;
+  }
+
+  /**
    * Current progress along the path [0, 1).
    *
    * One full traversal takes CYCLE_MINUTES minutes.  Each bus is offset by a
@@ -73,7 +102,7 @@ export default class Bus {
    * buses are irregularly spread but the positions are identical on every
    * page refresh.
    */
-  static CYCLE_MINUTES = 60; // one full route traversal in this many minutes
+  static CYCLE_MINUTES = 60;
 
   _progressAt(nowMs) {
     const minutesOfDay = (nowMs / 60_000) % (24 * 60);

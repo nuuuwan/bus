@@ -80,7 +80,7 @@ export default function BusesPage() {
                       display="block"
                       color="text.secondary"
                     >
-                      Bus #{bus.busIndex + 1}
+                      {bus.numberPlate}
                     </Typography>
                     <Distance distanceKm={distanceKm} />
                   </Box>

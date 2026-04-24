@@ -41,7 +41,7 @@ export default function BusMarker({ bus }) {
   return (
     <Marker position={[latLng.lat, latLng.lng]} icon={icon}>
       <Tooltip direction="top" offset={[0, -12]} opacity={0.9}>
-        {bus.route.displayName}
+        {bus.route.displayName} · {bus.numberPlate}
       </Tooltip>
     </Marker>
   );
