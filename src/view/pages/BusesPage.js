@@ -90,10 +90,14 @@ export default function BusesPage() {
                     <Box display="flex" alignItems="center" gap={0.5}>
                       <NumberPlate bus={bus} />
                       {approachArrow === "up" && (
-                        <ArrowUpwardIcon sx={{ fontSize: 16, color: "success.main" }} />
+                        <ArrowUpwardIcon
+                          sx={{ fontSize: 16, color: "success.main" }}
+                        />
                       )}
                       {approachArrow === "down" && (
-                        <ArrowDownwardIcon sx={{ fontSize: 16, color: "error.main" }} />
+                        <ArrowDownwardIcon
+                          sx={{ fontSize: 16, color: "error.main" }}
+                        />
                       )}
                     </Box>
                     <Box mt={0.5}>

@@ -51,22 +51,11 @@ export default function BusMarker({ bus }) {
   const isSelected = !selectedBus || selectedBus.id === bus.id;
   const color = isSelected ? bus.route.getColor() : "#aaa";
 
-  // Determine if bus is approaching or receding — compare distance now vs 15s ahead
-  let approachArrow = null;
-  if (isSelected && currentLatLng) {
-    const futureLatLng = bus.latLngAt(now + 15_000);
-    if (futureLatLng) {
-      const distNow = currentLatLng.distanceTo(latLng);
-      const distFuture = currentLatLng.distanceTo(futureLatLng);
-      approachArrow = distFuture < distNow ? "up" : "down";
-    }
-  }
-
   const icon = buildBusIcon(
     color,
     bus.headingAt(now),
     `${bus.route.shortLabel} · ${bus.numberPlate}`,
-    approachArrow,
+    null,
   );
 
   return (
