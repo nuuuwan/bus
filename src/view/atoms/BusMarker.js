@@ -6,6 +6,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { useData } from "../../nonview/contexts/DataContext";
+import { useNavigate } from "react-router-dom";
 
 function buildBusIcon(color, heading, label, approachArrow) {
   const iconHtml = renderToStaticMarkup(
@@ -42,6 +43,7 @@ function buildBusIcon(color, heading, label, approachArrow) {
 export default function BusMarker({ bus }) {
   const now = useClock();
   const { currentLatLng } = useData();
+  const navigate = useNavigate();
   const latLng = bus.latLngAt(now);
 
   if (!latLng) return null;
@@ -65,7 +67,16 @@ export default function BusMarker({ bus }) {
   );
 
   return (
-    <Marker position={[latLng.lat, latLng.lng]} icon={icon}>
+    <Marker
+      position={[latLng.lat, latLng.lng]}
+      icon={icon}
+      eventHandlers={{
+        click: () => {
+          const base = currentLatLng ? currentLatLng.id : "0,0";
+          navigate(`/${base}/bus/${encodeURIComponent(bus.id)}`);
+        },
+      }}
+    >
       <Tooltip direction="top" offset={[0, -12]} opacity={0.9}>
         {bus.route.displayName} · {bus.numberPlate}
       </Tooltip>
