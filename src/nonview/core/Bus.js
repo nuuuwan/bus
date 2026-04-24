@@ -133,6 +133,18 @@ export default class Bus {
   }
 
   /**
+   * Convert a cycle progress [0,1) to a path position [0,1] using ping-pong:
+   * first half of cycle = forward (0→1), second half = reverse (1→0).
+   * This makes each bus run the complete route in both directions.
+   */
+  _pathProgress(cycleProgress) {
+    // cycleProgress in [0,1): 0–0.5 → forward leg, 0.5–1.0 → reverse leg
+    return cycleProgress < 0.5
+      ? cycleProgress * 2
+      : (1 - cycleProgress) * 2;
+  }
+
+  /**
    * Interpolate a LatLng on the path at the given progress fraction [0, 1).
    */
   _latLngAtProgress(progress) {
@@ -165,7 +177,7 @@ export default class Bus {
   latLngAt(nowMs = Date.now()) {
     const path = this._path;
     if (path.length < 2) return null;
-    return this._latLngAtProgress(this._progressAt(nowMs));
+    return this._latLngAtProgress(this._pathProgress(this._progressAt(nowMs)));
   }
 
   /**
@@ -174,14 +186,16 @@ export default class Bus {
   headingAt(nowMs = Date.now()) {
     const path = this._path;
     if (path.length < 2) return 0;
-    const progress = this._progressAt(nowMs);
-    const target = progress * this._totalLength;
+    const cycleProgress = this._progressAt(nowMs);
+    const pathProg = this._pathProgress(cycleProgress);
+    const isReversing = cycleProgress >= 0.5;
+    const target = pathProg * this._totalLength;
     let accumulated = 0;
     for (let i = 0; i < path.length - 1; i++) {
       const segLen = path[i].distanceTo(path[i + 1]);
       if (accumulated + segLen >= target) {
-        const from = path[i];
-        const to = path[i + 1];
+        const from = isReversing ? path[i + 1] : path[i];
+        const to = isReversing ? path[i] : path[i + 1];
         const dLng = to.lng - from.lng;
         const dLat = to.lat - from.lat;
         const angle = Math.atan2(dLng, dLat) * (180 / Math.PI);
@@ -227,11 +241,19 @@ export default class Bus {
    * at the given targetLatLng.
    */
   nextArrivalAt(targetLatLng, nowMs = Date.now()) {
-    const haltProgress = this._progressOfLatLng(targetLatLng);
-    const currentProgress = this._progressAt(nowMs);
-    let delta = haltProgress - currentProgress;
-    if (delta <= 0) delta += 1;
-    return nowMs + delta * this._cycleMinutes() * 60_000;
+    // A halt appears at two points in the ping-pong cycle:
+    // forward leg: cycleProgress = haltPathProgress / 2
+    // reverse leg: cycleProgress = 1 - haltPathProgress / 2
+    const haltPathProgress = this._progressOfLatLng(targetLatLng);
+    const forwardCycle = haltPathProgress / 2;
+    const reverseCycle = 1 - haltPathProgress / 2;
+    const currentCycle = this._progressAt(nowMs);
+    const cycleMs = this._cycleMinutes() * 60_000;
+
+    const deltaForward = (forwardCycle - currentCycle + 1) % 1;
+    const deltaReverse = (reverseCycle - currentCycle + 1) % 1;
+    const delta = Math.min(deltaForward, deltaReverse);
+    return nowMs + delta * cycleMs;
   }
 
   /**
