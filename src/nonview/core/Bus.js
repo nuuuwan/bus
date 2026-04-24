@@ -139,9 +139,7 @@ export default class Bus {
    */
   _pathProgress(cycleProgress) {
     // cycleProgress in [0,1): 0–0.5 → forward leg, 0.5–1.0 → reverse leg
-    return cycleProgress < 0.5
-      ? cycleProgress * 2
-      : (1 - cycleProgress) * 2;
+    return cycleProgress < 0.5 ? cycleProgress * 2 : (1 - cycleProgress) * 2;
   }
 
   /**
