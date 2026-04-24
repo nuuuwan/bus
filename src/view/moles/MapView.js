@@ -19,9 +19,18 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
-function MapController({ onMoveEnd }) {
+function MapController({ onMoveEnd, flyToRef }) {
   const map = useMap();
   const { latLngId } = useParams();
+
+  // Expose fly-to function via ref for imperative use (e.g. location button)
+  useEffect(() => {
+    if (flyToRef) {
+      flyToRef.current = (lat, lng, zoom) => {
+        map.flyTo([lat, lng], zoom, { duration: 1 });
+      };
+    }
+  }, [map, flyToRef]);
 
   // Handle URL changes (like "Current Location" button)
   useEffect(() => {
@@ -60,6 +69,7 @@ export default function MapView() {
   const { routes, halts, buses, selectedHalt, selectedRoute, currentLatLng } =
     useData();
   const defaultZoom = 16;
+  const flyToRef = useRef(null);
 
   // Parse latLng from URL params and use ref to keep initial center stable
   const initialCenter = useRef(
@@ -88,18 +98,22 @@ export default function MapView() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const newLatLng = new LatLng(
-            position.coords.latitude,
-            position.coords.longitude,
-          );
-          navigate(`/${newLatLng.toString()}`, { replace: true });
+          const { latitude, longitude } = position.coords;
+          const newLatLng = new LatLng(latitude, longitude);
+          // Fly the map immediately
+          if (flyToRef.current) {
+            flyToRef.current(latitude, longitude, defaultZoom);
+          }
+          // Update URL (preserves drawer path suffix)
+          const pathSuffix = location.pathname.replace(/^\/[^/]+/, "");
+          navigate(`/${newLatLng.toString()}${pathSuffix}`, { replace: true });
         },
         (error) => {
           console.error("Error getting location:", error);
         },
       );
     }
-  }, [navigate]);
+  }, [navigate, location.pathname, defaultZoom]);
 
   // Calculate the target halt for the dotted line
   const targetHalt = selectedHalt
@@ -145,7 +159,7 @@ export default function MapView() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           className="grayscale-map"
         />
-        <MapController onMoveEnd={handleMoveEnd} />
+        <MapController onMoveEnd={handleMoveEnd} flyToRef={flyToRef} />
 
         {routes.map((route) => (
           <RoutePolyline key={route.id} route={route} />
