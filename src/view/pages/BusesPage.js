@@ -83,13 +83,15 @@ export default function BusesPage() {
                   />
                   <Box flex={1} minWidth={0}>
                     <RouteIcon route={bus.route} />
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      color="text.secondary"
-                    >
-                      {bus.numberPlate}
-                    </Typography>
+                    <Box display="flex" alignItems="center" gap={0.5}>
+                      <AirportShuttleIcon sx={{ fontSize: 13, color: bus.route.getColor() }} />
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                      >
+                        {bus.numberPlate}
+                      </Typography>
+                    </Box>
                     <Distance distanceKm={distanceKm} />
                     {nextHalt && (
                       <Box

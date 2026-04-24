@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
@@ -93,6 +94,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               const dur = formatDuration(Math.max(0, arrivalMs - now));
               return (
                 <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
+                  <AirportShuttleIcon sx={{ fontSize: 14, color: bus.route.getColor() }} />
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                   <Typography variant="caption" color="text.secondary">
                     {bus.numberPlate} · {dur}

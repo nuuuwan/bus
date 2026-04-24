@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
@@ -55,6 +56,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
         <Typography variant="body1">{halt.displayName}</Typography>
         {nextBus && (
           <Box display="flex" alignItems="center" gap={0.5}>
+            <AirportShuttleIcon sx={{ fontSize: 13, color: nextBus.bus.route.getColor() }} />
             <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
             <Typography variant="caption" color="text.secondary">
               {nextBus.bus.numberPlate} ·{" "}
