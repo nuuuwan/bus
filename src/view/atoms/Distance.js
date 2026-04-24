@@ -15,7 +15,7 @@ export default function Distance({ distanceKm }) {
     // < 1 km: convert to meters
     const meters = distanceKm * 1000;
     if (meters < 10) {
-      displayText = "<10m";
+      displayText = "<10 m";
     } else {
       displayText = `${Math.round(meters / 10) * 10} m`;
     }

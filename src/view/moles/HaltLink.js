@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
@@ -61,9 +62,12 @@ export default function HaltLink({ halt, buses = [] }) {
                 >
                   <RouteIcon route={route} />
                   {minsUntil !== null && (
-                    <Typography variant="caption" color="text.secondary">
-                      ({minsUntil === 0 ? "now" : `${minsUntil}m`})
-                    </Typography>
+                    <Box display="inline-flex" alignItems="center" gap={0.25}>
+                      <AccessTimeIcon sx={{ fontSize: 11 }} color="action" />
+                      <Typography variant="caption" color="text.secondary">
+                        {minsUntil === 0 ? "now" : `${minsUntil} min`}
+                      </Typography>
+                    </Box>
                   )}
                 </Box>
               );
