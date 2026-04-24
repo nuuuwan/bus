@@ -7,13 +7,13 @@ import { useData } from "../../nonview/contexts/DataContext";
 
 function buildHaltIcon(color) {
   const iconHtml = renderToStaticMarkup(
-    <StopCircleIcon style={{ color, fontSize: 20, display: "block" }} />,
+    <StopCircleIcon style={{ color, fontSize: 12, display: "block" }} />,
   );
   return L.divIcon({
-    html: `<div style="background:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.4)">${iconHtml}</div>`,
+    html: `<div style="background:white;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.4)">${iconHtml}</div>`,
     className: "",
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
   });
 }
 

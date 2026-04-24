@@ -26,7 +26,10 @@ export default class Route {
       down: "D",
       circular: "C",
     };
-    const abbr = dirMap[this.direction?.toLowerCase()] ?? this.direction?.charAt(0).toUpperCase() ?? "";
+    const abbr =
+      dirMap[this.direction?.toLowerCase()] ??
+      this.direction?.charAt(0).toUpperCase() ??
+      "";
     return `${this.routeNum}${abbr}`;
   }
 

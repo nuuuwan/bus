@@ -32,7 +32,11 @@ export default function BusMarker({ bus }) {
 
   if (!latLng) return null;
 
-  const icon = buildBusIcon(bus.route.getColor(), bus.headingAt(now), bus.route.shortLabel);
+  const icon = buildBusIcon(
+    bus.route.getColor(),
+    bus.headingAt(now),
+    bus.route.shortLabel,
+  );
 
   return (
     <Marker position={[latLng.lat, latLng.lng]} icon={icon}>
