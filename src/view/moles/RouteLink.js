@@ -94,7 +94,9 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               const dur = formatDuration(Math.max(0, arrivalMs - now));
               return (
                 <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
-                  <AirportShuttleIcon sx={{ fontSize: 14, color: bus.route.getColor() }} />
+                  <AirportShuttleIcon
+                    sx={{ fontSize: 14, color: bus.route.getColor() }}
+                  />
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                   <Typography variant="caption" color="text.secondary">
                     {bus.numberPlate} · {dur}

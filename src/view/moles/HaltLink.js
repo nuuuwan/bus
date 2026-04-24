@@ -56,7 +56,9 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
         <Typography variant="body1">{halt.displayName}</Typography>
         {nextBus && (
           <Box display="flex" alignItems="center" gap={0.5}>
-            <AirportShuttleIcon sx={{ fontSize: 13, color: nextBus.bus.route.getColor() }} />
+            <AirportShuttleIcon
+              sx={{ fontSize: 13, color: nextBus.bus.route.getColor() }}
+            />
             <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
             <Typography variant="caption" color="text.secondary">
               {nextBus.bus.numberPlate} ·{" "}
