@@ -13,7 +13,6 @@ import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 
-
 export default function BusPage() {
   const { selectedBus, loading } = useData();
   const now = useClock();
