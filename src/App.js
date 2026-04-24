@@ -126,6 +126,7 @@ function AppContent() {
         anchor="right"
         open={isDrawerOpen}
         onClose={handleDrawerClose}
+        hideBackdrop
         sx={{
           "& .MuiDrawer-paper": {
             width: "min(100vw, 400px)",
