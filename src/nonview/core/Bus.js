@@ -106,6 +106,7 @@ export default class Bus {
    */
   static CYCLE_MINUTES = 60;
   static SPEED_VARIATION = 0.25; // ±25%
+  static HALT_DWELL_MS = 5_000; // ms bus stays stationary at each halt
 
   /**
    * Per-bus cycle duration (minutes) — gives each bus a slightly different speed.
@@ -169,13 +170,82 @@ export default class Bus {
   }
 
   /**
+   * Returns sorted path fractions [0,1] for each halt that has a latLng.
+   * Memoised since the route never changes during a simulation.
+   */
+  _haltPathFractions() {
+    if (!this._cachedHaltFracs) {
+      this._cachedHaltFracs = this.route.haltList
+        .filter((h) => h.latLng)
+        .map((h) => this._progressOfLatLng(h.latLng))
+        .sort((a, b) => a - b);
+    }
+    return this._cachedHaltFracs;
+  }
+
+  /**
+   * Maps a linear leg fraction [0,1] to a halt-dwell-aware path fraction [0,1].
+   *
+   * The one-way leg time is split between:
+   *   - moving segments (time ∝ path distance between consecutive halts)
+   *   - HALT_DWELL_MS of stationary dwell at each intermediate halt
+   *
+   * The bus therefore pauses at every halt for at least 5 seconds before
+   * continuing toward the next stop.
+   *
+   * @param {number} legFrac — linear time fraction within one leg [0,1]
+   * @returns {number} path fraction [0,1]
+   */
+  _haltAwarePathFrac(legFrac) {
+    const haltFracs = this._haltPathFractions();
+    const n = haltFracs.length;
+    if (n === 0) return legFrac;
+
+    const legMs = (this._cycleMinutes() * 60_000) / 2;
+    const totalDwellMs = n * Bus.HALT_DWELL_MS;
+    // Keep at least 10 % of leg time for actual travel
+    const travelMs = Math.max(legMs - totalDwellMs, legMs * 0.1);
+    const currentMs = legFrac * legMs;
+
+    // Waypoints: route start (0), each halt, route end (1)
+    const waypoints = [0, ...haltFracs, 1];
+
+    let elapsed = 0;
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      const fromFrac = waypoints[i];
+      const toFrac = waypoints[i + 1];
+      const segPathLen = toFrac - fromFrac;
+      const segTravelMs = segPathLen * travelMs;
+
+      // Bus is travelling in this segment
+      if (currentMs < elapsed + segTravelMs) {
+        const t = segTravelMs > 0 ? (currentMs - elapsed) / segTravelMs : 0;
+        return fromFrac + t * segPathLen;
+      }
+      elapsed += segTravelMs;
+
+      // Bus is dwelling at the halt at toFrac (skip the terminus)
+      if (i < waypoints.length - 2) {
+        if (currentMs < elapsed + Bus.HALT_DWELL_MS) {
+          return toFrac;
+        }
+        elapsed += Bus.HALT_DWELL_MS;
+      }
+    }
+
+    return 1;
+  }
+
+  /**
    * LatLng of this bus at the given timestamp (ms since epoch).
    * Pass Date.now() for the current position.
    */
   latLngAt(nowMs = Date.now()) {
     const path = this._path;
     if (path.length < 2) return null;
-    return this._latLngAtProgress(this._pathProgress(this._progressAt(nowMs)));
+    const cycleProgress = this._progressAt(nowMs);
+    const legFrac = this._pathProgress(cycleProgress);
+    return this._latLngAtProgress(this._haltAwarePathFrac(legFrac));
   }
 
   /**
@@ -185,8 +255,9 @@ export default class Bus {
     const path = this._path;
     if (path.length < 2) return 0;
     const cycleProgress = this._progressAt(nowMs);
-    const pathProg = this._pathProgress(cycleProgress);
+    const legFrac = this._pathProgress(cycleProgress);
     const isReversing = cycleProgress >= 0.5;
+    const pathProg = this._haltAwarePathFrac(legFrac);
     const target = pathProg * this._totalLength;
     let accumulated = 0;
     for (let i = 0; i < path.length - 1; i++) {
