@@ -14,6 +14,22 @@ export default class Route {
     return `${this.routeNum} ${this.direction}`;
   }
 
+  get shortLabel() {
+    const dirMap = {
+      northbound: "N",
+      southbound: "S",
+      eastbound: "E",
+      westbound: "W",
+      inbound: "I",
+      outbound: "O",
+      up: "U",
+      down: "D",
+      circular: "C",
+    };
+    const abbr = dirMap[this.direction?.toLowerCase()] ?? this.direction?.charAt(0).toUpperCase() ?? "";
+    return `${this.routeNum}${abbr}`;
+  }
+
   static getId(routeNum, direction) {
     return `${routeNum}-${direction}`;
   }
