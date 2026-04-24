@@ -3,6 +3,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
+import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteIcon from "../atoms/RouteIcon";
 
@@ -56,9 +57,9 @@ export default function HaltLink({ halt, buses = [] }) {
         {servingRoutesWithArrival.length > 0 && (
           <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
             {servingRoutesWithArrival.map(({ route, nextArrivalMs }) => {
-              const minsUntil =
+              const durationStr =
                 nextArrivalMs !== null
-                  ? Math.max(0, Math.round((nextArrivalMs - now) / 60_000))
+                  ? formatDuration(Math.max(0, nextArrivalMs - now))
                   : null;
               return (
                 <Box
@@ -68,11 +69,11 @@ export default function HaltLink({ halt, buses = [] }) {
                   gap={0.25}
                 >
                   <RouteIcon route={route} />
-                  {minsUntil !== null && (
+                  {durationStr !== null && (
                     <Box display="inline-flex" alignItems="center" gap={0.25}>
                       <AccessTimeIcon sx={{ fontSize: 11 }} color="action" />
                       <Typography variant="caption" color="text.secondary">
-                        {minsUntil === 0 ? "now" : `${minsUntil} min`}
+                        {durationStr}
                       </Typography>
                     </Box>
                   )}

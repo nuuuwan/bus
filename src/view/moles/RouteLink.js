@@ -8,6 +8,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
+import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 
 const getDirectionIcon = (direction) => {
@@ -58,9 +59,9 @@ export default function RouteLink({ route, nextArrivalMs }) {
 
   // Arrival display (used when nextArrivalMs is provided)
   let arrivalTimeStr = null;
-  let minsUntil = null;
+  let durationStr = null;
   if (nextArrivalMs !== null && nextArrivalMs !== undefined) {
-    minsUntil = Math.max(0, Math.round((nextArrivalMs - now) / 60_000));
+    durationStr = formatDuration(Math.max(0, nextArrivalMs - now));
     arrivalTimeStr = new Date(nextArrivalMs).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
@@ -95,8 +96,7 @@ export default function RouteLink({ route, nextArrivalMs }) {
           <Box display="flex" alignItems="center" gap={0.5}>
             <AccessTimeIcon fontSize="small" color="action" />
             <Typography variant="body2" color="text.secondary">
-              {arrivalTimeStr} ·{" "}
-              {minsUntil === 0 ? "arriving" : `${minsUntil} min`}
+              {arrivalTimeStr} · {durationStr}
             </Typography>
           </Box>
         ) : (

@@ -1,5 +1,6 @@
 import { Typography, Box } from "@mui/material";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
+import { formatDuration } from "../../nonview/base/Duration";
 
 export default function Distance({ distanceKm }) {
   if (distanceKm === null || distanceKm === undefined) {
@@ -9,10 +10,8 @@ export default function Distance({ distanceKm }) {
   let displayText;
 
   if (distanceKm >= 1) {
-    // >= 1 km: show in km rounded to 1 decimal places
     displayText = `${distanceKm.toFixed(1)} km`;
   } else {
-    // < 1 km: convert to meters
     const meters = distanceKm * 1000;
     if (meters < 10) {
       displayText = "<10 m";
@@ -21,26 +20,8 @@ export default function Distance({ distanceKm }) {
     }
   }
 
-  // Calculate walking time at 4 kmph
-  const walkingSpeedKmph = 4;
-
-  let timeText;
-  if (distanceKm > 4) {
-    timeText = ">1h";
-  } else {
-    const timeHours = distanceKm / walkingSpeedKmph;
-    const timeMinutes = Math.round(timeHours * 60);
-
-    if (timeMinutes < 1) {
-      timeText = "<1 min";
-    } else if (timeMinutes < 60) {
-      timeText = `${timeMinutes} min`;
-    } else {
-      const hours = Math.floor(timeMinutes / 60);
-      const mins = timeMinutes % 60;
-      timeText = mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-    }
-  }
+  const walkingMs = (distanceKm / 4) * 60 * 60 * 1000;
+  const timeText = formatDuration(walkingMs);
 
   return (
     <Box display="flex" alignItems="center" gap={0.5}>
