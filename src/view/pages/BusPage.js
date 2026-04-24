@@ -77,8 +77,6 @@ export default function BusPage() {
     );
   }
 
-  const bus = selectedBus;
-
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={1}>
