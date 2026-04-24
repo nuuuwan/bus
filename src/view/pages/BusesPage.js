@@ -1,4 +1,10 @@
-import { Box, CircularProgress, List, ListItemButton, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  List,
+  ListItemButton,
+  Typography,
+} from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -67,8 +73,6 @@ export default function BusesPage() {
                   sx={{
                     py: 1.5,
                     px: 2,
-                    borderBottom: "1px solid",
-                    borderColor: "divider",
                     gap: 1.5,
                   }}
                 >

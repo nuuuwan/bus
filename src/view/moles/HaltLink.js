@@ -35,8 +35,6 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
         sx={{
           py: 1.5,
           px: 2,
-          borderBottom: "1px solid",
-          borderColor: "divider",
         }}
       >
         <Box display="flex" alignItems="center" gap={0.5}>

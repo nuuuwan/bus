@@ -89,8 +89,6 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
         sx={{
           py: 1.5,
           px: 2,
-          borderBottom: "1px solid",
-          borderColor: "divider",
           opacity,
         }}
       >

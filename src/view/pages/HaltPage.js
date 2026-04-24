@@ -79,8 +79,6 @@ export default function HaltPage() {
               sx={{
                 py: 1.5,
                 px: 2,
-                borderBottom: "1px solid",
-                borderColor: "divider",
                 gap: 1,
               }}
             >
