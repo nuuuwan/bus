@@ -134,13 +134,13 @@ export default class Bus {
   }
 
   /**
-   * Convert a cycle progress [0,1) to a path position [0,1] using ping-pong:
-   * first half of cycle = forward (0→1), second half = reverse (1→0).
-   * This makes each bus run the complete route in both directions.
+   * Convert a cycle progress [0,1) to a path position [0,1].
+   * Buses travel forward only (0→1) then wrap back to the start.
+   * Each route is already directional (e.g. 138N vs 138S), so there is no
+   * need to reverse along the same path.
    */
   _pathProgress(cycleProgress) {
-    // cycleProgress in [0,1): 0–0.5 → forward leg, 0.5–1.0 → reverse leg
-    return cycleProgress < 0.5 ? cycleProgress * 2 : (1 - cycleProgress) * 2;
+    return cycleProgress;
   }
 
   /**
@@ -256,17 +256,14 @@ export default class Bus {
     if (path.length < 2) return 0;
     const cycleProgress = this._progressAt(nowMs);
     const legFrac = this._pathProgress(cycleProgress);
-    const isReversing = cycleProgress >= 0.5;
     const pathProg = this._haltAwarePathFrac(legFrac);
     const target = pathProg * this._totalLength;
     let accumulated = 0;
     for (let i = 0; i < path.length - 1; i++) {
       const segLen = path[i].distanceTo(path[i + 1]);
       if (accumulated + segLen >= target) {
-        const from = isReversing ? path[i + 1] : path[i];
-        const to = isReversing ? path[i] : path[i + 1];
-        const dLng = to.lng - from.lng;
-        const dLat = to.lat - from.lat;
+        const dLng = path[i + 1].lng - path[i].lng;
+        const dLat = path[i + 1].lat - path[i].lat;
         const angle = Math.atan2(dLng, dLat) * (180 / Math.PI);
         return (angle + 360) % 360;
       }
@@ -310,18 +307,12 @@ export default class Bus {
    * at the given targetLatLng.
    */
   nextArrivalAt(targetLatLng, nowMs = Date.now()) {
-    // A halt appears at two points in the ping-pong cycle:
-    // forward leg: cycleProgress = haltPathProgress / 2
-    // reverse leg: cycleProgress = 1 - haltPathProgress / 2
+    // Forward-only cycle: a halt at path progress p is visited once per cycle
+    // at cycleProgress ≈ p. Find the next time that cycleProgress reaches p.
     const haltPathProgress = this._progressOfLatLng(targetLatLng);
-    const forwardCycle = haltPathProgress / 2;
-    const reverseCycle = 1 - haltPathProgress / 2;
     const currentCycle = this._progressAt(nowMs);
     const cycleMs = this._cycleMinutes() * 60_000;
-
-    const deltaForward = (forwardCycle - currentCycle + 1) % 1;
-    const deltaReverse = (reverseCycle - currentCycle + 1) % 1;
-    const delta = Math.min(deltaForward, deltaReverse);
+    const delta = (haltPathProgress - currentCycle + 1) % 1;
     return nowMs + delta * cycleMs;
   }
 
