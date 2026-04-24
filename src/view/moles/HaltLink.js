@@ -7,6 +7,7 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteIcon from "../atoms/RouteIcon";
+import NumberPlate from "../atoms/NumberPlate";
 
 export default function HaltLink({ halt, buses = [], nextBus }) {
   const location = useLocation();
@@ -56,12 +57,9 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
         <Typography variant="body1">{halt.displayName}</Typography>
         {nextBus && (
           <Box display="flex" alignItems="center" gap={0.5}>
-            <AirportShuttleIcon
-              sx={{ fontSize: 13, color: nextBus.bus.route.getColor() }}
-            />
+            <NumberPlate bus={nextBus.bus} />
             <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
             <Typography variant="caption" color="text.secondary">
-              {nextBus.bus.numberPlate} ·{" "}
               {formatDuration(Math.max(0, nextBus.arrivalMs - now))}
             </Typography>
           </Box>

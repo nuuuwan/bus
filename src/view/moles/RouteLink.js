@@ -7,6 +7,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
+import NumberPlate from "../atoms/NumberPlate";
 
 export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   const location = useLocation();
@@ -94,12 +95,10 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               const dur = formatDuration(Math.max(0, arrivalMs - now));
               return (
                 <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
-                  <AirportShuttleIcon
-                    sx={{ fontSize: 14, color: bus.route.getColor() }}
-                  />
+                  <NumberPlate bus={bus} />
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                   <Typography variant="caption" color="text.secondary">
-                    {bus.numberPlate} · {dur}
+                    {dur}
                   </Typography>
                 </Box>
               );

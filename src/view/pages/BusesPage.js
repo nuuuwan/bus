@@ -15,6 +15,7 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteIcon from "../atoms/RouteIcon";
+import NumberPlate from "../atoms/NumberPlate";
 
 export default function BusesPage() {
   const { buses, currentLatLng, loading } = useData();
@@ -81,12 +82,7 @@ export default function BusesPage() {
                 >
                   <Box flex={1} minWidth={0}>
                     <Box display="flex" alignItems="center" gap={0.5}>
-                      <AirportShuttleIcon
-                        sx={{ fontSize: 15, color: bus.route.getColor() }}
-                      />
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {bus.numberPlate}
-                      </Typography>
+                      <NumberPlate bus={bus} />
                     </Box>
                     <RouteIcon route={bus.route} />
                     <Distance distanceKm={distanceKm} />
