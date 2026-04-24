@@ -96,8 +96,12 @@ export default function BusesPage() {
                     <Box display="flex" alignItems="center" gap={0.5}>
                       <NumberPlate bus={bus} />
                     </Box>
-                    <Box mt={0.5}><RouteIcon route={bus.route} /></Box>
-                    <Box mt={0.5}><Distance distanceKm={catchHaltDistKm} /></Box>
+                    <Box mt={0.5}>
+                      <RouteIcon route={bus.route} />
+                    </Box>
+                    <Box mt={0.5}>
+                      <Distance distanceKm={catchHaltDistKm} />
+                    </Box>
                     {catchable && (
                       <Box
                         display="flex"

@@ -131,7 +131,9 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
                 via {closestHalt.displayName}
               </Typography>
             )}
-            <Box mt={0.5}><Distance distanceKm={closestDistanceKm} /></Box>
+            <Box mt={0.5}>
+              <Distance distanceKm={closestDistanceKm} />
+            </Box>
             {nextArrival !== null && (
               <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
                 <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />

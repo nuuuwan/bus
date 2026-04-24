@@ -68,7 +68,9 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
             </Typography>
           </Box>
         )}
-        <Box mt={0.5}><Distance distanceKm={distanceKm} /></Box>
+        <Box mt={0.5}>
+          <Distance distanceKm={distanceKm} />
+        </Box>
         {!nextBus && servingRoutesWithArrival.length > 0 && (
           <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
             {servingRoutesWithArrival.map(({ route, nextArrivalMs }) => {
