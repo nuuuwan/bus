@@ -46,15 +46,29 @@ export default class Route {
   }
 
   getColor() {
-    return (
-      {
-        10: "orange",
-        13: "red",
-        14: "blue",
-        15: "brown",
-        17: "green",
-      }[this.routeNum.substring(0, 2)] || "gray"
-    );
+    const COLORS = [
+      "#e53935", // red
+      "#d81b60", // pink
+      "#8e24aa", // purple
+      "#5e35b1", // deep purple
+      "#1e88e5", // blue
+      "#039be5", // light blue
+      "#00897b", // teal
+      "#43a047", // green
+      "#f4511e", // deep orange
+      "#fb8c00", // orange
+      "#fdd835", // yellow
+      "#6d4c41", // brown
+      "#00acc1", // cyan
+      "#7cb342", // light green
+      "#c0ca33", // lime
+    ];
+    // Hash routeNum to a stable index
+    let h = 0;
+    for (let i = 0; i < this.routeNum.length; i++) {
+      h = (h * 31 + this.routeNum.charCodeAt(i)) >>> 0;
+    }
+    return COLORS[h % COLORS.length];
   }
   static async listAll() {
     const halts = await Halt.listAll();
