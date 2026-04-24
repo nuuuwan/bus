@@ -1,9 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
-import NorthIcon from "@mui/icons-material/North";
-import SouthIcon from "@mui/icons-material/South";
-import EastIcon from "@mui/icons-material/East";
-import WestIcon from "@mui/icons-material/West";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -11,20 +7,10 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 
-const getDirectionIcon = (direction) => {
-  const dir = direction?.toLowerCase() || "";
-  if (dir.includes("north")) return <NorthIcon fontSize="small" />;
-  if (dir.includes("south")) return <SouthIcon fontSize="small" />;
-  if (dir.includes("east")) return <EastIcon fontSize="small" />;
-  if (dir.includes("west")) return <WestIcon fontSize="small" />;
-  return null;
-};
-
 export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   const location = useLocation();
   const { currentLatLng, buses } = useData();
   const now = useClock();
-  const directionIcon = getDirectionIcon(route.direction);
 
   // Extract latLng from current pathname
   const match = location.pathname.match(/^\/([^/]+)/);
@@ -101,12 +87,8 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
         <Box display="flex" alignItems="center" gap={1}>
           <RouteIcon sx={{ color: route.getColor() }} />
           <Typography variant="h6" sx={{ color: route.getColor() }}>
-            {route.routeNum}
+            {route.shortLabel}
           </Typography>
-          <Box display="flex" alignItems="center" gap={0.5}>
-            {directionIcon}
-            <Typography variant="body2">{route.direction}</Typography>
-          </Box>
         </Box>
         {hasNextBuses ? (
           <Box mt={0.25}>

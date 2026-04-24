@@ -2,9 +2,6 @@ import { Box, Typography } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 
 export default function RouteIconView({ route }) {
-  const directionLetter = route.direction
-    ? route.direction.charAt(0).toUpperCase()
-    : "";
 
   return (
     <Box
@@ -20,7 +17,7 @@ export default function RouteIconView({ route }) {
     >
       <RouteIcon sx={{ fontSize: 12 }} />
       <Typography variant="caption">
-        {route.routeNum + directionLetter}
+        {route.shortLabel}
       </Typography>
     </Box>
   );
