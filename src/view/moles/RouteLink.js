@@ -64,7 +64,14 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
       const d = currentLatLng.distanceTo(pos);
       const bestPos = best ? best.bus.latLngAt(now) : null;
       const bestD = bestPos ? currentLatLng.distanceTo(bestPos) : Infinity;
-      return d < bestD ? { bus, arrivalMs: closestHalt?.latLng ? bus.nextArrivalAt(closestHalt.latLng, now) : null } : best;
+      return d < bestD
+        ? {
+            bus,
+            arrivalMs: closestHalt?.latLng
+              ? bus.nextArrivalAt(closestHalt.latLng, now)
+              : null,
+          }
+        : best;
     }, null);
   })();
 
