@@ -104,6 +104,8 @@ export default function BusPage() {
         >
           {haltArrivals.map(({ halt, arrivalMs }, index) => {
             const isNext = index === nextHaltIndex;
+            const isPassed = nextHaltIndex >= 0 && index < nextHaltIndex;
+            const isUpcoming = !isPassed;
             return (
               <TimelineItem
                 key={halt.id ?? index}
@@ -114,6 +116,7 @@ export default function BusPage() {
                   <TimelineDot
                     color={isNext ? "primary" : "grey"}
                     variant={isNext ? "filled" : "outlined"}
+                    sx={isPassed ? { opacity: 0.35 } : {}}
                   >
                     {isNext ? (
                       <AirportShuttleIcon fontSize="small" />
@@ -128,6 +131,7 @@ export default function BusPage() {
                     py: 1,
                     backgroundColor: isNext ? "action.hover" : "transparent",
                     borderRadius: 1,
+                    opacity: isPassed ? 0.35 : 1,
                   }}
                 >
                   <Typography
@@ -137,7 +141,7 @@ export default function BusPage() {
                   >
                     {halt.displayName}
                   </Typography>
-                  {arrivalMs !== null && (
+                  {isUpcoming && arrivalMs !== null && (
                     <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
                       <AccessTimeIcon sx={{ fontSize: 12 }} color="action" />
                       <Typography variant="caption" color="text.secondary">

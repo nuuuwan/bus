@@ -19,7 +19,8 @@ function buildHaltIcon(color) {
 
 export default function HaltMarker({ halt }) {
   const navigate = useNavigate();
-  const { selectedHalt, selectedRoute, selectedBus, routes, currentLatLng } = useData();
+  const { selectedHalt, selectedRoute, selectedBus, routes, currentLatLng } =
+    useData();
 
   if (!halt.latLng) return null;
 
