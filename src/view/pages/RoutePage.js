@@ -1,5 +1,6 @@
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress, Chip } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -71,6 +72,14 @@ export default function RoutePage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={1}>
+        <Box px={1} pb={1}>
+          <Chip
+            icon={<AirportShuttleIcon />}
+            label={`${buses.filter((b) => b.route.id === selectedRoute.id).length} buses`}
+            size="small"
+            variant="outlined"
+          />
+        </Box>
         <Timeline
           position="right"
           sx={{
