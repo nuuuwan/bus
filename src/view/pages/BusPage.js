@@ -12,11 +12,10 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
-import Distance from "../atoms/Distance";
-import NumberPlate from "../atoms/NumberPlate";
+
 
 export default function BusPage() {
-  const { selectedBus, currentLatLng, loading } = useData();
+  const { selectedBus, loading } = useData();
   const now = useClock();
   const nextHaltRef = useRef(null);
   const [nextHaltIndex, setNextHaltIndex] = useState(-1);
@@ -80,19 +79,10 @@ export default function BusPage() {
   }
 
   const bus = selectedBus;
-  const pos = bus.latLngAt(now);
-  const distanceKm =
-    currentLatLng && pos ? currentLatLng.distanceTo(pos) : null;
 
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto" p={1}>
-        {/* Header: bus label + distance */}
-        <Box display="flex" alignItems="center" gap={1} px={1} pb={1}>
-          <NumberPlate bus={bus} />
-          {distanceKm !== null && <Distance distanceKm={distanceKm} />}
-        </Box>
-
         {/* Full halt timeline */}
         <Timeline
           position="right"

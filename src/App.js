@@ -21,6 +21,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import { DataProvider, useData } from "./nonview/contexts/DataContext";
 import { ClockProvider } from "./nonview/contexts/ClockContext";
+import NumberPlate from "./view/atoms/NumberPlate";
 import CustomBottomNavigator from "./view/moles/CustomBottomNavigator";
 import MapView from "./view/moles/MapView";
 import Clock from "./view/atoms/Clock";
@@ -71,11 +72,19 @@ function DrawerHeader({ onClose }) {
     icon = <AirportShuttleIcon />;
     text = "Buses";
   } else if (location.pathname.match(/\/bus\//)) {
-    const color = selectedBus ? selectedBus.route.getColor() : undefined;
-    icon = <AirportShuttleIcon sx={color ? { color } : undefined} />;
-    text = selectedBus
-      ? `${selectedBus.route.shortLabel} · ${selectedBus.numberPlate}`
-      : "";
+    return (
+      <>
+        <Toolbar sx={{ gap: 1 }}>
+          <Box sx={{ flexGrow: 1 }}>
+            {selectedBus && <NumberPlate bus={selectedBus} />}
+          </Box>
+          <IconButton edge="end" onClick={onClose} aria-label="close">
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+        <Divider />
+      </>
+    );
   } else {
     return null;
   }

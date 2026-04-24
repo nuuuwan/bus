@@ -151,12 +151,19 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               </Box>
             )}
             {bestCatch?.halt && (
-              <Typography variant="caption" color="text.secondary" display="block" mt={0.25}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                display="block"
+                mt={0.25}
+              >
                 → {bestCatch.halt.displayName}
               </Typography>
             )}
             <Box mt={0.5}>
-              <Distance distanceKm={bestCatch?.distanceKm ?? closestDistanceKm} />
+              <Distance
+                distanceKm={bestCatch?.distanceKm ?? closestDistanceKm}
+              />
             </Box>
           </>
         )}
