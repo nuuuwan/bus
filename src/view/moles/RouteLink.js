@@ -61,9 +61,11 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
           return routeBuses
             .map((b) => b.nextArrivalAt(closestHalt.latLng, now))
             .sort((a, b) => a - b)
-            .slice(0, 3);
+            .slice(0, 1);
         })()
       : [];
+
+  const nextArrival = next3Arrivals[0] ?? null;
 
   return (
     <Link
@@ -114,13 +116,11 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               </Typography>
             )}
             <Distance distanceKm={closestDistanceKm} />
-            {next3Arrivals.length > 0 && (
+            {nextArrival !== null && (
               <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
                 <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                 <Typography variant="caption" color="text.secondary">
-                  {next3Arrivals
-                    .map((ms) => formatDuration(Math.max(0, ms - now)))
-                    .join(" · ")}
+                  {formatDuration(Math.max(0, nextArrival - now))}
                 </Typography>
               </Box>
             )}
