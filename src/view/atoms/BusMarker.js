@@ -42,15 +42,18 @@ function buildBusIcon(color, heading, label, approachArrow) {
 
 export default function BusMarker({ bus }) {
   const now = useClock();
-  const { currentLatLng } = useData();
+  const { currentLatLng, selectedBus } = useData();
   const navigate = useNavigate();
   const latLng = bus.latLngAt(now);
 
   if (!latLng) return null;
 
+  const isSelected = !selectedBus || selectedBus.id === bus.id;
+  const color = isSelected ? bus.route.getColor() : "#aaa";
+
   // Determine if bus is approaching or receding — compare distance now vs 15s ahead
   let approachArrow = null;
-  if (currentLatLng) {
+  if (isSelected && currentLatLng) {
     const futureLatLng = bus.latLngAt(now + 15_000);
     if (futureLatLng) {
       const distNow = currentLatLng.distanceTo(latLng);
@@ -60,7 +63,7 @@ export default function BusMarker({ bus }) {
   }
 
   const icon = buildBusIcon(
-    bus.route.getColor(),
+    color,
     bus.headingAt(now),
     `${bus.route.shortLabel} · ${bus.numberPlate}`,
     approachArrow,

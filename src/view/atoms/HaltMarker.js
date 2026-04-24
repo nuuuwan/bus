@@ -19,22 +19,27 @@ function buildHaltIcon(color) {
 
 export default function HaltMarker({ halt }) {
   const navigate = useNavigate();
-  const { selectedHalt, selectedRoute, routes, currentLatLng } = useData();
+  const { selectedHalt, selectedRoute, selectedBus, routes, currentLatLng } = useData();
 
-  const isNotOnSelectedRoute = selectedRoute && !selectedRoute.hasHalt(halt);
-  const isNotSelectedHalt = selectedHalt && selectedHalt.id !== halt.id;
-  const isNotSelected = isNotOnSelectedRoute || isNotSelectedHalt;
-
-  if (isNotSelected) {
-    return null;
-  }
+  if (!halt.latLng) return null;
 
   const routesWithHalt = routes.filter((route) => route.hasHalt(halt));
   const colors = routesWithHalt.map((route) => route.getColor());
   const uniqueColors = [...new Set(colors)];
-  const color = uniqueColors.length === 1 ? uniqueColors[0] : "gray";
+  const routeColor = uniqueColors.length === 1 ? uniqueColors[0] : "gray";
 
-  if (!halt.latLng) return null;
+  // Grey out when a different halt or a bus (not on a route serving this halt) is selected
+  const hasBusSelection = !!selectedBus;
+  const busServesHalt = hasBusSelection && selectedBus.route.hasHalt(halt);
+  const hasHaltSelection = !!selectedHalt;
+  const hasRouteSelection = !!selectedRoute;
+
+  const isDimmed =
+    (hasHaltSelection && selectedHalt.id !== halt.id) ||
+    (hasRouteSelection && !selectedRoute.hasHalt(halt)) ||
+    (hasBusSelection && !busServesHalt);
+
+  const color = isDimmed ? "#ccc" : routeColor;
 
   return (
     <Marker
