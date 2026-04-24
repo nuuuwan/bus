@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 
 export default function NumberPlate({ bus }) {
   const color = bus.route.getColor();
@@ -8,6 +9,7 @@ export default function NumberPlate({ bus }) {
       sx={{
         display: "inline-flex",
         alignItems: "center",
+        gap: 0.4,
         px: 0.75,
         py: 0.1,
         borderRadius: 1,
@@ -22,6 +24,7 @@ export default function NumberPlate({ bus }) {
         whiteSpace: "nowrap",
       }}
     >
+      <AirportShuttleIcon sx={{ fontSize: "0.9rem" }} />
       {bus.numberPlate}
     </Box>
   );
