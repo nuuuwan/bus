@@ -8,6 +8,7 @@ import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import MapIcon from "@mui/icons-material/Map";
 import { useData } from "../../nonview/contexts/DataContext";
+import VERSION from "../../nonview/cons/VERSION";
 
 export default function CustomAppBar() {
   const location = useLocation();
@@ -58,7 +59,7 @@ export default function CustomAppBar() {
   const title = getTitle();
 
   useEffect(() => {
-    document.title = title.text;
+    document.title = `${title.text} · Bus ${VERSION.DATETIME_STR}`;
   }, [title.text]);
 
   return (
