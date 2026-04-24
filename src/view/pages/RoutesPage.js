@@ -1,5 +1,6 @@
-import { Box, CircularProgress, List, ListItem } from "@mui/material";
+import { Box, CircularProgress, List } from "@mui/material";
 import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteLink from "../moles/RouteLink";
 
@@ -50,14 +51,17 @@ export default function RoutesPage() {
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto">
         <List sx={{ p: 1, m: 1 }}>
-          {sortedRoutes.map((route) => (
-            <ListItem
-              key={`${route.routeNum}-${route.direction}`}
-              disablePadding
-            >
-              <RouteLink route={route} />
-            </ListItem>
-          ))}
+          <AnimatePresence>
+            {sortedRoutes.map((route) => (
+              <motion.div
+                key={`${route.routeNum}-${route.direction}`}
+                layout
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+              >
+                <RouteLink route={route} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </List>
       </Box>
     </Box>

@@ -1,5 +1,6 @@
-import { Box, CircularProgress, List, ListItem } from "@mui/material";
+import { Box, CircularProgress, List } from "@mui/material";
 import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
 import HaltLink from "../moles/HaltLink";
 
@@ -41,11 +42,17 @@ export default function HaltsPage() {
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto">
         <List sx={{ p: 1, m: 1 }}>
-          {sortedHalts.map((halt) => (
-            <ListItem key={halt.name} disablePadding>
-              <HaltLink halt={halt} buses={buses} />
-            </ListItem>
-          ))}
+          <AnimatePresence>
+            {sortedHalts.map((halt) => (
+              <motion.div
+                key={halt.name}
+                layout
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+              >
+                <HaltLink halt={halt} buses={buses} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </List>
       </Box>
     </Box>

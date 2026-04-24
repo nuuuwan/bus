@@ -2,10 +2,10 @@ import {
   Box,
   CircularProgress,
   List,
-  ListItem,
   ListItemButton,
   Typography,
 } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
@@ -62,7 +62,11 @@ export default function BusesPage() {
               : null;
 
             return (
-              <ListItem key={bus.id} disablePadding>
+              <motion.div
+                key={bus.id}
+                layout
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+              >
                 <ListItemButton
                   onClick={() =>
                     navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
@@ -108,7 +112,7 @@ export default function BusesPage() {
                     )}
                   </Box>
                 </ListItemButton>
-              </ListItem>
+              </motion.div>
             );
           })}
         </List>
