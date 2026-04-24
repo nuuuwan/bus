@@ -4,8 +4,10 @@ import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import EastIcon from "@mui/icons-material/East";
 import WestIcon from "@mui/icons-material/West";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
+import { useClock } from "../../nonview/contexts/ClockContext";
 import Distance from "../atoms/Distance";
 
 const getDirectionIcon = (direction) => {
@@ -17,18 +19,20 @@ const getDirectionIcon = (direction) => {
   return null;
 };
 
-export default function RouteLink({ route }) {
+export default function RouteLink({ route, nextArrivalMs }) {
   const location = useLocation();
   const { currentLatLng } = useData();
+  const now = useClock();
   const directionIcon = getDirectionIcon(route.direction);
 
   // Extract latLng from current pathname
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
 
-  // Find closest halt on this route and its distance
-  const haltsWithLatLng =
-    currentLatLng ? route.haltList.filter((halt) => halt.latLng) : [];
+  // Find closest halt on this route and its distance (used when no nextArrivalMs)
+  const haltsWithLatLng = currentLatLng
+    ? route.haltList.filter((halt) => halt.latLng)
+    : [];
   const closestHalt =
     haltsWithLatLng.length > 0
       ? haltsWithLatLng.reduce((best, halt) =>
@@ -43,9 +47,6 @@ export default function RouteLink({ route }) {
     : null;
 
   // Calculate opacity based on walking time at 4 kmph
-  // < 10 min (~0.67 km): opacity = 1
-  // 10 min to 1 hr (0.67-4 km): opacity = 0.67
-  // > 1 hr (>4 km): opacity = 0.33
   let opacity = 1;
   if (closestDistanceKm) {
     if (closestDistanceKm > 4) {
@@ -53,6 +54,17 @@ export default function RouteLink({ route }) {
     } else if (closestDistanceKm >= 0.667) {
       opacity = 0.67;
     }
+  }
+
+  // Arrival display (used when nextArrivalMs is provided)
+  let arrivalTimeStr = null;
+  let minsUntil = null;
+  if (nextArrivalMs !== null && nextArrivalMs !== undefined) {
+    minsUntil = Math.max(0, Math.round((nextArrivalMs - now) / 60_000));
+    arrivalTimeStr = new Date(nextArrivalMs).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
 
   return (
@@ -79,11 +91,22 @@ export default function RouteLink({ route }) {
             <Typography variant="body2">{route.direction}</Typography>
           </Box>
         </Box>
-        <Distance distanceKm={closestDistanceKm} />
-        {closestHalt && (
-          <Typography variant="caption" color="text.secondary">
-            via {closestHalt.displayName}
-          </Typography>
+        {arrivalTimeStr !== null ? (
+          <Box display="flex" alignItems="center" gap={0.5}>
+            <AccessTimeIcon fontSize="small" color="action" />
+            <Typography variant="body2" color="text.secondary">
+              {arrivalTimeStr} · {minsUntil === 0 ? "arriving" : `${minsUntil} min`}
+            </Typography>
+          </Box>
+        ) : (
+          <>
+            <Distance distanceKm={closestDistanceKm} />
+            {closestHalt && (
+              <Typography variant="caption" color="text.secondary">
+                via {closestHalt.displayName}
+              </Typography>
+            )}
+          </>
         )}
       </Box>
     </Link>

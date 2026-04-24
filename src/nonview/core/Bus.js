@@ -143,6 +143,48 @@ export default class Bus {
     return 0;
   }
 
+  // ── Arrival prediction ───────────────────────────────────────────────────
+
+  /**
+   * Returns the progress fraction [0,1) of the path point closest to targetLatLng.
+   */
+  _progressOfLatLng(targetLatLng) {
+    const path = this._path;
+    if (path.length === 0) return 0;
+    const totalLen = this._totalLength;
+    if (totalLen === 0) return 0;
+
+    let bestProgress = 0;
+    let bestDist = Infinity;
+    let accumulated = 0;
+
+    for (let i = 0; i < path.length - 1; i++) {
+      const d = targetLatLng.distanceTo(path[i]);
+      if (d < bestDist) {
+        bestDist = d;
+        bestProgress = accumulated / totalLen;
+      }
+      accumulated += path[i].distanceTo(path[i + 1]);
+    }
+    const dLast = targetLatLng.distanceTo(path[path.length - 1]);
+    if (dLast < bestDist) {
+      bestProgress = 1;
+    }
+    return bestProgress;
+  }
+
+  /**
+   * Timestamp (ms since epoch) of the next simulated arrival of this bus
+   * at the given targetLatLng.
+   */
+  nextArrivalAt(targetLatLng, nowMs = Date.now()) {
+    const haltProgress = this._progressOfLatLng(targetLatLng);
+    const currentProgress = this._progressAt(nowMs);
+    let delta = haltProgress - currentProgress;
+    if (delta <= 0) delta += 1;
+    return nowMs + delta * Bus.CYCLE_MINUTES * 60_000;
+  }
+
   // ── Factory ──────────────────────────────────────────────────────────────
 
   /** Number of simulated buses spawned per route. */
