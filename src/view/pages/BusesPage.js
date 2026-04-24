@@ -1,9 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  List,
-  ListItemButton,
-} from "@mui/material";
+import { Box, CircularProgress, List, ListItemButton } from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -75,7 +70,9 @@ export default function BusesPage() {
                       <NumberPlate bus={bus} />
                     </Box>
                     <Box mt={0.5}>
-                      <Distance distanceKm={distanceKm === Infinity ? null : distanceKm} />
+                      <Distance
+                        distanceKm={distanceKm === Infinity ? null : distanceKm}
+                      />
                     </Box>
                   </Box>
                 </ListItemButton>
