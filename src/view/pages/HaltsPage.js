@@ -4,7 +4,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import HaltLink from "../moles/HaltLink";
 
 export default function HaltsPage() {
-  const { halts, routes, currentLatLng, loading } = useData();
+  const { halts, routes, buses, currentLatLng, loading } = useData();
 
   // Filter halts to only show those associated with at least one route
   const filteredHalts = halts.filter((halt) =>
@@ -43,7 +43,7 @@ export default function HaltsPage() {
         <List sx={{ p: 1, m: 1 }}>
           {sortedHalts.map((halt) => (
             <ListItem key={halt.name} disablePadding>
-              <HaltLink halt={halt} />
+              <HaltLink halt={halt} buses={buses} />
             </ListItem>
           ))}
         </List>
