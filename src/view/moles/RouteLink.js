@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
@@ -166,6 +166,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
           </>
         )}
       </Box>
+      <Divider />
     </Link>
   );
 }

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, List } from "@mui/material";
+import { Box, CircularProgress, Divider, List, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -39,9 +39,17 @@ export default function HaltsPage() {
   }
 
   return (
-    <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto">
-        <List sx={{ p: 1, m: 1 }}>
+    <Box display="flex" flexDirection="column" height="100vh">
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
+      >
+        {sortedHalts.length} halts
+      </Typography>
+      <Divider />
+      <Box width="100%" overflow="auto" flexGrow={1}>
+        <List sx={{ p: 0 }}>
           <AnimatePresence>
             {sortedHalts.map((halt) => (
               <motion.div

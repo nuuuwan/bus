@@ -2,6 +2,7 @@ import {
   Box,
   Typography,
   CircularProgress,
+  Divider,
   List,
   ListItemButton,
 } from "@mui/material";
@@ -62,17 +63,19 @@ export default function HaltPage() {
   }
 
   return (
-    <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto">
-        {haltDistanceKm !== null && (
-          <Box sx={{ px: 2, pt: 2, pb: 1 }}>
-            <Distance distanceKm={haltDistanceKm} />
-          </Box>
-        )}
+    <Box display="flex" flexDirection="column" height="100vh">
+      {haltDistanceKm !== null && (
+        <Box sx={{ px: 2, pt: 1, pb: 0.5, flexShrink: 0 }}>
+          <Distance distanceKm={haltDistanceKm} />
+        </Box>
+      )}
+      <Divider />
+      <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
           {busItems.map(({ bus, arrivalMs }) => (
             <ListItemButton
               key={bus.id}
+              divider
               onClick={() =>
                 navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
               }

@@ -87,6 +87,7 @@ export default function BusesPage() {
                     px: 2,
                     gap: 1.5,
                   }}
+                  divider
                 >
                   <Box flex={1} minWidth={0}>
                     <Box display="flex" alignItems="center" gap={0.5}>
