@@ -15,6 +15,7 @@ export function DataProvider({ children }) {
   const [error, setError] = useState(null);
   const [selectedHalt, setSelectedHalt] = useState(null);
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const [selectedBus, setSelectedBus] = useState(null);
   const [currentLatLng, setCurrentLatLng] = useState(null);
   const location = useLocation();
 
@@ -54,6 +55,17 @@ export function DataProvider({ children }) {
   }, [location.pathname]);
 
   useEffect(() => {
+    const match = matchPath("/:latLngId/bus/:busId", location.pathname);
+    if (match?.params?.busId) {
+      const busId = decodeURIComponent(match.params.busId);
+      const found = buses.find((b) => b.id === busId) ?? null;
+      setSelectedBus(found);
+    } else {
+      setSelectedBus(null);
+    }
+  }, [location.pathname, buses]);
+
+  useEffect(() => {
     async function loadSelectedRoute() {
       const match = matchPath("/:latLngId/route/:routeId", location.pathname);
       if (match?.params?.routeId) {
@@ -76,6 +88,8 @@ export function DataProvider({ children }) {
       "/:latLngId/halts",
       "/:latLngId/halt",
       "/:latLngId/halt/:haltId",
+      "/:latLngId/buses",
+      "/:latLngId/bus/:busId",
     ];
 
     let latLngId = null;
@@ -106,6 +120,7 @@ export function DataProvider({ children }) {
     buses,
     selectedHalt,
     selectedRoute,
+    selectedBus,
     currentLatLng,
     loading,
     error,

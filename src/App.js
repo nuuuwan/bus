@@ -32,6 +32,7 @@ import HaltPage from "./view/pages/HaltPage";
 import RoutesPage from "./view/pages/RoutesPage";
 import HaltsPage from "./view/pages/HaltsPage";
 import BusesPage from "./view/pages/BusesPage";
+import BusPage from "./view/pages/BusPage";
 
 const theme = createTheme({
   palette: {
@@ -49,7 +50,7 @@ const theme = createTheme({
 
 function DrawerHeader({ onClose }) {
   const location = useLocation();
-  const { selectedHalt, selectedRoute } = useData();
+  const { selectedHalt, selectedRoute, selectedBus } = useData();
 
   let icon, text, color;
 
@@ -69,6 +70,10 @@ function DrawerHeader({ onClose }) {
   } else if (location.pathname.includes("/buses")) {
     icon = <AirportShuttleIcon />;
     text = "Buses";
+  } else if (location.pathname.match(/\/bus\//) ) {
+    const color = selectedBus ? selectedBus.route.getColor() : undefined;
+    icon = <AirportShuttleIcon sx={color ? { color } : undefined} />;
+    text = selectedBus ? selectedBus.numberPlate : "";
   } else {
     return null;
   }
@@ -134,6 +139,7 @@ function AppContent() {
           <Route path="/:latLngId/halts" element={<HaltsPage />} />
           <Route path="/:latLngId/halt/:haltId" element={<HaltPage />} />
           <Route path="/:latLngId/buses" element={<BusesPage />} />
+          <Route path="/:latLngId/bus/:busId" element={<BusPage />} />
         </Routes>
       </Drawer>
 

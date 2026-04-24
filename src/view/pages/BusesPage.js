@@ -69,7 +69,7 @@ export default function BusesPage() {
                 <ListItemButton
                   onClick={() =>
                     navigate(
-                      `/${latLng}/route/${encodeURIComponent(bus.route.id)}`,
+                      `/${latLng}/bus/${encodeURIComponent(bus.id)}`,
                     )
                   }
                   sx={{
