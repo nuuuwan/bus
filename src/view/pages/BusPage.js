@@ -1,16 +1,62 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineDot from "@mui/lab/TimelineDot";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
-import RouteIcon from "../atoms/RouteIcon";
+import NumberPlate from "../atoms/NumberPlate";
 
 export default function BusPage() {
   const { selectedBus, currentLatLng, loading } = useData();
   const now = useClock();
+  const nextHaltRef = useRef(null);
+  const [nextHaltIndex, setNextHaltIndex] = useState(-1);
+
+  // Compute per-halt arrivals and find the next halt index
+  const haltArrivals =
+    selectedBus && !loading
+      ? selectedBus.route.haltList.map((halt) => ({
+          halt,
+          arrivalMs: halt.latLng
+            ? selectedBus.nextArrivalAt(halt.latLng, now)
+            : null,
+        }))
+      : [];
+
+  useEffect(() => {
+    if (haltArrivals.length === 0) return;
+    let minMs = Infinity;
+    let idx = -1;
+    haltArrivals.forEach(({ arrivalMs }, i) => {
+      if (arrivalMs !== null && arrivalMs < minMs) {
+        minMs = arrivalMs;
+        idx = i;
+      }
+    });
+    setNextHaltIndex(idx);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedBus, now]);
+
+  // Smooth-scroll to the next halt
+  useEffect(() => {
+    if (nextHaltRef.current && nextHaltIndex >= 0) {
+      setTimeout(() => {
+        nextHaltRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
+    }
+  }, [nextHaltIndex]);
 
   if (loading) {
     return (
@@ -34,83 +80,77 @@ export default function BusPage() {
   }
 
   const bus = selectedBus;
-  const route = bus.route;
   const pos = bus.latLngAt(now);
   const distanceKm =
     currentLatLng && pos ? currentLatLng.distanceTo(pos) : null;
-  const nextHalts = bus.nextHaltArrivals(3, now);
 
   return (
-    <Box p={2} display="flex" flexDirection="column" gap={2}>
-      {/* Distance from user to bus */}
-      {distanceKm !== null && (
-        <Box display="flex" alignItems="center" gap={1}>
-          <AirportShuttleIcon sx={{ color: route.getColor() }} />
-          <Distance distanceKm={distanceKm} />
+    <Box display="flex" height="100vh">
+      <Box width="100%" overflow="auto" p={1}>
+        {/* Header: bus label + distance */}
+        <Box display="flex" alignItems="center" gap={1} px={1} pb={1}>
+          <NumberPlate bus={bus} />
+          {distanceKm !== null && <Distance distanceKm={distanceKm} />}
         </Box>
-      )}
 
-      {/* Route */}
-      <Box
-        sx={{
-          p: 1.5,
-          borderRadius: 1,
-          border: "1px solid",
-          borderColor: "divider",
-        }}
-      >
-        <Typography
-          variant="overline"
-          color="text.secondary"
-          display="block"
-          lineHeight={1.5}
-        >
-          Route
-        </Typography>
-        <Box display="flex" alignItems="center" gap={1} mt={0.5}>
-          <RouteIcon route={route} />
-          <Typography variant="body1">{route.displayName}</Typography>
-        </Box>
-      </Box>
-
-      {/* Next halts */}
-      {nextHalts.length > 0 && (
-        <Box
+        {/* Full halt timeline */}
+        <Timeline
+          position="right"
           sx={{
-            p: 1.5,
-            borderRadius: 1,
-            border: "1px solid",
-            borderColor: "divider",
+            padding: 0,
+            margin: 0,
+            "& .MuiTimelineItem-root": { "&:before": { display: "none" } },
           }}
         >
-          <Typography
-            variant="overline"
-            color="text.secondary"
-            display="block"
-            lineHeight={1.5}
-          >
-            Next Halts
-          </Typography>
-          {nextHalts.map(({ halt, arrivalMs }, i) => (
-            <Box
-              key={halt.id ?? i}
-              display="flex"
-              alignItems="center"
-              gap={1}
-              mt={0.75}
-            >
-              <StopCircleIcon color="action" sx={{ fontSize: 16 }} />
-              <Typography variant="body2" sx={{ flex: 1 }}>
-                {halt.displayName}
-              </Typography>
-              <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-              <Typography variant="body2" color="text.secondary">
-                {formatArrival(arrivalMs, now)}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      )}
+          {haltArrivals.map(({ halt, arrivalMs }, index) => {
+            const isNext = index === nextHaltIndex;
+            return (
+              <TimelineItem
+                key={halt.id ?? index}
+                ref={isNext ? nextHaltRef : null}
+              >
+                <TimelineSeparator>
+                  {index > 0 && <TimelineConnector />}
+                  <TimelineDot
+                    color={isNext ? "primary" : "grey"}
+                    variant={isNext ? "filled" : "outlined"}
+                  >
+                    {isNext ? (
+                      <AirportShuttleIcon fontSize="small" />
+                    ) : (
+                      <StopCircleIcon fontSize="small" />
+                    )}
+                  </TimelineDot>
+                  {index < haltArrivals.length - 1 && <TimelineConnector />}
+                </TimelineSeparator>
+                <TimelineContent
+                  sx={{
+                    py: 1,
+                    backgroundColor: isNext ? "action.hover" : "transparent",
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    fontWeight={isNext ? 700 : 400}
+                    component="span"
+                  >
+                    {halt.displayName}
+                  </Typography>
+                  {arrivalMs !== null && (
+                    <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
+                      <AccessTimeIcon sx={{ fontSize: 12 }} color="action" />
+                      <Typography variant="caption" color="text.secondary">
+                        {formatArrival(arrivalMs, now)}
+                      </Typography>
+                    </Box>
+                  )}
+                </TimelineContent>
+              </TimelineItem>
+            );
+          })}
+        </Timeline>
+      </Box>
     </Box>
   );
 }

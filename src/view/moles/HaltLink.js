@@ -4,7 +4,6 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { Link, useLocation } from "react-router-dom";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
-import Distance from "../atoms/Distance";
 import NumberPlate from "../atoms/NumberPlate";
 
 export default function HaltLink({ halt, buses = [], nextBus }) {
