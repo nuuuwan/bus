@@ -269,15 +269,11 @@ export default class Bus {
   nextHaltArrivals(n = 3, nowMs = Date.now()) {
     const halts = this.route.haltList.filter((h) => h.latLng);
     if (halts.length === 0) return [];
-    const currentProgress = this._progressAt(nowMs);
-    const cycleMs = this._cycleMinutes() * 60_000;
     return halts
-      .map((halt) => {
-        const haltProgress = this._progressOfLatLng(halt.latLng);
-        let delta = haltProgress - currentProgress;
-        if (delta <= 0) delta += 1;
-        return { halt, arrivalMs: nowMs + delta * cycleMs };
-      })
+      .map((halt) => ({
+        halt,
+        arrivalMs: this.nextArrivalAt(halt.latLng, nowMs),
+      }))
       .sort((a, b) => a.arrivalMs - b.arrivalMs)
       .slice(0, n);
   }

@@ -5,8 +5,7 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+import { motion } from "framer-motion";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useNavigate, useLocation } from "react-router-dom";

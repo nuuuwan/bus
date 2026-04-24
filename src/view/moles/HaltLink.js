@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
