@@ -53,26 +53,31 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   // nextBuses: [{bus, arrivalMs}, ...] — used in halt view when multiple buses
   const hasNextBuses = nextBuses && nextBuses.length > 0;
 
-  // Closest bus on this route (by physical distance to user)
-  const closestBus = (() => {
+  // Find the best catchable bus: the one whose next halt is closest to the user,
+  // paired with that halt and its arrival time.
+  const bestCatch = (() => {
     if (!currentLatLng || !buses?.length) return null;
     const routeBuses = buses.filter((b) => b.route.id === route.id);
     if (routeBuses.length === 0) return null;
-    return routeBuses.reduce((best, bus) => {
-      const pos = bus.latLngAt(now);
-      if (!pos) return best;
-      const d = currentLatLng.distanceTo(pos);
-      const bestPos = best ? best.bus.latLngAt(now) : null;
-      const bestD = bestPos ? currentLatLng.distanceTo(bestPos) : Infinity;
-      return d < bestD
-        ? {
-            bus,
-            arrivalMs: closestHalt?.latLng
-              ? bus.nextArrivalAt(closestHalt.latLng, now)
-              : null,
-          }
-        : best;
-    }, null);
+
+    let best = null;
+    let bestDist = Infinity;
+
+    for (const bus of routeBuses) {
+      const nextHaltArrival = bus.nextHaltArrival(now);
+      if (!nextHaltArrival || !nextHaltArrival.halt.latLng) continue;
+      const d = currentLatLng.distanceTo(nextHaltArrival.halt.latLng);
+      if (d < bestDist) {
+        bestDist = d;
+        best = {
+          bus,
+          halt: nextHaltArrival.halt,
+          arrivalMs: nextHaltArrival.arrivalMs,
+          distanceKm: d,
+        };
+      }
+    }
+    return best;
   })();
 
   return (
@@ -132,21 +137,26 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
           </Box>
         ) : (
           <>
-            {closestBus && (
+            {bestCatch && (
               <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-                <NumberPlate bus={closestBus.bus} />
-                {closestBus.arrivalMs !== null && (
+                <NumberPlate bus={bestCatch.bus} />
+                {bestCatch.arrivalMs !== null && (
                   <>
                     <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                     <Typography variant="caption" color="text.secondary">
-                      {formatArrival(closestBus.arrivalMs, now)}
+                      {formatArrival(bestCatch.arrivalMs, now)}
                     </Typography>
                   </>
                 )}
               </Box>
             )}
+            {bestCatch?.halt && (
+              <Typography variant="caption" color="text.secondary" display="block" mt={0.25}>
+                → {bestCatch.halt.displayName}
+              </Typography>
+            )}
             <Box mt={0.5}>
-              <Distance distanceKm={closestDistanceKm} />
+              <Distance distanceKm={bestCatch?.distanceKm ?? closestDistanceKm} />
             </Box>
           </>
         )}

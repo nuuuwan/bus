@@ -73,7 +73,9 @@ function DrawerHeader({ onClose }) {
   } else if (location.pathname.match(/\/bus\//)) {
     const color = selectedBus ? selectedBus.route.getColor() : undefined;
     icon = <AirportShuttleIcon sx={color ? { color } : undefined} />;
-    text = selectedBus ? selectedBus.numberPlate : "";
+    text = selectedBus
+      ? `${selectedBus.route.shortLabel} · ${selectedBus.numberPlate}`
+      : "";
   } else {
     return null;
   }
