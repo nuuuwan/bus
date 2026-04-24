@@ -16,7 +16,7 @@ export default function Clock() {
     <Box
       sx={{
         position: "absolute",
-        bottom: 16,
+        bottom: 72,
         left: 16,
         zIndex: 1000,
         backgroundColor: "rgba(255,255,255,0.85)",
