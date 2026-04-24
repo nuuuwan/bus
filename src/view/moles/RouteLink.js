@@ -103,7 +103,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
           </Box>
         </Box>
         {hasNextBuses ? (
-          <Box mt={0.25}>
+          <Box mt={0.5}>
             {nextBuses.map(({ bus, arrivalMs }) => {
               const dur = formatDuration(Math.max(0, arrivalMs - now));
               return (
@@ -118,7 +118,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
             })}
           </Box>
         ) : durationStr !== null ? (
-          <Box display="flex" alignItems="center" gap={0.5}>
+          <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
             <AccessTimeIcon fontSize="small" color="action" />
             <Typography variant="body2" color="text.secondary">
               {durationStr}
@@ -131,9 +131,9 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
                 via {closestHalt.displayName}
               </Typography>
             )}
-            <Distance distanceKm={closestDistanceKm} />
+            <Box mt={0.5}><Distance distanceKm={closestDistanceKm} /></Box>
             {nextArrival !== null && (
-              <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
+              <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
                 <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                 <Typography variant="caption" color="text.secondary">
                   {formatDuration(Math.max(0, nextArrival - now))}

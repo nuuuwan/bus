@@ -96,14 +96,14 @@ export default function BusesPage() {
                     <Box display="flex" alignItems="center" gap={0.5}>
                       <NumberPlate bus={bus} />
                     </Box>
-                    <RouteIcon route={bus.route} />
-                    <Distance distanceKm={catchHaltDistKm} />
+                    <Box mt={0.5}><RouteIcon route={bus.route} /></Box>
+                    <Box mt={0.5}><Distance distanceKm={catchHaltDistKm} /></Box>
                     {catchable && (
                       <Box
                         display="flex"
                         alignItems="center"
                         gap={0.5}
-                        mt={0.25}
+                        mt={0.5}
                       >
                         <StopCircleIcon sx={{ fontSize: 13 }} color="action" />
                         <Typography variant="caption" color="text.secondary">

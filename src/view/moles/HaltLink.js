@@ -60,7 +60,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
           <Typography variant="body1">{halt.displayName}</Typography>
         </Box>
         {nextBus && (
-          <Box display="flex" alignItems="center" gap={0.5}>
+          <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
             <NumberPlate bus={nextBus.bus} />
             <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
             <Typography variant="caption" color="text.secondary">
@@ -68,7 +68,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
             </Typography>
           </Box>
         )}
-        <Distance distanceKm={distanceKm} />
+        <Box mt={0.5}><Distance distanceKm={distanceKm} /></Box>
         {!nextBus && servingRoutesWithArrival.length > 0 && (
           <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
             {servingRoutesWithArrival.map(({ route, nextArrivalMs }) => {
