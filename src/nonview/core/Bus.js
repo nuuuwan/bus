@@ -233,7 +233,10 @@ export default class Bus {
       }
     }
     if (!bestHalt) return null;
-    return { halt: bestHalt, arrivalMs: nowMs + bestDelta * Bus.CYCLE_MINUTES * 60_000 };
+    return {
+      halt: bestHalt,
+      arrivalMs: nowMs + bestDelta * Bus.CYCLE_MINUTES * 60_000,
+    };
   }
 
   // ── Factory ──────────────────────────────────────────────────────────────

@@ -97,7 +97,12 @@ export default function BusesPage() {
                     </Typography>
                     <Distance distanceKm={distanceKm} />
                     {nextHalt && (
-                      <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        gap={0.5}
+                        mt={0.25}
+                      >
                         <StopCircleIcon sx={{ fontSize: 13 }} color="action" />
                         <Typography variant="caption" color="text.secondary">
                           {nextHalt.halt.displayName}

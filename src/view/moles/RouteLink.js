@@ -20,7 +20,7 @@ const getDirectionIcon = (direction) => {
   return null;
 };
 
-export default function RouteLink({ route, nextArrivalMs }) {
+export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   const location = useLocation();
   const { currentLatLng, buses } = useData();
   const now = useClock();
@@ -57,7 +57,7 @@ export default function RouteLink({ route, nextArrivalMs }) {
     }
   }
 
-  // Arrival display (used when nextArrivalMs is provided — halt view)
+  // Arrival display (used when nextArrivalMs is provided — halt view, single bus)
   let arrivalTimeStr = null;
   let durationStr = null;
   if (nextArrivalMs !== null && nextArrivalMs !== undefined) {
@@ -67,6 +67,9 @@ export default function RouteLink({ route, nextArrivalMs }) {
       minute: "2-digit",
     });
   }
+
+  // nextBuses: [{bus, arrivalMs}, ...] — used in halt view when multiple buses
+  const hasNextBuses = nextBuses && nextBuses.length > 0;
 
   // Next 3 arrivals at closest halt (used in routes list when no nextArrivalMs)
   const next3Arrivals =
@@ -105,7 +108,25 @@ export default function RouteLink({ route, nextArrivalMs }) {
             <Typography variant="body2">{route.direction}</Typography>
           </Box>
         </Box>
-        {arrivalTimeStr !== null ? (
+        {hasNextBuses ? (
+          <Box mt={0.25}>
+            {nextBuses.map(({ bus, arrivalMs }) => {
+              const time = new Date(arrivalMs).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+              const dur = formatDuration(Math.max(0, arrivalMs - now));
+              return (
+                <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
+                  <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+                  <Typography variant="caption" color="text.secondary">
+                    {bus.numberPlate} · {time} · {dur}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        ) : arrivalTimeStr !== null ? (
           <Box display="flex" alignItems="center" gap={0.5}>
             <AccessTimeIcon fontSize="small" color="action" />
             <Typography variant="body2" color="text.secondary">

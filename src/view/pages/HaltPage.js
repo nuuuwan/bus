@@ -24,23 +24,23 @@ export default function HaltPage() {
       ? currentLatLng.distanceTo(selectedHalt.latLng)
       : null;
 
-  // For each route, find the earliest next bus arrival at this halt
-  const routesWithArrival = routesForHalt.map((route) => {
+  // For each route, find up to 3 next buses and their arrivals at this halt
+  const routesWithBuses = routesForHalt.map((route) => {
     const routeBuses = buses.filter((b) => b.route.id === route.id);
-    const nextArrivalMs =
-      routeBuses.length > 0 && selectedHalt?.latLng
-        ? Math.min(
-            ...routeBuses.map((b) => b.nextArrivalAt(selectedHalt.latLng, now)),
-          )
-        : null;
-    return { route, nextArrivalMs };
+    const next3 = selectedHalt?.latLng
+      ? routeBuses
+          .map((b) => ({ bus: b, arrivalMs: b.nextArrivalAt(selectedHalt.latLng, now) }))
+          .sort((a, b) => a.arrivalMs - b.arrivalMs)
+          .slice(0, 3)
+      : [];
+    return { route, nextBuses: next3 };
   });
 
   // Sort by earliest arrival
-  const sorted = [...routesWithArrival].sort((a, b) => {
-    if (a.nextArrivalMs === null) return 1;
-    if (b.nextArrivalMs === null) return -1;
-    return a.nextArrivalMs - b.nextArrivalMs;
+  const sorted = [...routesWithBuses].sort((a, b) => {
+    const aMs = a.nextBuses[0]?.arrivalMs ?? Infinity;
+    const bMs = b.nextBuses[0]?.arrivalMs ?? Infinity;
+    return aMs - bMs;
   });
 
   if (loading) {
@@ -73,9 +73,9 @@ export default function HaltPage() {
           </Box>
         )}
         <List sx={{ p: 1, m: 1 }}>
-          {sorted.map(({ route, nextArrivalMs }) => (
+          {sorted.map(({ route, nextBuses }) => (
             <ListItem key={route.id} disablePadding>
-              <RouteLink route={route} nextArrivalMs={nextArrivalMs} />
+              <RouteLink route={route} nextBuses={nextBuses} />
             </ListItem>
           ))}
         </List>
