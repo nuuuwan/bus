@@ -42,16 +42,13 @@ export default function BusPage() {
 
   return (
     <Box p={2} display="flex" flexDirection="column" gap={2}>
-      {/* Bus identity */}
-      <Box display="flex" alignItems="center" gap={1.5}>
-        <AirportShuttleIcon sx={{ color: route.getColor(), fontSize: 36 }} />
-        <Box>
-          <Typography variant="h5" sx={{ color: route.getColor() }}>
-            {bus.numberPlate}
-          </Typography>
+      {/* Distance from user to bus */}
+      {distanceKm !== null && (
+        <Box display="flex" alignItems="center" gap={1}>
+          <AirportShuttleIcon sx={{ color: route.getColor() }} />
           <Distance distanceKm={distanceKm} />
         </Box>
-      </Box>
+      )}
 
       {/* Route */}
       <Box

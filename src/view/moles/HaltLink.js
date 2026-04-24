@@ -63,7 +63,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
           </Box>
         )}
         <Distance distanceKm={distanceKm} />
-        {servingRoutesWithArrival.length > 0 && (
+        {!nextBus && servingRoutesWithArrival.length > 0 && (
           <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
             {servingRoutesWithArrival.map(({ route, nextArrivalMs }) => {
               const durationStr =
