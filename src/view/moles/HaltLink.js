@@ -19,8 +19,24 @@ export default function HaltLink({ halt, buses = [] }) {
   const distanceKm =
     currentLatLng && halt.latLng ? currentLatLng.distanceTo(halt.latLng) : null;
 
-  // Find routes that serve this halt
-  const servingRoutes = routes.filter((route) => route.hasHalt(halt));
+  // Find routes that serve this halt, with next arrival, sorted by arrival time
+  const servingRoutesWithArrival = routes
+    .filter((route) => route.hasHalt(halt))
+    .map((route) => {
+      const routeBuses = buses.filter((b) => b.route.id === route.id);
+      const nextArrivalMs =
+        routeBuses.length > 0 && halt.latLng
+          ? Math.min(
+              ...routeBuses.map((b) => b.nextArrivalAt(halt.latLng, now)),
+            )
+          : null;
+      return { route, nextArrivalMs };
+    })
+    .sort((a, b) => {
+      if (a.nextArrivalMs === null) return 1;
+      if (b.nextArrivalMs === null) return -1;
+      return a.nextArrivalMs - b.nextArrivalMs;
+    });
 
   return (
     <Link
@@ -37,18 +53,9 @@ export default function HaltLink({ halt, buses = [] }) {
       >
         <Typography variant="body1">{halt.displayName}</Typography>
         <Distance distanceKm={distanceKm} />
-        {servingRoutes.length > 0 && (
+        {servingRoutesWithArrival.length > 0 && (
           <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
-            {servingRoutes.map((route) => {
-              const routeBuses = buses.filter((b) => b.route.id === route.id);
-              const nextArrivalMs =
-                routeBuses.length > 0 && halt.latLng
-                  ? Math.min(
-                      ...routeBuses.map((b) =>
-                        b.nextArrivalAt(halt.latLng, now),
-                      ),
-                    )
-                  : null;
+            {servingRoutesWithArrival.map(({ route, nextArrivalMs }) => {
               const minsUntil =
                 nextArrivalMs !== null
                   ? Math.max(0, Math.round((nextArrivalMs - now) / 60_000))
