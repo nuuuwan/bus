@@ -127,9 +127,12 @@ function AppContent() {
         open={isDrawerOpen}
         onClose={handleDrawerClose}
         hideBackdrop
+        disableScrollLock
         sx={{
+          pointerEvents: "none",
           "& .MuiDrawer-paper": {
             width: "min(100vw, 400px)",
+            pointerEvents: "auto",
           },
         }}
       >
