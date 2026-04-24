@@ -7,7 +7,7 @@ import { formatDuration } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteIcon from "../atoms/RouteIcon";
 
-export default function HaltLink({ halt, buses = [] }) {
+export default function HaltLink({ halt, buses = [], nextBus }) {
   const location = useLocation();
   const { currentLatLng, routes } = useData();
   const now = useClock();
@@ -53,6 +53,19 @@ export default function HaltLink({ halt, buses = [] }) {
         }}
       >
         <Typography variant="body1">{halt.displayName}</Typography>
+        {nextBus && (
+          <Box display="flex" alignItems="center" gap={0.5}>
+            <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
+            <Typography variant="caption" color="text.secondary">
+              {nextBus.bus.numberPlate} ·{" "}
+              {new Date(nextBus.arrivalMs).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}{" "}
+              · {formatDuration(Math.max(0, nextBus.arrivalMs - now))}
+            </Typography>
+          </Box>
+        )}
         <Distance distanceKm={distanceKm} />
         {servingRoutesWithArrival.length > 0 && (
           <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>

@@ -8,10 +8,12 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useData } from "../../nonview/contexts/DataContext";
+import { useClock } from "../../nonview/contexts/ClockContext";
 import HaltLink from "../moles/HaltLink";
 
 export default function RoutePage() {
-  const { selectedRoute, currentLatLng, loading } = useData();
+  const { selectedRoute, buses, currentLatLng, loading } = useData();
+  const now = useClock();
   const closestHaltRef = useRef(null);
   const [closestHaltIndex, setClosestHaltIndex] = useState(-1);
 
@@ -83,6 +85,20 @@ export default function RoutePage() {
         >
           {selectedRoute.haltList.map((halt, index) => {
             const isClosest = index === closestHaltIndex;
+
+            // Find the bus on this route arriving soonest at this halt
+            const routeBuses = buses.filter(
+              (b) => b.route.id === selectedRoute.id,
+            );
+            const nextBus =
+              halt.latLng && routeBuses.length > 0
+                ? routeBuses
+                    .map((b) => ({
+                      bus: b,
+                      arrivalMs: b.nextArrivalAt(halt.latLng, now),
+                    }))
+                    .sort((a, b) => a.arrivalMs - b.arrivalMs)[0]
+                : null;
             return (
               <TimelineItem key={index} ref={isClosest ? closestHaltRef : null}>
                 <TimelineSeparator>
@@ -103,7 +119,7 @@ export default function RoutePage() {
                     borderRadius: 1,
                   }}
                 >
-                  <HaltLink halt={halt} />
+                  <HaltLink halt={halt} nextBus={nextBus} />
                 </TimelineContent>
               </TimelineItem>
             );
