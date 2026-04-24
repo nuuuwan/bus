@@ -26,15 +26,28 @@ export default function BusesPage() {
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
 
-  const sortedBuses = currentLatLng
-    ? [...buses].sort((a, b) => {
-        const posA = a.latLngAt(now);
-        const posB = b.latLngAt(now);
-        const distA = posA ? currentLatLng.distanceTo(posA) : Infinity;
-        const distB = posB ? currentLatLng.distanceTo(posB) : Infinity;
-        return distA - distB;
+  // For each bus, find the first upcoming halt where the user can walk in time.
+  // Buses where no such halt exists (all missed) are hidden.
+  const busItems = (() => {
+    if (!currentLatLng) {
+      return buses.map((bus) => ({ bus, catchable: null, walkingMs: null }));
+    }
+    return buses
+      .flatMap((bus) => {
+        const upcoming = bus.nextHaltArrivals(bus.route.haltList.length, now);
+        const catchable = upcoming.find(({ halt, arrivalMs }) => {
+          if (!halt.latLng) return false;
+          const walkingMs =
+            (currentLatLng.distanceTo(halt.latLng) / 4) * 3_600_000;
+          return arrivalMs - now > walkingMs;
+        });
+        if (!catchable) return [];
+        const walkingMs =
+          (currentLatLng.distanceTo(catchable.halt.latLng) / 4) * 3_600_000;
+        return [{ bus, catchable, walkingMs }];
       })
-    : buses;
+      .sort((a, b) => a.walkingMs - b.walkingMs);
+  })();
 
   if (loading) {
     return (
@@ -53,13 +66,12 @@ export default function BusesPage() {
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto">
         <List sx={{ p: 0 }}>
-          {sortedBuses.map((bus) => {
-            const pos = bus.latLngAt(now);
-            const distanceKm =
-              currentLatLng && pos ? currentLatLng.distanceTo(pos) : null;
-            const nextHalt = bus.nextHaltArrival(now);
-            const nextHaltDuration = nextHalt
-              ? formatDuration(Math.max(0, nextHalt.arrivalMs - now))
+          {busItems.map(({ bus, catchable, walkingMs }) => {
+            const catchHaltDistKm = catchable
+              ? currentLatLng.distanceTo(catchable.halt.latLng)
+              : null;
+            const busArrivalDuration = catchable
+              ? formatDuration(Math.max(0, catchable.arrivalMs - now))
               : null;
 
             return (
@@ -85,8 +97,8 @@ export default function BusesPage() {
                       <NumberPlate bus={bus} />
                     </Box>
                     <RouteIcon route={bus.route} />
-                    <Distance distanceKm={distanceKm} />
-                    {nextHalt && (
+                    <Distance distanceKm={catchHaltDistKm} />
+                    {catchable && (
                       <Box
                         display="flex"
                         alignItems="center"
@@ -95,11 +107,11 @@ export default function BusesPage() {
                       >
                         <StopCircleIcon sx={{ fontSize: 13 }} color="action" />
                         <Typography variant="caption" color="text.secondary">
-                          {nextHalt.halt.displayName}
+                          {catchable.halt.displayName}
                         </Typography>
                         <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
                         <Typography variant="caption" color="text.secondary">
-                          {nextHaltDuration}
+                          {busArrivalDuration}
                         </Typography>
                       </Box>
                     )}
