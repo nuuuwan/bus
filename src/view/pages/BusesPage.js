@@ -63,12 +63,6 @@ export default function BusesPage() {
             const nextHaltDuration = nextHalt
               ? formatDuration(Math.max(0, nextHalt.arrivalMs - now))
               : null;
-            const nextHaltTime = nextHalt
-              ? new Date(nextHalt.arrivalMs).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : null;
 
             return (
               <ListItem key={bus.id} disablePadding>
@@ -112,7 +106,7 @@ export default function BusesPage() {
                         </Typography>
                         <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
                         <Typography variant="caption" color="text.secondary">
-                          {nextHaltTime} · {nextHaltDuration}
+                          {nextHaltDuration}
                         </Typography>
                       </Box>
                     )}

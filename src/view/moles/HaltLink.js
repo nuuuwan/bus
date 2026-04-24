@@ -57,12 +57,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
           <Box display="flex" alignItems="center" gap={0.5}>
             <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
             <Typography variant="caption" color="text.secondary">
-              {nextBus.bus.numberPlate} ·{" "}
-              {new Date(nextBus.arrivalMs).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}{" "}
-              · {formatDuration(Math.max(0, nextBus.arrivalMs - now))}
+            {nextBus.bus.numberPlate} · {formatDuration(Math.max(0, nextBus.arrivalMs - now))}
             </Typography>
           </Box>
         )}

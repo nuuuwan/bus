@@ -44,14 +44,9 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   }
 
   // Arrival display (used when nextArrivalMs is provided — halt view, single bus)
-  let arrivalTimeStr = null;
   let durationStr = null;
   if (nextArrivalMs !== null && nextArrivalMs !== undefined) {
     durationStr = formatDuration(Math.max(0, nextArrivalMs - now));
-    arrivalTimeStr = new Date(nextArrivalMs).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   }
 
   // nextBuses: [{bus, arrivalMs}, ...] — used in halt view when multiple buses
@@ -93,26 +88,22 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
         {hasNextBuses ? (
           <Box mt={0.25}>
             {nextBuses.map(({ bus, arrivalMs }) => {
-              const time = new Date(arrivalMs).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
               const dur = formatDuration(Math.max(0, arrivalMs - now));
               return (
                 <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                   <Typography variant="caption" color="text.secondary">
-                    {bus.numberPlate} · {time} · {dur}
+                    {bus.numberPlate} · {dur}
                   </Typography>
                 </Box>
               );
             })}
           </Box>
-        ) : arrivalTimeStr !== null ? (
+        ) : durationStr !== null ? (
           <Box display="flex" alignItems="center" gap={0.5}>
             <AccessTimeIcon fontSize="small" color="action" />
             <Typography variant="body2" color="text.secondary">
-              {arrivalTimeStr} · {durationStr}
+              {durationStr}
             </Typography>
           </Box>
         ) : (
