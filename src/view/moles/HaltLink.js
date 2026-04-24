@@ -2,44 +2,27 @@ import { Box, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { Link, useLocation } from "react-router-dom";
-import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
-import RouteIcon from "../atoms/RouteIcon";
 import NumberPlate from "../atoms/NumberPlate";
 
 export default function HaltLink({ halt, buses = [], nextBus }) {
   const location = useLocation();
-  const { currentLatLng, routes } = useData();
   const now = useClock();
 
   // Extract latLng from current pathname
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
 
-  // Calculate distance if currentLatLng is available
-  const distanceKm =
-    currentLatLng && halt.latLng ? currentLatLng.distanceTo(halt.latLng) : null;
-
-  // Find routes that serve this halt, with next arrival, sorted by arrival time
-  const servingRoutesWithArrival = routes
-    .filter((route) => route.hasHalt(halt))
-    .map((route) => {
-      const routeBuses = buses.filter((b) => b.route.id === route.id);
-      const nextArrivalMs =
-        routeBuses.length > 0 && halt.latLng
-          ? Math.min(
-              ...routeBuses.map((b) => b.nextArrivalAt(halt.latLng, now)),
-            )
-          : null;
-      return { route, nextArrivalMs };
-    })
-    .sort((a, b) => {
-      if (a.nextArrivalMs === null) return 1;
-      if (b.nextArrivalMs === null) return -1;
-      return a.nextArrivalMs - b.nextArrivalMs;
-    });
+  // When nextBus isn't explicitly passed, find the soonest bus from `buses`
+  const resolvedNextBus =
+    nextBus ??
+    (halt.latLng && buses.length > 0
+      ? buses
+          .map((b) => ({ bus: b, arrivalMs: b.nextArrivalAt(halt.latLng, now) }))
+          .sort((a, b) => a.arrivalMs - b.arrivalMs)[0]
+      : null);
 
   return (
     <Link
@@ -58,44 +41,13 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
           <StopCircleIcon sx={{ fontSize: 16 }} color="action" />
           <Typography variant="body1">{halt.displayName}</Typography>
         </Box>
-        {nextBus && (
+        {resolvedNextBus && (
           <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-            <NumberPlate bus={nextBus.bus} />
+            <NumberPlate bus={resolvedNextBus.bus} />
             <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
             <Typography variant="caption" color="text.secondary">
-              {formatArrival(nextBus.arrivalMs, now)}
+              {formatArrival(resolvedNextBus.arrivalMs, now)}
             </Typography>
-          </Box>
-        )}
-        <Box mt={0.5}>
-          <Distance distanceKm={distanceKm} />
-        </Box>
-        {!nextBus && servingRoutesWithArrival.length > 0 && (
-          <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
-            {servingRoutesWithArrival.map(({ route, nextArrivalMs }) => {
-              const durationStr =
-                nextArrivalMs !== null
-                  ? formatArrival(nextArrivalMs, now)
-                  : null;
-              return (
-                <Box
-                  key={route.id}
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={0.25}
-                >
-                  <RouteIcon route={route} />
-                  {durationStr !== null && (
-                    <Box display="inline-flex" alignItems="center" gap={0.25}>
-                      <AccessTimeIcon sx={{ fontSize: 11 }} color="action" />
-                      <Typography variant="caption" color="text.secondary">
-                        {durationStr}
-                      </Typography>
-                    </Box>
-                  )}
-                </Box>
-              );
-            })}
           </Box>
         )}
       </Box>
