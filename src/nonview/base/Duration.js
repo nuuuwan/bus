@@ -12,8 +12,8 @@ export function formatDuration(ms) {
     return `${totalSeconds} sec`;
   }
   const totalMinutes = Math.round(totalSeconds / 60);
-  if (totalMinutes < 120) {
-    return `${totalMinutes} min`;
+  if (totalMinutes >= 60) {
+    return "> 1 hour";
   }
-  return "> 2 hours";
+  return `${totalMinutes} min`;
 }
