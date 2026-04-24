@@ -20,7 +20,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
-function MapController({ onMoveEnd, flyToRef, selectedBus, selectedHalt, now }) {
+function MapController({
+  onMoveEnd,
+  flyToRef,
+  selectedBus,
+  selectedHalt,
+  now,
+}) {
   const map = useMap();
   const { latLngId } = useParams();
 
@@ -41,13 +47,11 @@ function MapController({ onMoveEnd, flyToRef, selectedBus, selectedHalt, now }) 
         map.flyTo([pos.lat, pos.lng], 16, { duration: 1 });
       }
     } else if (selectedHalt?.latLng) {
-      map.flyTo(
-        [selectedHalt.latLng.lat, selectedHalt.latLng.lng],
-        16,
-        { duration: 1 },
-      );
+      map.flyTo([selectedHalt.latLng.lat, selectedHalt.latLng.lng], 16, {
+        duration: 1,
+      });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBus?.id, selectedHalt?.id]);
 
   // Handle URL changes (like "Current Location" button)
@@ -84,8 +88,15 @@ export default function MapView() {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { routes, halts, buses, selectedBus, selectedHalt, selectedRoute, currentLatLng } =
-    useData();
+  const {
+    routes,
+    halts,
+    buses,
+    selectedBus,
+    selectedHalt,
+    selectedRoute,
+    currentLatLng,
+  } = useData();
   const { now } = useClock();
   const defaultZoom = 16;
   const flyToRef = useRef(null);

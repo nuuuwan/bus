@@ -1,4 +1,4 @@
-import { Box, CircularProgress, List } from "@mui/material";
+import { Box, CircularProgress, List, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -50,7 +50,10 @@ export default function RoutesPage() {
   return (
     <Box display="flex" height="100vh">
       <Box width="100%" overflow="auto">
-        <List sx={{ p: 1, m: 1 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ px: 2, pt: 1, display: "block" }}>
+            {sortedRoutes.length} routes
+          </Typography>
+          <List sx={{ p: 1, m: 1 }}>
           <AnimatePresence>
             {sortedRoutes.map((route) => (
               <motion.div
