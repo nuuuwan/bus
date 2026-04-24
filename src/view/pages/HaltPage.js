@@ -9,7 +9,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import { formatDuration } from "../../nonview/base/Duration";
+import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import NumberPlate from "../atoms/NumberPlate";
 
@@ -87,7 +87,7 @@ export default function HaltPage() {
               <NumberPlate bus={bus} />
               <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
               <Typography variant="caption" color="text.secondary">
-                {formatDuration(Math.max(0, arrivalMs - now))}
+                {formatArrival(arrivalMs, now)}
               </Typography>
             </ListItemButton>
           ))}

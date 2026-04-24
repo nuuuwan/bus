@@ -4,7 +4,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import { formatDuration } from "../../nonview/base/Duration";
+import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteIcon from "../atoms/RouteIcon";
 
@@ -105,7 +105,7 @@ export default function BusPage() {
               </Typography>
               <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
               <Typography variant="body2" color="text.secondary">
-                {formatDuration(Math.max(0, arrivalMs - now))}
+                {formatArrival(arrivalMs, now)}
               </Typography>
             </Box>
           ))}

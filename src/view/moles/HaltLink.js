@@ -4,7 +4,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import { formatDuration } from "../../nonview/base/Duration";
+import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteIcon from "../atoms/RouteIcon";
 import NumberPlate from "../atoms/NumberPlate";
@@ -63,7 +63,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
             <NumberPlate bus={nextBus.bus} />
             <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
             <Typography variant="caption" color="text.secondary">
-              {formatDuration(Math.max(0, nextBus.arrivalMs - now))}
+              {formatArrival(nextBus.arrivalMs, now)}
             </Typography>
           </Box>
         )}
@@ -75,7 +75,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
             {servingRoutesWithArrival.map(({ route, nextArrivalMs }) => {
               const durationStr =
                 nextArrivalMs !== null
-                  ? formatDuration(Math.max(0, nextArrivalMs - now))
+                  ? formatArrival(nextArrivalMs, now)
                   : null;
               return (
                 <Box

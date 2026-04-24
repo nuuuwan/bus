@@ -4,7 +4,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import { formatDuration } from "../../nonview/base/Duration";
+import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import NumberPlate from "../atoms/NumberPlate";
 
@@ -47,7 +47,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   // Arrival display (used when nextArrivalMs is provided — halt view, single bus)
   let durationStr = null;
   if (nextArrivalMs !== null && nextArrivalMs !== undefined) {
-    durationStr = formatDuration(Math.max(0, nextArrivalMs - now));
+    durationStr = formatArrival(nextArrivalMs, now);
   }
 
   // nextBuses: [{bus, arrivalMs}, ...] — used in halt view when multiple buses
@@ -104,7 +104,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
         {hasNextBuses ? (
           <Box mt={0.5}>
             {nextBuses.map(({ bus, arrivalMs }) => {
-              const dur = formatDuration(Math.max(0, arrivalMs - now));
+              const dur = formatArrival(arrivalMs, now);
               return (
                 <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
                   <NumberPlate bus={bus} />
@@ -137,7 +137,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
                 <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                 <Typography variant="caption" color="text.secondary">
-                  {formatDuration(Math.max(0, nextArrival - now))}
+                  {formatArrival(nextArrival, now)}
                 </Typography>
               </Box>
             )}

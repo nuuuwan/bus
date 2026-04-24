@@ -11,7 +11,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import { formatDuration } from "../../nonview/base/Duration";
+import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import NumberPlate from "../atoms/NumberPlate";
 
@@ -69,7 +69,7 @@ export default function BusesPage() {
               ? currentLatLng.distanceTo(catchable.halt.latLng)
               : null;
             const busArrivalDuration = catchable
-              ? formatDuration(Math.max(0, catchable.arrivalMs - now))
+              ? formatArrival(catchable.arrivalMs, now)
               : null;
 
             return (
