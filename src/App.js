@@ -10,7 +10,6 @@ import {
 import {
   Box,
   Drawer,
-  Toolbar,
   Typography,
   IconButton,
   Divider,
@@ -74,19 +73,23 @@ function DrawerHeader({ onClose }) {
   } else if (location.pathname.match(/\/bus\//)) {
     return (
       <>
-        <Box sx={{ display: "flex", justifyContent: "center", pt: 1, pb: 0.5 }}>
-          <Box
-            sx={{ width: 40, height: 4, borderRadius: 2, bgcolor: "grey.400" }}
-          />
-        </Box>
-        <Toolbar sx={{ gap: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            px: 1.5,
+            py: 0.75,
+            minHeight: 40,
+            gap: 1,
+          }}
+        >
           <Box sx={{ flexGrow: 1 }}>
             {selectedBus && <NumberPlate bus={selectedBus} />}
           </Box>
-          <IconButton edge="end" onClick={onClose} aria-label="close">
-            <CloseIcon />
+          <IconButton size="small" onClick={onClose} aria-label="close">
+            <CloseIcon fontSize="small" />
           </IconButton>
-        </Toolbar>
+        </Box>
         <Divider />
       </>
     );
@@ -96,23 +99,27 @@ function DrawerHeader({ onClose }) {
 
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "center", pt: 1, pb: 0.5 }}>
-        <Box
-          sx={{ width: 40, height: 4, borderRadius: 2, bgcolor: "grey.400" }}
-        />
-      </Box>
-      <Toolbar sx={{ gap: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          px: 1.5,
+          py: 0.75,
+          minHeight: 40,
+          gap: 1,
+        }}
+      >
         {icon}
         <Typography
-          variant="h6"
-          sx={{ flexGrow: 1, ...(color ? { color } : {}) }}
+          variant="subtitle1"
+          sx={{ flexGrow: 1, fontWeight: 600, ...(color ? { color } : {}) }}
         >
           {text}
         </Typography>
-        <IconButton edge="end" onClick={onClose} aria-label="close">
-          <CloseIcon />
+        <IconButton size="small" onClick={onClose} aria-label="close">
+          <CloseIcon fontSize="small" />
         </IconButton>
-      </Toolbar>
+      </Box>
       <Divider />
     </>
   );
@@ -153,14 +160,13 @@ function AppContent() {
         sx={{
           pointerEvents: "none",
           "& .MuiDrawer-paper": {
-            height: "50vh",
+            height: "calc(50vh - 56px)",
             borderRadius: "16px 16px 0 0",
             pointerEvents: "auto",
             width: "min(100vw, 390px)",
-            /* Align with the centered #root without using transform
-               (transform is already used by the Slide open/close animation) */
             left: "max(0px, calc((100% - 390px) / 2))",
             right: "auto",
+            bottom: "56px",
           },
         }}
       >
