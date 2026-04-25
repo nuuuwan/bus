@@ -1,7 +1,6 @@
 import {
   Box,
   CircularProgress,
-  Divider,
   List,
   ListItemButton,
   Typography,
@@ -73,7 +72,6 @@ export default function BusesPage() {
       >
         {nearbyCount} buses within 1km
       </Typography>
-      <Divider />
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
           {busItems.map(({ bus, distanceKm, approachArrow }) => {

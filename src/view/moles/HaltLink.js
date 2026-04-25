@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useClock } from "../../nonview/contexts/ClockContext";
@@ -48,7 +48,6 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
           </Box>
         )}
       </Box>
-      <Divider />
     </Link>
   );
 }

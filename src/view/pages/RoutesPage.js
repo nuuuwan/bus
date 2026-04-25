@@ -1,10 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Divider,
-  List,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, List, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -72,7 +66,6 @@ export default function RoutesPage() {
       >
         {nearbyCount} routes within 1km
       </Typography>
-      <Divider />
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 1, m: 1 }}>
           <AnimatePresence>

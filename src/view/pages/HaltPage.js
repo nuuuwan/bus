@@ -2,7 +2,6 @@ import {
   Box,
   Typography,
   CircularProgress,
-  Divider,
   List,
   ListItemButton,
 } from "@mui/material";
@@ -69,7 +68,6 @@ export default function HaltPage() {
           <Distance distanceKm={haltDistanceKm} />
         </Box>
       )}
-      <Divider />
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
           {busItems.map(({ bus, arrivalMs }) => (

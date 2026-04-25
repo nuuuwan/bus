@@ -7,7 +7,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { Box, Drawer, Typography, IconButton, Divider } from "@mui/material";
+import { Box, Drawer, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
@@ -84,7 +84,6 @@ function DrawerHeader({ onClose }) {
             <CloseIcon fontSize="small" />
           </IconButton>
         </Box>
-        <Divider />
       </>
     );
   } else {
@@ -92,30 +91,27 @@ function DrawerHeader({ onClose }) {
   }
 
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          px: 1.5,
-          py: 0.75,
-          minHeight: 40,
-          gap: 1,
-        }}
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        px: 1.5,
+        py: 0.75,
+        minHeight: 40,
+        gap: 1,
+      }}
+    >
+      {icon}
+      <Typography
+        variant="subtitle1"
+        sx={{ flexGrow: 1, fontWeight: 600, ...(color ? { color } : {}) }}
       >
-        {icon}
-        <Typography
-          variant="subtitle1"
-          sx={{ flexGrow: 1, fontWeight: 600, ...(color ? { color } : {}) }}
-        >
-          {text}
-        </Typography>
-        <IconButton size="small" onClick={onClose} aria-label="close">
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </Box>
-      <Divider />
-    </>
+        {text}
+      </Typography>
+      <IconButton size="small" onClick={onClose} aria-label="close">
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </Box>
   );
 }
 
