@@ -67,22 +67,10 @@ export default function CustomBottomNavigator() {
       sx={{ position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 1100 }}
       elevation={3}
     >
-      <BottomNavigation value={value} onChange={handleChange}>
-        <BottomNavigationAction
-          label="Halts"
-          icon={<StopCircleIcon />}
-          value="halts"
-        />
-        <BottomNavigationAction
-          label="Routes"
-          icon={<RouteIcon />}
-          value="routes"
-        />
-        <BottomNavigationAction
-          label="Buses"
-          icon={<AirportShuttleIcon />}
-          value="buses"
-        />
+      <BottomNavigation value={value} onChange={handleChange} showLabels={false}>
+        <BottomNavigationAction icon={<StopCircleIcon />} value="halts" />
+        <BottomNavigationAction icon={<RouteIcon />} value="routes" />
+        <BottomNavigationAction icon={<AirportShuttleIcon />} value="buses" />
       </BottomNavigation>
     </Paper>
   );
