@@ -152,6 +152,9 @@ export default function MapView() {
 
   const handleMoveEnd = useCallback(
     (newLatLng) => {
+      // While riding, the map follows the bus automatically — don't let
+      // map-pan moveend events overwrite the URL with crosshair offsets.
+      if (ride) return;
       const newLatLngString = newLatLng.toString();
 
       // Only update if the latLng has changed
@@ -162,7 +165,7 @@ export default function MapView() {
         navigate(`/${newLatLngString}${pathSuffix}`, { replace: true });
       }
     },
-    [latLngId, location.pathname, navigate],
+    [latLngId, location.pathname, navigate, ride],
   );
 
   const handleCurrentLocation = useCallback(() => {

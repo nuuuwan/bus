@@ -28,7 +28,7 @@ function deserializeRide(data, buses, halts) {
   const boardedAtHalt = halts.find((h) => h.id === data.boardedAtHaltId);
   if (!bus || !boardedAtHalt) return null;
   const alightedAtHalt = data.alightedAtHaltId
-    ? halts.find((h) => h.id === data.alightedAtHaltId) ?? null
+    ? (halts.find((h) => h.id === data.alightedAtHaltId) ?? null)
     : null;
   return new Ride(
     bus,
@@ -154,7 +154,9 @@ export function DataProvider({ children }) {
     if (latLngId) {
       try {
         const latLng = LatLng.fromString(latLngId);
-        setCurrentLatLng(latLng);
+        // While riding, the setInterval below tracks the bus position;
+        // don't let the (stale) URL override it.
+        setCurrentLatLng((prev) => (ride ? prev : latLng));
       } catch (err) {
         console.error("Error parsing latLngId:", err);
         setCurrentLatLng(null);
@@ -162,7 +164,7 @@ export function DataProvider({ children }) {
     } else {
       setCurrentLatLng(null);
     }
-  }, [location.pathname]);
+  }, [location.pathname, ride]);
 
   // While riding, keep currentLatLng in sync with the bus position so that
   // proximity sorting, the dotted line, and other location-dependent UI
