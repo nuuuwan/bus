@@ -1,7 +1,6 @@
 import {
   Box,
   CircularProgress,
-  Divider,
   List,
   Typography,
 } from "@mui/material";
@@ -27,6 +26,15 @@ export default function HaltsPage() {
       })
     : filteredHalts;
 
+  const NEARBY_KM = 1;
+  const nearbyCount = currentLatLng
+    ? sortedHalts.filter(
+        (halt) =>
+          halt.latLng &&
+          currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
+      ).length
+    : sortedHalts.length;
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentLatLng]);
@@ -51,9 +59,8 @@ export default function HaltsPage() {
         color="text.secondary"
         sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
       >
-        {sortedHalts.length} halts
+        {nearbyCount} halts within 1km
       </Typography>
-      <Divider />
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
           <AnimatePresence>
