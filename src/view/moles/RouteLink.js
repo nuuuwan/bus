@@ -7,6 +7,7 @@ import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteInfo from "../atoms/RouteInfo";
 import BusInfo from "../atoms/BusInfo";
+import HaltInfo from "../atoms/HaltInfo";
 
 export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   const location = useLocation();
@@ -133,14 +134,9 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               </Box>
             )}
             {bestCatch?.halt && (
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                display="block"
-                mt={0.25}
-              >
-                → {bestCatch.halt.displayName}
-              </Typography>
+              <Box mt={0.25}>
+                <HaltInfo halt={bestCatch.halt} />
+              </Box>
             )}
             <Box mt={0.5}>
               <Distance
