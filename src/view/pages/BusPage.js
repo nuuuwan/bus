@@ -2,6 +2,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import HailIcon from "@mui/icons-material/Hail";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -89,51 +90,80 @@ export default function BusPage() {
             "& .MuiTimelineItem-root": { "&:before": { display: "none" } },
           }}
         >
-          {haltArrivals.map(({ halt, arrivalMs }, index) => {
-            const isNext = index === nextHaltIndex;
-            const isPassed = nextHaltIndex >= 0 && index < nextHaltIndex;
-            const isUpcoming = !isPassed;
-            return (
-              <TimelineItem
-                key={halt.id ?? index}
-                ref={isNext ? nextHaltRef : null}
-              >
-                <TimelineSeparator>
-                  {index > 0 && <TimelineConnector />}
-                  <TimelineDot
-                    color={isNext ? "primary" : "grey"}
-                    variant={isNext ? "filled" : "outlined"}
-                    sx={isPassed ? { opacity: 0.35 } : {}}
-                  >
-                    {isNext ? (
-                      <AirportShuttleIcon fontSize="small" />
-                    ) : (
-                      <Box sx={{ width: 20, height: 20 }} />
-                    )}
-                  </TimelineDot>
-                  {index < haltArrivals.length - 1 && <TimelineConnector />}
-                </TimelineSeparator>
-                <TimelineContent
-                  sx={{
-                    py: 1,
-                    backgroundColor: isNext ? "action.hover" : "transparent",
-                    borderRadius: 1,
-                    opacity: isPassed ? 0.35 : 1,
-                  }}
+          {(() => {
+            // Determine "at halt" state in render (depends on `now`)
+            const atHalt = selectedBus ? selectedBus.currentHalt(now) : null;
+            const atHaltIndex = atHalt
+              ? haltArrivals.findIndex(({ halt }) => halt.id === atHalt.id)
+              : -1;
+            // baseIndex: all halts before this are "passed"
+            const baseIndex = atHaltIndex >= 0 ? atHaltIndex : nextHaltIndex;
+            // effectiveNextIndex: highlight next upcoming halt after current
+            const effectiveNextIndex =
+              atHaltIndex >= 0 ? atHaltIndex + 1 : nextHaltIndex;
+
+            return haltArrivals.map(({ halt, arrivalMs }, index) => {
+              const isAtHalt = index === atHaltIndex;
+              const isPassed = baseIndex >= 0 && index < baseIndex;
+              const isNext = !isAtHalt && index === effectiveNextIndex;
+              const isUpcoming = !isPassed && !isAtHalt;
+              return (
+                <TimelineItem
+                  key={halt.id ?? index}
+                  ref={isAtHalt || isNext ? nextHaltRef : null}
                 >
-                  <HaltInfo halt={halt} />
-                  {isUpcoming && arrivalMs !== null && (
-                    <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
-                      <AccessTimeIcon sx={{ fontSize: 12 }} color="action" />
-                      <Typography variant="caption" color="text.secondary">
-                        {formatArrival(arrivalMs, now)}
+                  <TimelineSeparator>
+                    {index > 0 && <TimelineConnector />}
+                    <TimelineDot
+                      color={isAtHalt ? "success" : isNext ? "primary" : "grey"}
+                      variant={isAtHalt || isNext ? "filled" : "outlined"}
+                      sx={isPassed ? { opacity: 0.35 } : {}}
+                    >
+                      {isAtHalt ? (
+                        <HailIcon fontSize="small" />
+                      ) : isNext ? (
+                        <AirportShuttleIcon fontSize="small" />
+                      ) : (
+                        <Box sx={{ width: 20, height: 20 }} />
+                      )}
+                    </TimelineDot>
+                    {index < haltArrivals.length - 1 && <TimelineConnector />}
+                  </TimelineSeparator>
+                  <TimelineContent
+                    sx={{
+                      py: 1,
+                      backgroundColor: isAtHalt
+                        ? "success.light"
+                        : isNext
+                          ? "action.hover"
+                          : "transparent",
+                      borderRadius: 1,
+                      opacity: isPassed ? 0.35 : 1,
+                    }}
+                  >
+                    <HaltInfo halt={halt} />
+                    {isAtHalt && (
+                      <Typography
+                        variant="caption"
+                        color="success.dark"
+                        sx={{ fontWeight: 600, display: "block", mt: 0.25 }}
+                      >
+                        Boarding · Alighting
                       </Typography>
-                    </Box>
-                  )}
-                </TimelineContent>
-              </TimelineItem>
-            );
-          })}
+                    )}
+                    {!isAtHalt && isUpcoming && arrivalMs !== null && (
+                      <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
+                        <AccessTimeIcon sx={{ fontSize: 12 }} color="action" />
+                        <Typography variant="caption" color="text.secondary">
+                          {formatArrival(arrivalMs, now)}
+                        </Typography>
+                      </Box>
+                    )}
+                  </TimelineContent>
+                </TimelineItem>
+              );
+            });
+          })()}
         </Timeline>
       </Box>
     </Box>

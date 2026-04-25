@@ -170,17 +170,78 @@ export default class Bus {
   }
 
   /**
+   * Returns sorted halt-fraction pairs [{ halt, frac }] for each halt that
+   * has a latLng, ordered by ascending path fraction.
+   * Memoised since the route never changes during a simulation.
+   */
+  _haltFracPairs() {
+    if (!this._cachedHaltFracPairs) {
+      this._cachedHaltFracPairs = this.route.haltList
+        .filter((h) => h.latLng)
+        .map((h) => ({ halt: h, frac: this._progressOfLatLng(h.latLng) }))
+        .sort((a, b) => a.frac - b.frac);
+    }
+    return this._cachedHaltFracPairs;
+  }
+
+  /**
    * Returns sorted path fractions [0,1] for each halt that has a latLng.
    * Memoised since the route never changes during a simulation.
    */
   _haltPathFractions() {
     if (!this._cachedHaltFracs) {
-      this._cachedHaltFracs = this.route.haltList
-        .filter((h) => h.latLng)
-        .map((h) => this._progressOfLatLng(h.latLng))
-        .sort((a, b) => a - b);
+      this._cachedHaltFracs = this._haltFracPairs().map((p) => p.frac);
     }
     return this._cachedHaltFracs;
+  }
+
+  /**
+   * Returns the Halt this bus is currently dwelling at (boarding/alighting),
+   * or null if the bus is travelling between halts.
+   *
+   * Mirrors the dwell logic in _haltAwarePathFrac exactly.
+   */
+  currentHalt(nowMs = Date.now()) {
+    const path = this._path;
+    if (path.length < 2) return null;
+
+    const cycleProgress = this._progressAt(nowMs);
+    const legFrac = this._pathProgress(cycleProgress);
+
+    const pairs = this._haltFracPairs();
+    const n = pairs.length;
+    if (n === 0) return null;
+
+    const legMs = (this._cycleMinutes() * 60_000) / 2;
+    const totalDwellMs = n * Bus.HALT_DWELL_MS;
+    const travelMs = Math.max(legMs - totalDwellMs, legMs * 0.1);
+    const currentMs = legFrac * legMs;
+
+    // Waypoints: route start, each halt, route end
+    const waypoints = [{ halt: null, frac: 0 }, ...pairs, { halt: null, frac: 1 }];
+
+    let elapsed = 0;
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      const fromFrac = waypoints[i].frac;
+      const toFrac = waypoints[i + 1].frac;
+      const segPathLen = toFrac - fromFrac;
+      const segTravelMs = segPathLen * travelMs;
+
+      // Bus is travelling in this segment
+      if (currentMs < elapsed + segTravelMs) {
+        return null;
+      }
+      elapsed += segTravelMs;
+
+      // Bus is dwelling at waypoints[i+1].halt (skip terminus)
+      if (i < waypoints.length - 2) {
+        if (currentMs < elapsed + Bus.HALT_DWELL_MS) {
+          return waypoints[i + 1].halt;
+        }
+        elapsed += Bus.HALT_DWELL_MS;
+      }
+    }
+    return null;
   }
 
   /**
