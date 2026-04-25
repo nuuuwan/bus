@@ -91,6 +91,7 @@ export default function BusesPage() {
                     py: 1.5,
                     px: 2,
                     gap: 1.5,
+                    opacity: distanceKm <= NEARBY_KM ? 1 : 0.25,
                   }}
                   divider
                 >

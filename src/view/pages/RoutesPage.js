@@ -41,8 +41,7 @@ export default function RoutesPage() {
     ? sortedRoutes.filter((route) =>
         route.haltList.some(
           (halt) =>
-            halt.latLng &&
-            currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
+            halt.latLng && currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
         ),
       ).length
     : sortedRoutes.length;
@@ -77,15 +76,25 @@ export default function RoutesPage() {
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 1, m: 1 }}>
           <AnimatePresence>
-            {sortedRoutes.map((route) => (
-              <motion.div
-                key={`${route.routeNum}-${route.direction}`}
-                layout
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-              >
-                <RouteLink route={route} />
-              </motion.div>
-            ))}
+            {sortedRoutes.map((route) => {
+              const isNearby =
+                !currentLatLng ||
+                route.haltList.some(
+                  (halt) =>
+                    halt.latLng &&
+                    currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
+                );
+              return (
+                <motion.div
+                  key={`${route.routeNum}-${route.direction}`}
+                  layout
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  style={{ opacity: isNearby ? 1 : 0.25 }}
+                >
+                  <RouteLink route={route} />
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </List>
       </Box>
