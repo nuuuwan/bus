@@ -1,7 +1,4 @@
-import { Typography, Box } from "@mui/material";
-import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { formatDuration } from "../../nonview/base/Duration";
+import { Typography } from "@mui/material";
 
 export default function Distance({ distanceKm }) {
   if (distanceKm === null || distanceKm === undefined) {
@@ -16,19 +13,9 @@ export default function Distance({ distanceKm }) {
     displayText = `${parseFloat((distanceKm * 1000).toPrecision(2))} m`;
   }
 
-  const walkingMs = (distanceKm / 4) * 60 * 60 * 1000;
-  const timeText = formatDuration(walkingMs);
-
   return (
-    <Box display="flex" alignItems="center" gap={0.5}>
-      <DirectionsWalkIcon fontSize="small" color="action" />
-      <Typography variant="body2" color="text.secondary">
-        {displayText}
-      </Typography>
-      <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-      <Typography variant="body2" color="text.secondary">
-        {timeText}
-      </Typography>
-    </Box>
+    <Typography variant="body2" color="text.secondary">
+      {displayText}
+    </Typography>
   );
 }

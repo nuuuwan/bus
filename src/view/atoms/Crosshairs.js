@@ -23,17 +23,14 @@ export default function Crosshairs() {
     };
   }, [map]);
 
-  // Walking speed: 4 kmph
-  // 5 min = 0.333 km = 333 m
-  // 10 min = 0.667 km = 667 m
   const centerPosition = [center.lat, center.lng];
 
   return (
     <>
-      {/* 10 min circle (667m) */}
+      {/* 1 km circle */}
       <Circle
         center={centerPosition}
-        radius={667}
+        radius={1000}
         pathOptions={{
           color: "#404040",
           weight: 2,
@@ -41,10 +38,10 @@ export default function Crosshairs() {
           opacity: 0.5,
         }}
       />
-      {/* 5 min circle (333m) */}
+      {/* 500 m circle */}
       <Circle
         center={centerPosition}
-        radius={333}
+        radius={500}
         pathOptions={{
           color: "#404040",
           weight: 2,
