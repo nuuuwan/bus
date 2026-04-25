@@ -55,7 +55,7 @@ export function CrosshairsOverlay() {
     <Box
       sx={{
         position: "absolute",
-        top: "50%",
+        top: "25%",
         left: "50%",
         transform: "translate(-50%, -50%)",
         pointerEvents: "none",
