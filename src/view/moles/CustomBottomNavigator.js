@@ -101,7 +101,10 @@ export default function CustomBottomNavigator() {
         <BottomNavigationAction icon={<StopCircleIcon />} value="halts" />
         <BottomNavigationAction icon={<RouteIcon />} value="routes" />
         <BottomNavigationAction icon={<AirportShuttleIcon />} value="buses" />
-        <BottomNavigationAction icon={<AirlineSeatReclineExtraIcon />} value="rides" />
+        <BottomNavigationAction
+          icon={<AirlineSeatReclineExtraIcon />}
+          value="rides"
+        />
         <BottomNavigationAction icon={<PersonIcon />} value="profile" />
       </BottomNavigation>
     </Paper>

@@ -14,8 +14,16 @@ export default function UserProfilePage() {
   const totalSpent = rideHistory.reduce((sum, r) => sum + r.fare, 0);
 
   const rows = [
-    { icon: <PersonIcon fontSize="small" color="action" />, label: "Name", value: user.name },
-    { icon: <HomeIcon fontSize="small" color="action" />, label: "Address", value: user.address },
+    {
+      icon: <PersonIcon fontSize="small" color="action" />,
+      label: "Name",
+      value: user.name,
+    },
+    {
+      icon: <HomeIcon fontSize="small" color="action" />,
+      label: "Address",
+      value: user.address,
+    },
     {
       icon: <AccountBalanceWalletIcon fontSize="small" color="action" />,
       label: "Balance",
@@ -36,7 +44,11 @@ export default function UserProfilePage() {
           <Box display="flex" alignItems="flex-start" gap={1.5} py={1.25}>
             <Box sx={{ mt: 0.25, flexShrink: 0 }}>{icon}</Box>
             <Box>
-              <Typography variant="caption" color="text.secondary" display="block">
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                display="block"
+              >
                 {label}
               </Typography>
               <Typography variant="body2">{value}</Typography>
