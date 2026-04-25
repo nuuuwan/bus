@@ -119,12 +119,12 @@ export default function RideView() {
               sx={{
                 color: "white",
                 fontWeight: 700,
-                fontSize: "1.4rem",
+                fontSize: "3rem",
                 fontFamily: "monospace",
                 lineHeight: 1,
               }}
             >
-              LKR {liveFare.toFixed(2)}
+              LKR {liveFare}
             </Typography>
           </Box>
         </Box>

@@ -50,14 +50,11 @@ export default class Ride {
     const currentPos = this.bus.latLngAt(effectiveMs);
     const km =
       boardLatLng && currentPos ? boardLatLng.distanceTo(currentPos) : 0;
-    return (
-      Math.round(
-        (Ride.FARE_BASE_LKR +
-          Ride.FARE_PER_MINUTE_LKR * minutes +
-          Ride.FARE_PER_KM_LKR * km) *
-          100,
-      ) / 100
-    );
+    const raw =
+      Ride.FARE_BASE_LKR +
+      Ride.FARE_PER_MINUTE_LKR * minutes +
+      Ride.FARE_PER_KM_LKR * km;
+    return Math.round(raw / 5) * 5;
   }
 
   /** Convenience getter — returns fare at effective time. */

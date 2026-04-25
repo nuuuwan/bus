@@ -33,7 +33,7 @@ export default function UserProfilePage() {
     {
       icon: <DirectionsBusIcon fontSize="small" color="action" />,
       label: "Rides",
-      value: `${totalRides} ride${totalRides !== 1 ? "s" : ""} · LKR ${totalSpent.toFixed(2)} spent`,
+      value: `${totalRides} ride${totalRides !== 1 ? "s" : ""} · LKR ${totalSpent} spent`,
     },
   ];
 

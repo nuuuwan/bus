@@ -95,7 +95,7 @@ export default function RidesPage() {
                   {formatDuration(r.durationMs())}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  LKR {r.fare.toFixed(2)}
+                  LKR {r.fare}
                 </Typography>
                 {r.isActive && (
                   <Typography
