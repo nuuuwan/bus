@@ -18,7 +18,7 @@ if (typeof document !== "undefined") {
   }
 }
 
-function buildBusIcon(color, heading, label, atHalt) {
+function buildBusIcon(color, heading, label, atHalt, blinkVisible) {
   const iconHtml = renderToStaticMarkup(
     <AirportShuttleIcon
       style={{
@@ -29,12 +29,10 @@ function buildBusIcon(color, heading, label, atHalt) {
       }}
     />,
   );
-  const ring = atHalt
-    ? `box-shadow:0 0 0 3px #4caf50,0 1px 4px rgba(0,0,0,0.5)`
-    : `box-shadow:0 1px 4px rgba(0,0,0,0.5)`;
-  const blink = atHalt ? `animation:bus-blink 1s step-end infinite` : "";
+  const ring = `box-shadow:0 1px 4px rgba(0,0,0,0.5)`;
+  const opacity = atHalt && !blinkVisible ? "opacity:0;" : "";
   return L.divIcon({
-    html: `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;${blink}">
+    html: `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;${opacity}">
       <div style="background:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;${ring}">${iconHtml}</div>
       <div style="background:${color};color:white;font-size:9px;font-weight:bold;padding:1px 4px;border-radius:3px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.4);line-height:1.2">${label}</div>
     </div>`,
