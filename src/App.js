@@ -136,6 +136,7 @@ function AppContent() {
       {/* Redirect-only routes — render null, just navigate */}
       <Routes>
         <Route path="/" element={<RootRedirect />} />
+        <Route path="/:latLngId" element={null} />
         <Route path="/:latLngId/route" element={<RouteRedirect />} />
         <Route path="/:latLng/halt" element={<HaltRedirect />} />
       </Routes>

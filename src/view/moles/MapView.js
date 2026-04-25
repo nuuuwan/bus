@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { Box, IconButton } from "@mui/material";
@@ -26,9 +26,9 @@ function MapController({
   selectedBus,
   selectedHalt,
   now,
+  latLngId,
 }) {
   const map = useMap();
-  const { latLngId } = useParams();
 
   // Expose fly-to function via ref for imperative use (e.g. location button).
   // yOffsetPx shifts the map center downward so the target appears
@@ -96,9 +96,11 @@ function MapController({
 }
 
 export default function MapView() {
-  const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  // Parse latLngId directly from the URL path — useParams() is not available
+  // here because MapView renders outside any <Route> element.
+  const latLngId = location.pathname.split("/").filter(Boolean)[0] || null;
   const {
     routes,
     halts,
@@ -112,27 +114,26 @@ export default function MapView() {
   const defaultZoom = 16;
   const flyToRef = useRef(null);
 
-  // Parse latLng from URL params and use ref to keep initial center stable
+  // Parse latLng from URL and use ref to keep initial center stable
   const initialCenter = useRef(
-    params.latLngId
-      ? LatLng.fromString(params.latLngId).toArray()
+    latLngId
+      ? LatLng.fromString(latLngId).toArray()
       : LatLng.fromDefault().toArray(),
   );
 
   const handleMoveEnd = useCallback(
     (newLatLng) => {
-      const currentLatLng = params.latLngId;
       const newLatLngString = newLatLng.toString();
 
       // Only update if the latLng has changed
-      if (currentLatLng !== newLatLngString) {
+      if (latLngId !== newLatLngString) {
         // Preserve the current route structure (e.g., /halts, /routes, /route/123, /halt/456)
         // Extract everything after the latLngId
         const pathSuffix = location.pathname.replace(/^\/[^/]+/, "");
         navigate(`/${newLatLngString}${pathSuffix}`, { replace: true });
       }
     },
-    [params.latLngId, location.pathname, navigate],
+    [latLngId, location.pathname, navigate],
   );
 
   const handleCurrentLocation = useCallback(() => {
@@ -212,6 +213,7 @@ export default function MapView() {
           selectedBus={selectedBus}
           selectedHalt={selectedHalt}
           now={now}
+          latLngId={latLngId}
         />
 
         {routes.map((route) => (
