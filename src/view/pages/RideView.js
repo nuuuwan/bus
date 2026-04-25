@@ -49,8 +49,8 @@ export default function RideView() {
 
         <Divider sx={{ my: 0.75 }} />
 
-        {/* Next stop */}
-        {nextArrival && (
+        {/* Next stop (only shown when not at a halt) */}
+        {nextArrival && !atHalt && (
           <>
             <Box mb={1}>
               <Box display="flex" alignItems="baseline" gap={1} mb={0.25}>
