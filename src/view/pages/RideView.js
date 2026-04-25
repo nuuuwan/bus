@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDurationSeconds } from "../../nonview/base/Duration";
+import HaltInfo from "../atoms/HaltInfo";
 import BusInfo from "../atoms/BusInfo";
 import DrawerPage from "../moles/DrawerPage";
 
@@ -52,13 +53,14 @@ export default function RideView() {
         {nextArrival && (
           <>
             <Box mb={1}>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block", mb: 0.25 }}
-              >
-                Next stop
-              </Typography>
+              <Box display="flex" alignItems="baseline" gap={1} mb={0.25}>
+                <Typography variant="caption" color="text.secondary">
+                  Next stop
+                </Typography>
+                <Typography variant="caption" color="primary.main" sx={{ fontWeight: 600 }}>
+                  {formatDurationSeconds(Math.max(0, nextArrival.arrivalMs - now))}
+                </Typography>
+              </Box>
               <HaltInfo halt={nextArrival.halt} />
             </Box>
             <Divider sx={{ my: 0.75 }} />

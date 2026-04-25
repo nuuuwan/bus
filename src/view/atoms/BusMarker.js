@@ -58,6 +58,7 @@ export default function BusMarker({ bus }) {
     <Marker
       position={[latLng.lat, latLng.lng]}
       icon={icon}
+      zIndexOffset={isHighlighted ? 1000 : 0}
       eventHandlers={{
         click: () => {
           const base = currentLatLng ? currentLatLng.id : "0,0";
