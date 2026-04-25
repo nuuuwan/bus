@@ -1,6 +1,7 @@
-import { Box, Divider, List, ListItem, Typography } from "@mui/material";
+import { Box, Divider, List, ListItem, ListItemButton, Typography } from "@mui/material";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import NumberPlate from "../atoms/NumberPlate";
@@ -8,6 +9,10 @@ import HaltInfo from "../atoms/HaltInfo";
 
 export default function RidesPage() {
   const { rideHistory, ride } = useData();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const match = location.pathname.match(/^\/([^/]+)/);
+  const latLng = match ? match[1] : "";
 
   const allRides = [...(ride ? [ride] : []), ...[...rideHistory].reverse()];
 
@@ -40,18 +45,22 @@ export default function RidesPage() {
       </Typography>
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
-          {allRides.map((r, i) => (
-            <ListItem
-              key={i}
-              divider
-              sx={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-                py: 1.5,
-                px: 2,
-                gap: 0.5,
-              }}
-            >
+          {allRides.map((r, i) => {
+            const isActive = r.isActive;
+            const ItemComponent = isActive ? ListItemButton : ListItem;
+            return (
+              <ItemComponent
+                key={i}
+                divider
+                onClick={isActive ? () => navigate(`/${latLng}/ride`) : undefined}
+                sx={{
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  py: 1.5,
+                  px: 2,
+                  gap: 0.5,
+                }}
+              >
               {/* Bus */}
               <NumberPlate bus={r.bus} />
 
@@ -93,8 +102,9 @@ export default function RidesPage() {
                 )}
               </Box>
               <Divider />
-            </ListItem>
-          ))}
+            </ItemComponent>
+            );
+          })}
         </List>
       </Box>
     </Box>
