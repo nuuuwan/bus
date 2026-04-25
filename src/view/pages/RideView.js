@@ -6,6 +6,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import HaltInfo from "../atoms/HaltInfo";
+import BusInfo from "../atoms/BusInfo";
 import DrawerPage from "../moles/DrawerPage";
 
 export default function RideView() {
@@ -25,6 +26,13 @@ export default function RideView() {
   return (
     <DrawerPage>
       <Box sx={{ px: 2, py: 1 }}>
+        {/* Bus info */}
+        <Box mb={1}>
+          <BusInfo bus={ride.bus} />
+        </Box>
+
+        <Divider sx={{ my: 0.75 }} />
+
         {/* Current status */}
         <Box mb={1}>
           <Typography
