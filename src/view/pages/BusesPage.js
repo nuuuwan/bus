@@ -1,5 +1,6 @@
 import {
   Box,
+  Chip,
   CircularProgress,
   List,
   ListItemButton,
@@ -94,17 +95,23 @@ export default function BusesPage() {
                   divider
                 >
                   <Box flex={1} minWidth={0}>
-                    <Box display="flex" alignItems="center" gap={0.5}>
+                    <Box display="flex" alignItems="center" gap={0.5} flexWrap="wrap">
                       <BusInfo bus={bus} />
-                      {approachArrow === "up" && (
-                        <ArrowUpwardIcon
-                          sx={{ fontSize: 16, color: "success.main" }}
-                        />
-                      )}
-                      {approachArrow === "down" && (
-                        <ArrowDownwardIcon
-                          sx={{ fontSize: 16, color: "error.main" }}
-                        />
+                      {bus.currentHalt(now) ? (
+                        <Chip label="Boarding" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+                      ) : (
+                        <>
+                          {approachArrow === "up" && (
+                            <ArrowUpwardIcon
+                              sx={{ fontSize: 16, color: "success.main" }}
+                            />
+                          )}
+                          {approachArrow === "down" && (
+                            <ArrowDownwardIcon
+                              sx={{ fontSize: 16, color: "error.main" }}
+                            />
+                          )}
+                        </>
                       )}
                     </Box>
                     <Box mt={0.5}>

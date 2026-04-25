@@ -1,4 +1,4 @@
-import { Box, ListItemButton, Typography } from "@mui/material";
+import { Box, Chip, ListItemButton, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -100,14 +100,21 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
       {hasNextBuses ? (
         <Box mt={0.5}>
           {nextBuses.map(({ bus, arrivalMs }) => {
+            const isAtHalt = !!bus.currentHalt(now);
             const dur = formatArrival(arrivalMs, now);
             return (
-              <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
+              <Box key={bus.id} display="flex" alignItems="center" gap={0.5} flexWrap="wrap">
                 <BusInfo bus={bus} />
-                <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-                <Typography variant="caption" color="text.secondary">
-                  {dur}
-                </Typography>
+                {isAtHalt ? (
+                  <Chip label="Boarding" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+                ) : (
+                  <>
+                    <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+                    <Typography variant="caption" color="text.secondary">
+                      {dur}
+                    </Typography>
+                  </>
+                )}
               </Box>
             );
           })}
@@ -122,16 +129,18 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
       ) : (
         <>
           {bestCatch && (
-            <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
+            <Box display="flex" alignItems="center" gap={0.5} mt={0.5} flexWrap="wrap">
               <BusInfo bus={bestCatch.bus} />
-              {bestCatch.arrivalMs !== null && (
+              {bestCatch.bus.currentHalt(now) ? (
+                <Chip label="Boarding" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+              ) : bestCatch.arrivalMs !== null ? (
                 <>
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                   <Typography variant="caption" color="text.secondary">
                     {formatArrival(bestCatch.arrivalMs, now)}
                   </Typography>
                 </>
-              )}
+              ) : null}
             </Box>
           )}
           {bestCatch?.halt && (
