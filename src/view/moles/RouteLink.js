@@ -103,10 +103,22 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
             const isAtHalt = !!bus.currentHalt(now);
             const dur = formatArrival(arrivalMs, now);
             return (
-              <Box key={bus.id} display="flex" alignItems="center" gap={0.5} flexWrap="wrap">
+              <Box
+                key={bus.id}
+                display="flex"
+                alignItems="center"
+                gap={0.5}
+                flexWrap="wrap"
+              >
                 <BusInfo bus={bus} />
                 {isAtHalt ? (
-                  <Chip label="Boarding" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+                  <Chip
+                    label="Boarding"
+                    size="small"
+                    color="success"
+                    variant="outlined"
+                    sx={{ height: 18, fontSize: "0.65rem" }}
+                  />
                 ) : (
                   <>
                     <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
@@ -129,10 +141,22 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
       ) : (
         <>
           {bestCatch && (
-            <Box display="flex" alignItems="center" gap={0.5} mt={0.5} flexWrap="wrap">
+            <Box
+              display="flex"
+              alignItems="center"
+              gap={0.5}
+              mt={0.5}
+              flexWrap="wrap"
+            >
               <BusInfo bus={bestCatch.bus} />
               {bestCatch.bus.currentHalt(now) ? (
-                <Chip label="Boarding" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+                <Chip
+                  label="Boarding"
+                  size="small"
+                  color="success"
+                  variant="outlined"
+                  sx={{ height: 18, fontSize: "0.65rem" }}
+                />
               ) : bestCatch.arrivalMs !== null ? (
                 <>
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />

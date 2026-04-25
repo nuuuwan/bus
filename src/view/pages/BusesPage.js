@@ -95,10 +95,21 @@ export default function BusesPage() {
                   divider
                 >
                   <Box flex={1} minWidth={0}>
-                    <Box display="flex" alignItems="center" gap={0.5} flexWrap="wrap">
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      gap={0.5}
+                      flexWrap="wrap"
+                    >
                       <BusInfo bus={bus} />
                       {bus.currentHalt(now) ? (
-                        <Chip label="Boarding" size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+                        <Chip
+                          label="Boarding"
+                          size="small"
+                          color="success"
+                          variant="outlined"
+                          sx={{ height: 18, fontSize: "0.65rem" }}
+                        />
                       ) : (
                         <>
                           {approachArrow === "up" && (

@@ -31,8 +31,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
       : null);
 
   const busAtHalt =
-    resolvedNextBus &&
-    resolvedNextBus.bus.currentHalt(now)?.id === halt.id
+    resolvedNextBus && resolvedNextBus.bus.currentHalt(now)?.id === halt.id
       ? resolvedNextBus.bus
       : null;
   const canBoard = busAtHalt && !ride;
@@ -45,7 +44,13 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
     >
       <HaltInfo halt={halt} />
       {resolvedNextBus && (
-        <Box display="flex" alignItems="center" gap={0.5} mt={0.5} flexWrap="wrap">
+        <Box
+          display="flex"
+          alignItems="center"
+          gap={0.5}
+          mt={0.5}
+          flexWrap="wrap"
+        >
           <NumberPlate bus={resolvedNextBus.bus} atHalt={!!busAtHalt} />
           {busAtHalt ? (
             <Chip
@@ -74,7 +79,13 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
                 boardBus(busAtHalt, halt);
                 navigate(`/${latLng}/ride`);
               }}
-              sx={{ textTransform: "none", py: 0, px: 1, fontSize: "0.7rem", minHeight: 24 }}
+              sx={{
+                textTransform: "none",
+                py: 0,
+                px: 1,
+                fontSize: "0.7rem",
+                minHeight: 24,
+              }}
             >
               Get On
             </Button>
