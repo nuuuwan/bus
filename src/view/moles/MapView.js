@@ -210,8 +210,8 @@ export default function MapView() {
         zoom={defaultZoom}
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
-        dragging={false}
-        scrollWheelZoom={false}
+        dragging={true}
+        scrollWheelZoom={true}
         doubleClickZoom={false}
         touchZoom={false}
         boxZoom={false}
