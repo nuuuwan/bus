@@ -74,67 +74,67 @@ export default function BusesPage() {
       }
     >
       <List sx={{ p: 0 }}>
-          {busItems.map(({ bus, distanceKm, approachArrow }) => {
-            return (
-              <motion.div
-                key={bus.id}
-                layout
-                transition={{ duration: 0.35, ease: "easeInOut" }}
+        {busItems.map(({ bus, distanceKm, approachArrow }) => {
+          return (
+            <motion.div
+              key={bus.id}
+              layout
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+            >
+              <ListItemButton
+                onClick={() =>
+                  navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
+                }
+                sx={{
+                  py: 1.5,
+                  px: 2,
+                  gap: 1.5,
+                  opacity: distanceKm <= NEARBY_KM ? 1 : 0.25,
+                }}
+                divider
               >
-                <ListItemButton
-                  onClick={() =>
-                    navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
-                  }
-                  sx={{
-                    py: 1.5,
-                    px: 2,
-                    gap: 1.5,
-                    opacity: distanceKm <= NEARBY_KM ? 1 : 0.25,
-                  }}
-                  divider
-                >
-                  <Box flex={1} minWidth={0}>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      gap={0.5}
-                      flexWrap="wrap"
-                    >
-                      <BusInfo bus={bus} />
-                      {bus.currentHalt(now) ? (
-                        <Chip
-                          label="Boarding"
-                          size="small"
-                          color="success"
-                          variant="outlined"
-                          sx={{ height: 18, fontSize: "0.65rem" }}
-                        />
-                      ) : (
-                        <>
-                          {approachArrow === "up" && (
-                            <ArrowUpwardIcon
-                              sx={{ fontSize: 16, color: "success.main" }}
-                            />
-                          )}
-                          {approachArrow === "down" && (
-                            <ArrowDownwardIcon
-                              sx={{ fontSize: 16, color: "error.main" }}
-                            />
-                          )}
-                        </>
-                      )}
-                    </Box>
-                    <Box mt={0.5}>
-                      <Distance
-                        distanceKm={distanceKm === Infinity ? null : distanceKm}
+                <Box flex={1} minWidth={0}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={0.5}
+                    flexWrap="wrap"
+                  >
+                    <BusInfo bus={bus} />
+                    {bus.currentHalt(now) ? (
+                      <Chip
+                        label="Boarding"
+                        size="small"
+                        color="success"
+                        variant="outlined"
+                        sx={{ height: 18, fontSize: "0.65rem" }}
                       />
-                    </Box>
+                    ) : (
+                      <>
+                        {approachArrow === "up" && (
+                          <ArrowUpwardIcon
+                            sx={{ fontSize: 16, color: "success.main" }}
+                          />
+                        )}
+                        {approachArrow === "down" && (
+                          <ArrowDownwardIcon
+                            sx={{ fontSize: 16, color: "error.main" }}
+                          />
+                        )}
+                      </>
+                    )}
                   </Box>
-                </ListItemButton>
-              </motion.div>
-            );
-          })}
-        </List>
+                  <Box mt={0.5}>
+                    <Distance
+                      distanceKm={distanceKm === Infinity ? null : distanceKm}
+                    />
+                  </Box>
+                </Box>
+              </ListItemButton>
+            </motion.div>
+          );
+        })}
+      </List>
     </DrawerPage>
   );
 }

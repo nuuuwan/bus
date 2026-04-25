@@ -51,69 +51,67 @@ export default function RidesPage() {
       }
     >
       <List sx={{ p: 0 }}>
-          {allRides.map((r, i) => {
-            const isActive = r.isActive;
-            const ItemComponent = isActive ? ListItemButton : ListItem;
-            return (
-              <ItemComponent
-                key={i}
-                divider
-                onClick={
-                  isActive ? () => navigate(`/${latLng}/ride`) : undefined
-                }
-                sx={{
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  py: 1.5,
-                  px: 2,
-                  gap: 0.5,
-                }}
+        {allRides.map((r, i) => {
+          const isActive = r.isActive;
+          const ItemComponent = isActive ? ListItemButton : ListItem;
+          return (
+            <ItemComponent
+              key={i}
+              divider
+              onClick={isActive ? () => navigate(`/${latLng}/ride`) : undefined}
+              sx={{
+                flexDirection: "column",
+                alignItems: "flex-start",
+                py: 1.5,
+                px: 2,
+                gap: 0.5,
+              }}
+            >
+              {/* Bus */}
+              <NumberPlate bus={r.bus} />
+
+              {/* From → To */}
+              <Box
+                display="flex"
+                alignItems="center"
+                gap={0.5}
+                flexWrap="wrap"
+                mt={0.25}
               >
-                {/* Bus */}
-                <NumberPlate bus={r.bus} />
+                <HaltInfo halt={r.boardedAtHalt} />
+                {r.alightedAtHalt && (
+                  <>
+                    <ArrowForwardIcon
+                      sx={{ fontSize: 14, color: "text.secondary" }}
+                    />
+                    <HaltInfo halt={r.alightedAtHalt} />
+                  </>
+                )}
+              </Box>
 
-                {/* From → To */}
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap={0.5}
-                  flexWrap="wrap"
-                  mt={0.25}
-                >
-                  <HaltInfo halt={r.boardedAtHalt} />
-                  {r.alightedAtHalt && (
-                    <>
-                      <ArrowForwardIcon
-                        sx={{ fontSize: 14, color: "text.secondary" }}
-                      />
-                      <HaltInfo halt={r.alightedAtHalt} />
-                    </>
-                  )}
-                </Box>
-
-                {/* Duration + fare */}
-                <Box display="flex" gap={2} mt={0.25}>
-                  <Typography variant="caption" color="text.secondary">
-                    {formatDuration(r.durationMs())}
+              {/* Duration + fare */}
+              <Box display="flex" gap={2} mt={0.25}>
+                <Typography variant="caption" color="text.secondary">
+                  {formatDuration(r.durationMs())}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  LKR {r.fare.toFixed(2)}
+                </Typography>
+                {r.isActive && (
+                  <Typography
+                    variant="caption"
+                    color="success.main"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    Active
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    LKR {r.fare.toFixed(2)}
-                  </Typography>
-                  {r.isActive && (
-                    <Typography
-                      variant="caption"
-                      color="success.main"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      Active
-                    </Typography>
-                  )}
-                </Box>
-                <Divider />
-              </ItemComponent>
-            );
-          })}
-        </List>
+                )}
+              </Box>
+              <Divider />
+            </ItemComponent>
+          );
+        })}
+      </List>
     </DrawerPage>
   );
 }

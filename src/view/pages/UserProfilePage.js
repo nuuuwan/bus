@@ -40,24 +40,24 @@ export default function UserProfilePage() {
   return (
     <DrawerPage>
       <Box sx={{ px: 2, py: 1 }}>
-      {rows.map(({ icon, label, value }, i) => (
-        <Box key={label}>
-          {i > 0 && <Divider />}
-          <Box display="flex" alignItems="flex-start" gap={1.5} py={1.25}>
-            <Box sx={{ mt: 0.25, flexShrink: 0 }}>{icon}</Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                display="block"
-              >
-                {label}
-              </Typography>
-              <Typography variant="body2">{value}</Typography>
+        {rows.map(({ icon, label, value }, i) => (
+          <Box key={label}>
+            {i > 0 && <Divider />}
+            <Box display="flex" alignItems="flex-start" gap={1.5} py={1.25}>
+              <Box sx={{ mt: 0.25, flexShrink: 0 }}>{icon}</Box>
+              <Box>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                >
+                  {label}
+                </Typography>
+                <Typography variant="body2">{value}</Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      ))}
+        ))}
       </Box>
     </DrawerPage>
   );

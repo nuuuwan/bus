@@ -68,27 +68,27 @@ export default function RoutesPage() {
     >
       <List sx={{ p: 0 }}>
         <AnimatePresence>
-            {sortedRoutes.map((route) => {
-              const isNearby =
-                !currentLatLng ||
-                route.haltList.some(
-                  (halt) =>
-                    halt.latLng &&
-                    currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
-                );
-              return (
-                <motion.div
-                  key={`${route.routeNum}-${route.direction}`}
-                  layout
-                  transition={{ duration: 0.35, ease: "easeInOut" }}
-                  style={{ opacity: isNearby ? 1 : 0.25 }}
-                >
-                  <RouteLink route={route} />
-                </motion.div>
+          {sortedRoutes.map((route) => {
+            const isNearby =
+              !currentLatLng ||
+              route.haltList.some(
+                (halt) =>
+                  halt.latLng &&
+                  currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
               );
-            })}
-          </AnimatePresence>
-        </List>
+            return (
+              <motion.div
+                key={`${route.routeNum}-${route.direction}`}
+                layout
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                style={{ opacity: isNearby ? 1 : 0.25 }}
+              >
+                <RouteLink route={route} />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </List>
     </DrawerPage>
   );
 }

@@ -178,18 +178,25 @@ function AppContent() {
         }}
       >
         <DrawerHeader onClose={handleDrawerClose} />
-        <Box sx={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-        <Routes>
-          <Route path="/:latLngId/routes" element={<RoutesPage />} />
-          <Route path="/:latLngId/route/:routeId" element={<RoutePage />} />
-          <Route path="/:latLngId/halts" element={<HaltsPage />} />
-          <Route path="/:latLngId/halt/:haltId" element={<HaltPage />} />
-          <Route path="/:latLngId/buses" element={<BusesPage />} />
-          <Route path="/:latLngId/bus/:busId" element={<BusPage />} />
-          <Route path="/:latLngId/ride" element={<RideView />} />
-          <Route path="/:latLngId/rides" element={<RidesPage />} />
-          <Route path="/:latLngId/profile" element={<UserProfilePage />} />
-        </Routes>
+        <Box
+          sx={{
+            flex: 1,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Routes>
+            <Route path="/:latLngId/routes" element={<RoutesPage />} />
+            <Route path="/:latLngId/route/:routeId" element={<RoutePage />} />
+            <Route path="/:latLngId/halts" element={<HaltsPage />} />
+            <Route path="/:latLngId/halt/:haltId" element={<HaltPage />} />
+            <Route path="/:latLngId/buses" element={<BusesPage />} />
+            <Route path="/:latLngId/bus/:busId" element={<BusPage />} />
+            <Route path="/:latLngId/ride" element={<RideView />} />
+            <Route path="/:latLngId/rides" element={<RidesPage />} />
+            <Route path="/:latLngId/profile" element={<UserProfilePage />} />
+          </Routes>
         </Box>
       </Drawer>
 

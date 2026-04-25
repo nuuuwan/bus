@@ -73,66 +73,72 @@ export default function HaltPage() {
   }
 
   return (
-    <DrawerPage subheader={haltDistanceKm !== null ? <Distance distanceKm={haltDistanceKm} /> : null}>
+    <DrawerPage
+      subheader={
+        haltDistanceKm !== null ? (
+          <Distance distanceKm={haltDistanceKm} />
+        ) : null
+      }
+    >
       <List sx={{ p: 0 }}>
-          {busItems.map(({ bus, arrivalMs }) => {
-            const busAtThisHalt =
-              selectedHalt && bus.currentHalt(now)?.id === selectedHalt.id;
-            const canBoard = busAtThisHalt && !ride;
-            return (
-              <ListItemButton
-                key={bus.id}
-                divider
-                onClick={() =>
-                  navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
-                }
-                sx={{
-                  py: 1.5,
-                  px: 2,
-                  gap: 1,
-                }}
-              >
-                <BusInfo bus={bus} />
-                {busAtThisHalt ? (
-                  canBoard ? (
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="success"
-                      startIcon={<DirectionsBusIcon />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        boardBus(bus, selectedHalt);
-                        navigate(`/${latLng}/ride`);
-                      }}
-                      sx={{ ml: "auto", textTransform: "none", flexShrink: 0 }}
-                    >
-                      Get On
-                    </Button>
-                  ) : (
-                    <Typography
-                      variant="caption"
-                      color="success.dark"
-                      sx={{ ml: "auto", fontWeight: 600, flexShrink: 0 }}
-                    >
-                      Boarding
-                    </Typography>
-                  )
+        {busItems.map(({ bus, arrivalMs }) => {
+          const busAtThisHalt =
+            selectedHalt && bus.currentHalt(now)?.id === selectedHalt.id;
+          const canBoard = busAtThisHalt && !ride;
+          return (
+            <ListItemButton
+              key={bus.id}
+              divider
+              onClick={() =>
+                navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
+              }
+              sx={{
+                py: 1.5,
+                px: 2,
+                gap: 1,
+              }}
+            >
+              <BusInfo bus={bus} />
+              {busAtThisHalt ? (
+                canBoard ? (
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="success"
+                    startIcon={<DirectionsBusIcon />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      boardBus(bus, selectedHalt);
+                      navigate(`/${latLng}/ride`);
+                    }}
+                    sx={{ ml: "auto", textTransform: "none", flexShrink: 0 }}
+                  >
+                    Get On
+                  </Button>
                 ) : (
-                  <>
-                    <AccessTimeIcon
-                      sx={{ fontSize: 14, ml: "auto" }}
-                      color="action"
-                    />
-                    <Typography variant="caption" color="text.secondary">
-                      {formatArrival(arrivalMs, now)}
-                    </Typography>
-                  </>
-                )}
-              </ListItemButton>
-            );
-          })}
-        </List>
+                  <Typography
+                    variant="caption"
+                    color="success.dark"
+                    sx={{ ml: "auto", fontWeight: 600, flexShrink: 0 }}
+                  >
+                    Boarding
+                  </Typography>
+                )
+              ) : (
+                <>
+                  <AccessTimeIcon
+                    sx={{ fontSize: 14, ml: "auto" }}
+                    color="action"
+                  />
+                  <Typography variant="caption" color="text.secondary">
+                    {formatArrival(arrivalMs, now)}
+                  </Typography>
+                </>
+              )}
+            </ListItemButton>
+          );
+        })}
+      </List>
     </DrawerPage>
   );
 }

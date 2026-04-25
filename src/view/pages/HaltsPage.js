@@ -57,24 +57,24 @@ export default function HaltsPage() {
     >
       <List sx={{ p: 0 }}>
         <AnimatePresence>
-            {sortedHalts.map((halt) => {
-              const isNearby =
-                !currentLatLng ||
-                !halt.latLng ||
-                currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM;
-              return (
-                <motion.div
-                  key={halt.name}
-                  layout
-                  transition={{ duration: 0.35, ease: "easeInOut" }}
-                  style={{ opacity: isNearby ? 1 : 0.25 }}
-                >
-                  <HaltLink halt={halt} buses={buses} />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </List>
+          {sortedHalts.map((halt) => {
+            const isNearby =
+              !currentLatLng ||
+              !halt.latLng ||
+              currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM;
+            return (
+              <motion.div
+                key={halt.name}
+                layout
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                style={{ opacity: isNearby ? 1 : 0.25 }}
+              >
+                <HaltLink halt={halt} buses={buses} />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </List>
     </DrawerPage>
   );
 }
