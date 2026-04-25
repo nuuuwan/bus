@@ -245,13 +245,8 @@ export function DataProvider({ children }) {
     if (ride) {
       const ms = Date.now();
       const finalFare = ride.fareAt(ms);
-      setRideHistory((prev) => [
-        ...prev,
-        ride.withAlight(halt ?? null, ms),
-      ]);
-      setUser(
-        new User(user.name, user.address, user.cashBalance - finalFare),
-      );
+      setRideHistory((prev) => [...prev, ride.withAlight(halt ?? null, ms)]);
+      setUser(new User(user.name, user.address, user.cashBalance - finalFare));
     }
     setRide(null);
   }

@@ -33,14 +33,18 @@ function buildBusIcon(color, heading, label, atHalt) {
 
 export default function BusMarker({ bus }) {
   const now = useClock();
-  const { currentLatLng, selectedBus } = useData();
+  const { currentLatLng, selectedBus, ride } = useData();
   const navigate = useNavigate();
   const latLng = bus.latLngAt(now);
 
   if (!latLng) return null;
 
-  const isSelected = !selectedBus || selectedBus.id === bus.id;
-  const color = isSelected ? bus.route.getColor() : "#aaa";
+  // When riding, only the bus being ridden is highlighted; all others are gray.
+  // When not riding, dim non-selected buses (a bus is selected when viewing its detail page).
+  const isHighlighted = ride
+    ? bus.id === ride.bus.id
+    : !selectedBus || selectedBus.id === bus.id;
+  const color = isHighlighted ? bus.route.getColor() : "#aaa";
   const atHalt = bus.currentHalt(now);
 
   const icon = buildBusIcon(

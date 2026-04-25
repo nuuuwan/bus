@@ -1,4 +1,4 @@
-import { Circle, useMap } from "react-leaflet";
+import { useMap } from "react-leaflet";
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import L from "leaflet";
@@ -10,7 +10,7 @@ function getCrosshairLatLng(map) {
 
 export default function Crosshairs() {
   const map = useMap();
-  const [center, setCenter] = useState(() => getCrosshairLatLng(map));
+  const [, setCenter] = useState(() => getCrosshairLatLng(map));
 
   useEffect(() => {
     const updateCenter = () => {
@@ -23,34 +23,7 @@ export default function Crosshairs() {
     };
   }, [map]);
 
-  const centerPosition = [center.lat, center.lng];
-
-  return (
-    <>
-      {/* 1 km circle */}
-      <Circle
-        center={centerPosition}
-        radius={1000}
-        pathOptions={{
-          color: "#404040",
-          weight: 2,
-          fillColor: "transparent",
-          opacity: 0.5,
-        }}
-      />
-      {/* 500 m circle */}
-      <Circle
-        center={centerPosition}
-        radius={500}
-        pathOptions={{
-          color: "#404040",
-          weight: 2,
-          fillColor: "transparent",
-          opacity: 0.6,
-        }}
-      />
-    </>
-  );
+  return null;
 }
 
 export function CrosshairsOverlay() {

@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDurationSeconds } from "../../nonview/base/Duration";
-import HaltInfo from "../atoms/HaltInfo";
 import BusInfo from "../atoms/BusInfo";
 import DrawerPage from "../moles/DrawerPage";
 

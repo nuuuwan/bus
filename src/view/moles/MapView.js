@@ -176,6 +176,16 @@ export default function MapView() {
     [latLngId, location.pathname, navigate, ride],
   );
 
+  // While riding, keep the URL latLng in sync with the bus position so that
+  // if the user navigates away and back the map restores to the right spot.
+  useEffect(() => {
+    if (!ride || !currentLatLng) return;
+    const newLatLngString = currentLatLng.toString();
+    if (latLngId === newLatLngString) return;
+    const pathSuffix = location.pathname.replace(/^\/[^/]+/, "");
+    navigate(`/${newLatLngString}${pathSuffix}`, { replace: true });
+  }, [ride, currentLatLng, latLngId, location.pathname, navigate]);
+
   const handleCurrentLocation = useCallback(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
