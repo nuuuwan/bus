@@ -57,8 +57,14 @@ export default function RideView() {
                 <Typography variant="caption" color="text.secondary">
                   Next stop
                 </Typography>
-                <Typography variant="caption" color="primary.main" sx={{ fontWeight: 600 }}>
-                  {formatDurationSeconds(Math.max(0, nextArrival.arrivalMs - now))}
+                <Typography
+                  variant="caption"
+                  color="primary.main"
+                  sx={{ fontWeight: 600 }}
+                >
+                  {formatDurationSeconds(
+                    Math.max(0, nextArrival.arrivalMs - now),
+                  )}
                 </Typography>
               </Box>
               <HaltInfo halt={nextArrival.halt} />

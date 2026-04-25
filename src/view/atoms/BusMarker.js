@@ -6,6 +6,18 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useNavigate } from "react-router-dom";
 
+// Inject blink keyframe once into the document head
+if (typeof document !== "undefined") {
+  const styleId = "bus-blink-style";
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement("style");
+    style.id = styleId;
+    style.textContent =
+      "@keyframes bus-blink{0%,49%{opacity:1}50%,100%{opacity:0}}";
+    document.head.appendChild(style);
+  }
+}
+
 function buildBusIcon(color, heading, label, atHalt) {
   const iconHtml = renderToStaticMarkup(
     <AirportShuttleIcon
@@ -20,8 +32,9 @@ function buildBusIcon(color, heading, label, atHalt) {
   const ring = atHalt
     ? `box-shadow:0 0 0 3px #4caf50,0 1px 4px rgba(0,0,0,0.5)`
     : `box-shadow:0 1px 4px rgba(0,0,0,0.5)`;
+  const blink = atHalt ? `animation:bus-blink 1s step-end infinite` : "";
   return L.divIcon({
-    html: `<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+    html: `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;${blink}">
       <div style="background:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;${ring}">${iconHtml}</div>
       <div style="background:${color};color:white;font-size:9px;font-weight:bold;padding:1px 4px;border-radius:3px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.4);line-height:1.2">${label}</div>
     </div>`,
