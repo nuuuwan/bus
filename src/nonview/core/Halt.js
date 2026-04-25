@@ -16,7 +16,11 @@ export default class Halt {
   }
 
   get id() {
-    return `${this.nameKebabCase}-${this.latLng.id}`;
+    const lat = this.latLng.lat;
+    const lng = this.latLng.lng;
+    const latStr = `${Math.abs(lat).toFixed(4)}${lat >= 0 ? "N" : "S"}`;
+    const lngStr = `${Math.abs(lng).toFixed(4)}${lng >= 0 ? "E" : "W"}`;
+    return `${this.nameKebabCase}-${latStr}-${lngStr}`;
   }
 
   static fromPythonDict(d) {
