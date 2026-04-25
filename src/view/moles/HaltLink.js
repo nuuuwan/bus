@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box, ListItemButton, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Link, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import NumberPlate from "../atoms/NumberPlate";
@@ -8,6 +8,7 @@ import HaltInfo from "../atoms/HaltInfo";
 
 export default function HaltLink({ halt, buses = [], nextBus }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const now = useClock();
 
   // Extract latLng from current pathname
@@ -27,27 +28,21 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
       : null);
 
   return (
-    <Link
-      to={`/${latLng}/halt/${encodeURIComponent(halt.id)}`}
-      style={{ textDecoration: "none", width: "100%", color: "inherit" }}
+    <ListItemButton
+      divider
+      onClick={() => navigate(`/${latLng}/halt/${encodeURIComponent(halt.id)}`)}
+      sx={{ flexDirection: "column", alignItems: "flex-start", py: 1.5, px: 2 }}
     >
-      <Box
-        sx={{
-          py: 1.5,
-          px: 2,
-        }}
-      >
-        <HaltInfo halt={halt} />
-        {resolvedNextBus && (
-          <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-            <NumberPlate bus={resolvedNextBus.bus} />
-            <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
-            <Typography variant="caption" color="text.secondary">
-              {formatArrival(resolvedNextBus.arrivalMs, now)}
-            </Typography>
-          </Box>
-        )}
-      </Box>
-    </Link>
+      <HaltInfo halt={halt} />
+      {resolvedNextBus && (
+        <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
+          <NumberPlate bus={resolvedNextBus.bus} />
+          <AccessTimeIcon sx={{ fontSize: 13 }} color="action" />
+          <Typography variant="caption" color="text.secondary">
+            {formatArrival(resolvedNextBus.arrivalMs, now)}
+          </Typography>
+        </Box>
+      )}
+    </ListItemButton>
   );
 }

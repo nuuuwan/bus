@@ -67,7 +67,7 @@ export default function RoutesPage() {
         {nearbyCount} routes within 1km
       </Typography>
       <Box width="100%" overflow="auto" flexGrow={1}>
-        <List sx={{ p: 1, m: 1 }}>
+        <List sx={{ p: 0 }}>
           <AnimatePresence>
             {sortedRoutes.map((route) => {
               const isNearby =

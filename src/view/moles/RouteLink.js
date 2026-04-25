@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box, ListItemButton, Typography } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Link, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
@@ -11,6 +11,7 @@ import HaltInfo from "../atoms/HaltInfo";
 
 export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const { currentLatLng, buses } = useData();
   const now = useClock();
 
@@ -82,20 +83,12 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   })();
 
   return (
-    <Link
-      to={`/${latLng}/route/${encodeURIComponent(route.id)}`}
-      style={{ textDecoration: "none", width: "100%", color: "inherit" }}
+    <ListItemButton
+      divider
+      onClick={() => navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`)}
+      sx={{ flexDirection: "column", alignItems: "flex-start", py: 1.5, px: 2, opacity }}
     >
-      <Box
-        sx={{
-          py: 1.5,
-          px: 2,
-          opacity,
-        }}
-      >
-        <Box display="flex" alignItems="center" gap={1}>
-          <RouteInfo route={route} />
-        </Box>
+        <RouteInfo route={route} />
         {hasNextBuses ? (
           <Box mt={0.5}>
             {nextBuses.map(({ bus, arrivalMs }) => {
@@ -145,7 +138,6 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
             </Box>
           </>
         )}
-      </Box>
-    </Link>
+    </ListItemButton>
   );
 }
