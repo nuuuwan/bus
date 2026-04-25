@@ -74,6 +74,11 @@ function DrawerHeader({ onClose }) {
   } else if (location.pathname.match(/\/bus\//)) {
     return (
       <>
+        <Box sx={{ display: "flex", justifyContent: "center", pt: 1, pb: 0.5 }}>
+          <Box
+            sx={{ width: 40, height: 4, borderRadius: 2, bgcolor: "grey.400" }}
+          />
+        </Box>
         <Toolbar sx={{ gap: 1 }}>
           <Box sx={{ flexGrow: 1 }}>
             {selectedBus && <NumberPlate bus={selectedBus} />}
@@ -91,6 +96,11 @@ function DrawerHeader({ onClose }) {
 
   return (
     <>
+      <Box sx={{ display: "flex", justifyContent: "center", pt: 1, pb: 0.5 }}>
+        <Box
+          sx={{ width: 40, height: 4, borderRadius: 2, bgcolor: "grey.400" }}
+        />
+      </Box>
       <Toolbar sx={{ gap: 1 }}>
         {icon}
         <Typography
@@ -122,7 +132,7 @@ function AppContent() {
   };
 
   return (
-    <Box sx={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}>
+    <Box sx={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
       {/* Redirect-only routes — render null, just navigate */}
       <Routes>
         <Route path="/" element={<RootRedirect />} />
@@ -134,7 +144,7 @@ function AppContent() {
       <Clock />
 
       <Drawer
-        anchor="right"
+        anchor="bottom"
         open={isDrawerOpen}
         onClose={handleDrawerClose}
         hideBackdrop
@@ -142,8 +152,14 @@ function AppContent() {
         sx={{
           pointerEvents: "none",
           "& .MuiDrawer-paper": {
-            width: "min(100vw, 400px)",
+            height: "50vh",
+            borderRadius: "16px 16px 0 0",
             pointerEvents: "auto",
+            width: "min(100vw, 390px)",
+            /* Align with the centered #root without using transform
+               (transform is already used by the Slide open/close animation) */
+            left: "max(0px, calc((100% - 390px) / 2))",
+            right: "auto",
           },
         }}
       >

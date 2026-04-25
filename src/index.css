@@ -1,10 +1,41 @@
+html {
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
 body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  /* Center the iPhone frame both horizontally and vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent text selection / callout on long press */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#root {
+  /* iPhone 14: 390×844 CSS px */
+  width: min(100vw, 390px);
+  height: min(100vh, 844px);
+  position: relative;
+  overflow: hidden;
+  /* Respect iOS safe areas (notch + home bar) */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
 }
 
 code {

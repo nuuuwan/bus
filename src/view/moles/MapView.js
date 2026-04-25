@@ -30,11 +30,22 @@ function MapController({
   const map = useMap();
   const { latLngId } = useParams();
 
-  // Expose fly-to function via ref for imperative use (e.g. location button)
+  // Expose fly-to function via ref for imperative use (e.g. location button).
+  // yOffsetPx shifts the map center downward so the target appears
+  // at the visual centre of the visible area (e.g. above bottom drawer).
   useEffect(() => {
     if (flyToRef) {
-      flyToRef.current = (lat, lng, zoom) => {
-        map.flyTo([lat, lng], zoom, { duration: 1 });
+      flyToRef.current = (lat, lng, zoom, yOffsetPx = 0) => {
+        if (yOffsetPx !== 0) {
+          const targetPt = map.project([lat, lng], zoom);
+          const adjustedLatLng = map.unproject(
+            L.point(targetPt.x, targetPt.y + yOffsetPx),
+            zoom,
+          );
+          map.flyTo(adjustedLatLng, zoom, { duration: 1 });
+        } else {
+          map.flyTo([lat, lng], zoom, { duration: 1 });
+        }
       };
     }
   }, [map, flyToRef]);
@@ -130,9 +141,15 @@ export default function MapView() {
         (position) => {
           const { latitude, longitude } = position.coords;
           const newLatLng = new LatLng(latitude, longitude);
-          // Fly the map immediately
+          // Fly the map, offsetting the centre upward when the bottom
+          // drawer is open so the pin lands in the visible area centre.
           if (flyToRef.current) {
-            flyToRef.current(latitude, longitude, defaultZoom);
+            const pathParts = location.pathname.split("/").filter(Boolean);
+            const isDrawerOpen = pathParts.length > 1;
+            // Drawer is 50vh tall; visible centre is at 25vh from top,
+            // so shift the fly-to centre down by 25vh.
+            const yOffsetPx = isDrawerOpen ? window.innerHeight * 0.25 : 0;
+            flyToRef.current(latitude, longitude, defaultZoom, yOffsetPx);
           }
           // Update URL (preserves drawer path suffix)
           const pathSuffix = location.pathname.replace(/^\/[^/]+/, "");
