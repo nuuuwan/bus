@@ -7,8 +7,8 @@ export default class LatLng {
   }
 
   toString() {
-    const latAbs = Math.abs(this.lat).toFixed(6);
-    const lngAbs = Math.abs(this.lng).toFixed(6);
+    const latAbs = Math.abs(this.lat).toFixed(4);
+    const lngAbs = Math.abs(this.lng).toFixed(4);
     const latDir = this.lat >= 0 ? "N" : "S";
     const lngDir = this.lng >= 0 ? "E" : "W";
     return `${latAbs}${latDir}-${lngAbs}${lngDir}`;

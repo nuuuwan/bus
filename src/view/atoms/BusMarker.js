@@ -6,18 +6,6 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useNavigate } from "react-router-dom";
 
-// Inject blink keyframe once into the document head
-if (typeof document !== "undefined") {
-  const styleId = "bus-blink-style";
-  if (!document.getElementById(styleId)) {
-    const style = document.createElement("style");
-    style.id = styleId;
-    style.textContent =
-      "@keyframes bus-blink{0%,49%{opacity:1}50%,100%{opacity:0}}";
-    document.head.appendChild(style);
-  }
-}
-
 function buildBusIcon(color, heading, label, atHalt, blinkVisible) {
   const iconHtml = renderToStaticMarkup(
     <AirportShuttleIcon
@@ -30,10 +18,10 @@ function buildBusIcon(color, heading, label, atHalt, blinkVisible) {
     />,
   );
   const ring = `box-shadow:0 1px 4px rgba(0,0,0,0.5)`;
-  const opacity = atHalt && !blinkVisible ? "opacity:0;" : "";
+  const iconOpacity = atHalt && !blinkVisible ? "opacity:0;" : "";
   return L.divIcon({
-    html: `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;${opacity}">
-      <div style="background:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;${ring}">${iconHtml}</div>
+    html: `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+      <div style="background:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;${ring};${iconOpacity}">${iconHtml}</div>
       <div style="background:${color};color:white;font-size:9px;font-weight:bold;padding:1px 4px;border-radius:3px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.4);line-height:1.2">${label}</div>
     </div>`,
     className: "",
@@ -57,12 +45,14 @@ export default function BusMarker({ bus }) {
     : !selectedBus || selectedBus.id === bus.id;
   const color = isHighlighted ? bus.route.getColor() : "#aaa";
   const atHalt = bus.currentHalt(now);
+  const blinkVisible = Math.floor(now / 500) % 2 === 0;
 
   const icon = buildBusIcon(
     color,
     bus.headingAt(now),
     `${bus.route.shortLabel} · ${bus.numberPlate}`,
     atHalt !== null,
+    blinkVisible,
   );
 
   return (
