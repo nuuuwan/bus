@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import HistoryIcon from "@mui/icons-material/History";
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
@@ -95,7 +95,7 @@ export default function RideView() {
           <Button
             variant="text"
             size="small"
-            startIcon={<HistoryIcon />}
+            startIcon={<AirlineSeatReclineExtraIcon />}
             onClick={() => navigate(`/${latLng}/rides`)}
             sx={{ textTransform: "none" }}
           >

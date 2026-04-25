@@ -13,6 +13,8 @@ import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import PersonIcon from "@mui/icons-material/Person";
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import { DataProvider, useData } from "./nonview/contexts/DataContext";
 import { ClockProvider } from "./nonview/contexts/ClockContext";
 import NumberPlate from "./view/atoms/NumberPlate";
@@ -30,6 +32,7 @@ import BusesPage from "./view/pages/BusesPage";
 import BusPage from "./view/pages/BusPage";
 import RideView from "./view/pages/RideView";
 import RidesPage from "./view/pages/RidesPage";
+import UserProfilePage from "./view/pages/UserProfilePage";
 
 const theme = createTheme({
   palette: {
@@ -58,8 +61,11 @@ function DrawerHeader({ onClose }) {
     icon = <StopCircleIcon />;
     text = "Halts Near You";
   } else if (location.pathname.includes("/rides")) {
-    icon = <DirectionsBusIcon />;
+    icon = <AirlineSeatReclineExtraIcon />;
     text = "Ride History";
+  } else if (location.pathname.includes("/profile")) {
+    icon = <PersonIcon />;
+    text = "My Profile";
   } else if (location.pathname.match(/\/ride$/)) {
     icon = <DirectionsBusIcon sx={{ color: "success.main" }} />;
     text = "On Bus";
@@ -179,6 +185,7 @@ function AppContent() {
           <Route path="/:latLngId/bus/:busId" element={<BusPage />} />
           <Route path="/:latLngId/ride" element={<RideView />} />
           <Route path="/:latLngId/rides" element={<RidesPage />} />
+          <Route path="/:latLngId/profile" element={<UserProfilePage />} />
         </Routes>
       </Drawer>
 

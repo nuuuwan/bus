@@ -6,6 +6,8 @@ import Paper from "@mui/material/Paper";
 import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
+import PersonIcon from "@mui/icons-material/Person";
 
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
@@ -26,6 +28,13 @@ export default function CustomBottomNavigator() {
       setValue("halts");
     } else if (location.pathname.includes("/buses")) {
       setValue("buses");
+    } else if (
+      location.pathname.includes("/rides") ||
+      location.pathname.match(/\/ride$/)
+    ) {
+      setValue("rides");
+    } else if (location.pathname.includes("/profile")) {
+      setValue("profile");
     }
   }, [location.pathname]);
 
@@ -39,7 +48,9 @@ export default function CustomBottomNavigator() {
     const isOnListPage =
       location.pathname.endsWith("/routes") ||
       location.pathname.endsWith("/halts") ||
-      location.pathname.endsWith("/buses");
+      location.pathname.endsWith("/buses") ||
+      location.pathname.endsWith("/rides") ||
+      location.pathname.endsWith("/profile");
     if (newValue === value && isOnListPage && isDrawerOpen) {
       navigate(`/${latLng}`);
       return;
@@ -56,6 +67,12 @@ export default function CustomBottomNavigator() {
         break;
       case "buses":
         navigate(`/${latLng}/buses`);
+        break;
+      case "rides":
+        navigate(`/${latLng}/rides`);
+        break;
+      case "profile":
+        navigate(`/${latLng}/profile`);
         break;
       default:
         break;
@@ -84,6 +101,8 @@ export default function CustomBottomNavigator() {
         <BottomNavigationAction icon={<StopCircleIcon />} value="halts" />
         <BottomNavigationAction icon={<RouteIcon />} value="routes" />
         <BottomNavigationAction icon={<AirportShuttleIcon />} value="buses" />
+        <BottomNavigationAction icon={<AirlineSeatReclineExtraIcon />} value="rides" />
+        <BottomNavigationAction icon={<PersonIcon />} value="profile" />
       </BottomNavigation>
     </Paper>
   );

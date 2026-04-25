@@ -97,6 +97,7 @@ export function DataProvider({ children }) {
       "/:latLngId/bus/:busId",
       "/:latLngId/ride",
       "/:latLngId/rides",
+      "/:latLngId/profile",
     ];
 
     let latLngId = null;
