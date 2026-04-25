@@ -20,14 +20,14 @@ export default function CustomAppBar() {
     if (location.pathname.includes("/routes")) {
       return {
         icon: <RouteIcon />,
-        text: "Routes",
+        text: "Routes Near You",
       };
     }
     // Check for halts list page
     else if (location.pathname.includes("/halts")) {
       return {
         icon: <StopCircleIcon />,
-        text: "Halts",
+        text: "Halts Near You",
       };
     }
     // Check if we're on a route page (with latLng prefix)

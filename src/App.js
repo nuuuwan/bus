@@ -57,10 +57,10 @@ function DrawerHeader({ onClose }) {
 
   if (location.pathname.includes("/routes")) {
     icon = <RouteIcon />;
-    text = "Routes";
+    text = "Routes Near You";
   } else if (location.pathname.includes("/halts")) {
     icon = <StopCircleIcon />;
-    text = "Halts";
+    text = "Halts Near You";
   } else if (location.pathname.includes("/route/")) {
     color = selectedRoute ? selectedRoute.getColor() : undefined;
     icon = <RouteIcon sx={color ? { color } : undefined} />;
@@ -70,7 +70,7 @@ function DrawerHeader({ onClose }) {
     text = selectedHalt ? selectedHalt.displayName : "";
   } else if (location.pathname.includes("/buses")) {
     icon = <AirportShuttleIcon />;
-    text = "Buses";
+    text = "Buses Near You";
   } else if (location.pathname.match(/\/bus\//)) {
     return (
       <>

@@ -68,9 +68,9 @@ export default function CustomBottomNavigator() {
       elevation={3}
     >
       <BottomNavigation value={value} onChange={handleChange}>
-        <BottomNavigationAction icon={<StopCircleIcon />} value="halts" />
-        <BottomNavigationAction icon={<RouteIcon />} value="routes" />
-        <BottomNavigationAction icon={<AirportShuttleIcon />} value="buses" />
+        <BottomNavigationAction label="Halts" icon={<StopCircleIcon />} value="halts" />
+        <BottomNavigationAction label="Routes" icon={<RouteIcon />} value="routes" />
+        <BottomNavigationAction label="Buses" icon={<AirportShuttleIcon />} value="buses" />
       </BottomNavigation>
     </Paper>
   );
