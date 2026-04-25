@@ -85,59 +85,65 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   return (
     <ListItemButton
       divider
-      onClick={() => navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`)}
-      sx={{ flexDirection: "column", alignItems: "flex-start", py: 1.5, px: 2, opacity }}
+      onClick={() =>
+        navigate(`/${latLng}/route/${encodeURIComponent(route.id)}`)
+      }
+      sx={{
+        flexDirection: "column",
+        alignItems: "flex-start",
+        py: 1.5,
+        px: 2,
+        opacity,
+      }}
     >
-        <RouteInfo route={route} />
-        {hasNextBuses ? (
-          <Box mt={0.5}>
-            {nextBuses.map(({ bus, arrivalMs }) => {
-              const dur = formatArrival(arrivalMs, now);
-              return (
-                <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
-                  <BusInfo bus={bus} />
+      <RouteInfo route={route} />
+      {hasNextBuses ? (
+        <Box mt={0.5}>
+          {nextBuses.map(({ bus, arrivalMs }) => {
+            const dur = formatArrival(arrivalMs, now);
+            return (
+              <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
+                <BusInfo bus={bus} />
+                <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+                <Typography variant="caption" color="text.secondary">
+                  {dur}
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
+      ) : durationStr !== null ? (
+        <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
+          <AccessTimeIcon fontSize="small" color="action" />
+          <Typography variant="body2" color="text.secondary">
+            {durationStr}
+          </Typography>
+        </Box>
+      ) : (
+        <>
+          {bestCatch && (
+            <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
+              <BusInfo bus={bestCatch.bus} />
+              {bestCatch.arrivalMs !== null && (
+                <>
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                   <Typography variant="caption" color="text.secondary">
-                    {dur}
+                    {formatArrival(bestCatch.arrivalMs, now)}
                   </Typography>
-                </Box>
-              );
-            })}
-          </Box>
-        ) : durationStr !== null ? (
-          <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-            <AccessTimeIcon fontSize="small" color="action" />
-            <Typography variant="body2" color="text.secondary">
-              {durationStr}
-            </Typography>
-          </Box>
-        ) : (
-          <>
-            {bestCatch && (
-              <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-                <BusInfo bus={bestCatch.bus} />
-                {bestCatch.arrivalMs !== null && (
-                  <>
-                    <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-                    <Typography variant="caption" color="text.secondary">
-                      {formatArrival(bestCatch.arrivalMs, now)}
-                    </Typography>
-                  </>
-                )}
-              </Box>
-            )}
-            {bestCatch?.halt && (
-              <Box mt={0.25}>
-                <HaltInfo halt={bestCatch.halt} />
-              </Box>
-            )}
-            <Box mt={0.5}>
-              <Distance
-                distanceKm={bestCatch?.distanceKm ?? closestDistanceKm}
-              />
+                </>
+              )}
             </Box>
-          </>
-        )}
+          )}
+          {bestCatch?.halt && (
+            <Box mt={0.25}>
+              <HaltInfo halt={bestCatch.halt} />
+            </Box>
+          )}
+          <Box mt={0.5}>
+            <Distance distanceKm={bestCatch?.distanceKm ?? closestDistanceKm} />
+          </Box>
+        </>
+      )}
     </ListItemButton>
   );
 }

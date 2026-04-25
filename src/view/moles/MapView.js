@@ -27,6 +27,7 @@ function MapController({
   selectedHalt,
   now,
   latLngId,
+  ride,
 }) {
   const map = useMap();
 
@@ -65,8 +66,9 @@ function MapController({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBus?.id, selectedHalt?.id]);
 
-  // Handle URL changes (like "Current Location" button)
+  // Handle URL changes (like "Current Location" button) — skip when riding
   useEffect(() => {
+    if (ride) return;
     if (latLngId) {
       const latLng = LatLng.fromString(latLngId);
       const currentCenter = map.getCenter();
@@ -79,7 +81,16 @@ function MapController({
         map.setView([latLng.lat, latLng.lng], map.getZoom());
       }
     }
-  }, [latLngId, map]);
+  }, [latLngId, map, ride]);
+
+  // Continuously follow the bus while the user is riding
+  useEffect(() => {
+    if (!ride) return;
+    const pos = ride.bus.latLngAt(now);
+    if (pos) {
+      map.panTo([pos.lat, pos.lng], { animate: true, duration: 0.9 });
+    }
+  }, [ride, now, map]);
 
   // Handle User Drags
   useEffect(() => {
@@ -109,6 +120,7 @@ export default function MapView() {
     selectedHalt,
     selectedRoute,
     currentLatLng,
+    ride,
   } = useData();
   const { now } = useClock();
   const defaultZoom = 16;
@@ -214,6 +226,7 @@ export default function MapView() {
           selectedHalt={selectedHalt}
           now={now}
           latLngId={latLngId}
+          ride={ride}
         />
 
         {routes.map((route) => (

@@ -21,6 +21,7 @@ export function DataProvider({ children }) {
   const [currentLatLng, setCurrentLatLng] = useState(null);
   const [user, setUser] = useState(() => User.getDefault());
   const [ride, setRide] = useState(null);
+  const [rideHistory, setRideHistory] = useState([]);
   const location = useLocation();
 
   useEffect(() => {
@@ -94,6 +95,7 @@ export function DataProvider({ children }) {
       "/:latLngId/halt/:haltId",
       "/:latLngId/buses",
       "/:latLngId/bus/:busId",
+      "/:latLngId/rides",
     ];
 
     let latLngId = null;
@@ -127,7 +129,10 @@ export function DataProvider({ children }) {
     );
   }
 
-  function alightBus() {
+  function alightBus(halt) {
+    if (ride) {
+      setRideHistory((prev) => [...prev, ride.withAlight(halt ?? null, Date.now())]);
+    }
     setRide(null);
   }
 
@@ -141,6 +146,7 @@ export function DataProvider({ children }) {
     currentLatLng,
     user,
     ride,
+    rideHistory,
     boardBus,
     alightBus,
     loading,

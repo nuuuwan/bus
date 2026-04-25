@@ -6,10 +6,12 @@ import Paper from "@mui/material/Paper";
 import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+import { useData } from "../../nonview/contexts/DataContext";
 
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { ride } = useData();
   const [value, setValue] = useState("routes");
 
   useEffect(() => {
@@ -72,7 +74,7 @@ export default function CustomBottomNavigator() {
         left: 0,
         right: 0,
         zIndex: 1100,
-        display: isDrawerOpen ? "none" : "block",
+        display: isDrawerOpen || ride ? "none" : "block",
       }}
       elevation={3}
     >

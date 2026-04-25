@@ -182,7 +182,7 @@ export default function BusPage() {
                                 variant="outlined"
                                 color="error"
                                 startIcon={<ExitToAppIcon />}
-                                onClick={() => alightBus()}
+                                onClick={() => alightBus(halt)}
                                 sx={{ textTransform: "none" }}
                               >
                                 Get Off
