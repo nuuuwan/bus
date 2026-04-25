@@ -66,21 +66,35 @@ function MapController({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBus?.id, selectedHalt?.id]);
 
-  // Handle URL changes (like "Current Location" button) — skip when riding
+  // Handle URL changes (like "Current Location" button) — skip when riding.
+  // The URL stores the crosshair lat/lng (25% y), so when repositioning we
+  // must offset the map centre so that lat/lng lands at the crosshair, not
+  // at the geographic centre (50% y). We compare against the current
+  // crosshair position (not map.getCenter()) to avoid a feedback loop where
+  // the drag-triggered URL update re-fires a setView.
   useEffect(() => {
     if (ride) return;
-    if (latLngId) {
-      const latLng = LatLng.fromString(latLngId);
-      const currentCenter = map.getCenter();
-
-      // Only fly if the URL is significantly different from the current view
-      if (
-        currentCenter.lat !== latLng.lat ||
-        currentCenter.lng !== latLng.lng
-      ) {
-        map.setView([latLng.lat, latLng.lng], map.getZoom());
-      }
+    if (!latLngId) return;
+    const targetLL = LatLng.fromString(latLngId);
+    const size = map.getSize();
+    const crosshairLL = map.containerPointToLatLng(
+      L.point(size.x / 2, size.y * 0.25),
+    );
+    const EPS = 1e-5;
+    if (
+      Math.abs(crosshairLL.lat - targetLL.lat) < EPS &&
+      Math.abs(crosshairLL.lng - targetLL.lng) < EPS
+    ) {
+      return; // crosshair already at target — drag just updated the URL, no-op
     }
+    // Position map so targetLL appears at the crosshair (25% y)
+    const zoom = map.getZoom();
+    const targetPt = map.project([targetLL.lat, targetLL.lng], zoom);
+    const adjustedCenter = map.unproject(
+      L.point(targetPt.x, targetPt.y + size.y * 0.25),
+      zoom,
+    );
+    map.flyTo(adjustedCenter, zoom, { duration: 0.5 });
   }, [latLngId, map, ride]);
 
   // Continuously follow the bus while the user is riding
@@ -157,17 +171,8 @@ export default function MapView() {
         (position) => {
           const { latitude, longitude } = position.coords;
           const newLatLng = new LatLng(latitude, longitude);
-          // Fly the map, offsetting the centre upward when the bottom
-          // drawer is open so the pin lands in the visible area centre.
-          if (flyToRef.current) {
-            const pathParts = location.pathname.split("/").filter(Boolean);
-            const isDrawerOpen = pathParts.length > 1;
-            // Drawer is 50vh tall; visible centre is at 25vh from top,
-            // so shift the fly-to centre down by 25vh.
-            const yOffsetPx = isDrawerOpen ? window.innerHeight * 0.25 : 0;
-            flyToRef.current(latitude, longitude, defaultZoom, yOffsetPx);
-          }
-          // Update URL (preserves drawer path suffix)
+          // Just update the URL — the URL effect will fly the map so that
+          // the location lands at the crosshair position (25% y).
           const pathSuffix = location.pathname.replace(/^\/[^/]+/, "");
           navigate(`/${newLatLng.toString()}${pathSuffix}`, { replace: true });
         },
@@ -176,7 +181,7 @@ export default function MapView() {
         },
       );
     }
-  }, [navigate, location.pathname, defaultZoom]);
+  }, [navigate, location.pathname]);
 
   // Calculate the target halt for the dotted line
   const targetHalt = selectedHalt
