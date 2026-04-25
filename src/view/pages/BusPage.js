@@ -1,7 +1,6 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
@@ -12,6 +11,7 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
+import HaltInfo from "../atoms/HaltInfo";
 
 export default function BusPage() {
   const { selectedBus, loading } = useData();
@@ -108,7 +108,7 @@ export default function BusPage() {
                     {isNext ? (
                       <AirportShuttleIcon fontSize="small" />
                     ) : (
-                      <StopCircleIcon fontSize="small" />
+                      <Box sx={{ width: 20, height: 20 }} />
                     )}
                   </TimelineDot>
                   {index < haltArrivals.length - 1 && <TimelineConnector />}
@@ -121,13 +121,7 @@ export default function BusPage() {
                     opacity: isPassed ? 0.35 : 1,
                   }}
                 >
-                  <Typography
-                    variant="body2"
-                    fontWeight={isNext ? 700 : 400}
-                    component="span"
-                  >
-                    {halt.displayName}
-                  </Typography>
+                  <HaltInfo halt={halt} />
                   {isUpcoming && arrivalMs !== null && (
                     <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
                       <AccessTimeIcon sx={{ fontSize: 12 }} color="action" />
