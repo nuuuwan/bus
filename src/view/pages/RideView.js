@@ -91,8 +91,18 @@ export default function RideView() {
         )}
 
         {/* Fare */}
-        <Box sx={{ mb: 1, display: "inline-flex", flexDirection: "column", alignItems: "flex-start" }}>
-          <Typography variant="caption" sx={{ color: "text.secondary", mb: 0.25 }}>
+        <Box
+          sx={{
+            mb: 1,
+            display: "inline-flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{ color: "text.secondary", mb: 0.25 }}
+          >
             Fare
           </Typography>
           <Box
@@ -105,7 +115,15 @@ export default function RideView() {
               alignItems: "baseline",
             }}
           >
-            <Typography sx={{ color: "white", fontWeight: 700, fontSize: "1.4rem", fontFamily: "monospace", lineHeight: 1 }}>
+            <Typography
+              sx={{
+                color: "white",
+                fontWeight: 700,
+                fontSize: "1.4rem",
+                fontFamily: "monospace",
+                lineHeight: 1,
+              }}
+            >
               LKR {liveFare.toFixed(2)}
             </Typography>
           </Box>

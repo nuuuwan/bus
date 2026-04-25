@@ -55,7 +55,6 @@ export default class LatLng {
 
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.debug("Geolocation success:", position);
           resolve(
             new LatLng(position.coords.latitude, position.coords.longitude),
           );
