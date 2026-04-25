@@ -122,7 +122,9 @@ export function DataProvider({ children }) {
     if (ride) return; // already riding
     if (user.cashBalance < Ride.FARE_LKR) return; // insufficient funds
     setRide(new Ride(bus, halt, Date.now()));
-    setUser(new User(user.name, user.address, user.cashBalance - Ride.FARE_LKR));
+    setUser(
+      new User(user.name, user.address, user.cashBalance - Ride.FARE_LKR),
+    );
   }
 
   function alightBus() {

@@ -16,7 +16,15 @@ import Distance from "../atoms/Distance";
 import BusInfo from "../atoms/BusInfo";
 
 export default function HaltPage() {
-  const { selectedHalt, routes, buses, currentLatLng, loading, ride, boardBus } = useData();
+  const {
+    selectedHalt,
+    routes,
+    buses,
+    currentLatLng,
+    loading,
+    ride,
+    boardBus,
+  } = useData();
   const now = useClock();
   const navigate = useNavigate();
   const location = useLocation();
@@ -116,7 +124,10 @@ export default function HaltPage() {
                   )
                 ) : (
                   <>
-                    <AccessTimeIcon sx={{ fontSize: 14, ml: "auto" }} color="action" />
+                    <AccessTimeIcon
+                      sx={{ fontSize: 14, ml: "auto" }}
+                      color="action"
+                    />
                     <Typography variant="caption" color="text.secondary">
                       {formatArrival(arrivalMs, now)}
                     </Typography>

@@ -144,46 +144,53 @@ export default function BusPage() {
                     }}
                   >
                     <HaltInfo halt={halt} />
-                    {isAtHalt && (() => {
-                      const onThisBus = ride?.bus.id === selectedBus.id;
-                      const canBoard = !ride;
-                      const canAlight = onThisBus;
-                      return (
-                        <Box display="flex" alignItems="center" gap={1} mt={0.5} flexWrap="wrap">
-                          <Typography
-                            variant="caption"
-                            color="success.dark"
-                            sx={{ fontWeight: 600 }}
+                    {isAtHalt &&
+                      (() => {
+                        const onThisBus = ride?.bus.id === selectedBus.id;
+                        const canBoard = !ride;
+                        const canAlight = onThisBus;
+                        return (
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            gap={1}
+                            mt={0.5}
+                            flexWrap="wrap"
                           >
-                            Boarding · Alighting
-                          </Typography>
-                          {canBoard && (
-                            <Button
-                              size="small"
-                              variant="contained"
-                              color="success"
-                              startIcon={<DirectionsBusIcon />}
-                              onClick={() => boardBus(selectedBus, halt)}
-                              sx={{ textTransform: "none" }}
+                            <Typography
+                              variant="caption"
+                              color="success.dark"
+                              sx={{ fontWeight: 600 }}
                             >
-                              Get On
-                            </Button>
-                          )}
-                          {canAlight && (
-                            <Button
-                              size="small"
-                              variant="outlined"
-                              color="error"
-                              startIcon={<ExitToAppIcon />}
-                              onClick={() => alightBus()}
-                              sx={{ textTransform: "none" }}
-                            >
-                              Get Off
-                            </Button>
-                          )}
-                        </Box>
-                      );
-                    })()}
+                              Boarding · Alighting
+                            </Typography>
+                            {canBoard && (
+                              <Button
+                                size="small"
+                                variant="contained"
+                                color="success"
+                                startIcon={<DirectionsBusIcon />}
+                                onClick={() => boardBus(selectedBus, halt)}
+                                sx={{ textTransform: "none" }}
+                              >
+                                Get On
+                              </Button>
+                            )}
+                            {canAlight && (
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                color="error"
+                                startIcon={<ExitToAppIcon />}
+                                onClick={() => alightBus()}
+                                sx={{ textTransform: "none" }}
+                              >
+                                Get Off
+                              </Button>
+                            )}
+                          </Box>
+                        );
+                      })()}
                     {!isAtHalt && isUpcoming && arrivalMs !== null && (
                       <Box
                         display="flex"
