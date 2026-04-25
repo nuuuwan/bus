@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { Box, IconButton } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
@@ -143,7 +143,6 @@ export default function MapView() {
     buses,
     selectedBus,
     selectedHalt,
-    selectedRoute,
     currentLatLng,
     ride,
   } = useData();
@@ -204,38 +203,6 @@ export default function MapView() {
     }
   }, [navigate, location.pathname]);
 
-  // Calculate the target halt for the dotted line
-  const targetHalt = selectedHalt
-    ? selectedHalt
-    : selectedRoute && currentLatLng
-      ? selectedRoute.haltList
-          .filter((halt) => halt.latLng)
-          .reduce((closest, halt) => {
-            if (!closest) return halt;
-            const distToCurrent = currentLatLng.distanceTo(halt.latLng);
-            const distToClosest = currentLatLng.distanceTo(closest.latLng);
-            return distToCurrent < distToClosest ? halt : closest;
-          }, null)
-      : currentLatLng
-        ? halts
-            .filter(
-              (halt) =>
-                halt.latLng && routes.some((route) => route.hasHalt(halt)),
-            )
-            .reduce((closest, halt) => {
-              if (!closest) return halt;
-              const distToCurrent = currentLatLng.distanceTo(halt.latLng);
-              const distToClosest = currentLatLng.distanceTo(closest.latLng);
-              return distToCurrent < distToClosest ? halt : closest;
-            }, null)
-        : null;
-
-  // Create dotted line coordinates
-  const dottedLinePositions =
-    targetHalt && currentLatLng && targetHalt.latLng
-      ? [currentLatLng.toArray(), targetHalt.latLng.toArray()]
-      : null;
-
   return (
     <Box sx={{ position: "relative", height: "100%", width: "100%" }}>
       <MapContainer
@@ -268,16 +235,6 @@ export default function MapView() {
         {routes.map((route) => (
           <RoutePolyline key={route.id} route={route} />
         ))}
-
-        {dottedLinePositions && (
-          <Polyline
-            positions={dottedLinePositions}
-            color="black"
-            weight={3}
-            opacity={1}
-            dashArray="5, 8"
-          />
-        )}
 
         {halts
           .filter((halt) => routes.some((route) => route.hasHalt(halt)))
