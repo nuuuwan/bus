@@ -2,8 +2,12 @@
  * Represents a bus ride by the user — active or completed.
  */
 export default class Ride {
-  /** Flat fare charged when boarding, in LKR */
-  static FARE_LKR = 30;
+  /** Base fare charged when boarding, in LKR */
+  static FARE_BASE_LKR = 10;
+  /** Additional fare per minute, in LKR */
+  static FARE_PER_MINUTE_LKR = 2;
+  /** Additional fare per km (straight-line from boarding halt), in LKR */
+  static FARE_PER_KM_LKR = 8;
 
   /**
    * @param {Bus}    bus               — the bus boarded
@@ -24,7 +28,6 @@ export default class Ride {
     this.boardedAtMs = boardedAtMs;
     this.alightedAtHalt = alightedAtHalt;
     this.alightedAtMs = alightedAtMs;
-    this.fare = Ride.FARE_LKR;
   }
 
   get isActive() {
@@ -34,6 +37,32 @@ export default class Ride {
   /** Duration in ms. Uses nowMs for active rides. */
   durationMs(nowMs = Date.now()) {
     return Math.max(0, (this.alightedAtMs ?? nowMs) - this.boardedAtMs);
+  }
+
+  /**
+   * Dynamic fare at a given moment (or at alight time for completed rides).
+   * Formula: base + per-minute + per-km (straight-line from boarding halt).
+   */
+  fareAt(nowMs = Date.now()) {
+    const effectiveMs = this.alightedAtMs ?? nowMs;
+    const minutes = this.durationMs(effectiveMs) / 60_000;
+    const boardLatLng = this.boardedAtHalt?.latLng;
+    const currentPos = this.bus.latLngAt(effectiveMs);
+    const km =
+      boardLatLng && currentPos ? boardLatLng.distanceTo(currentPos) : 0;
+    return (
+      Math.round(
+        (Ride.FARE_BASE_LKR +
+          Ride.FARE_PER_MINUTE_LKR * minutes +
+          Ride.FARE_PER_KM_LKR * km) *
+          100,
+      ) / 100
+    );
+  }
+
+  /** Convenience getter — returns fare at effective time. */
+  get fare() {
+    return this.fareAt();
   }
 
   /** Returns a completed copy of this ride. */

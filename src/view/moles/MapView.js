@@ -102,7 +102,15 @@ function MapController({
     if (!ride) return;
     const pos = ride.bus.latLngAt(now);
     if (pos) {
-      map.panTo([pos.lat, pos.lng], { animate: true, duration: 0.9 });
+      // Offset so the bus lands at the crosshair (25% y), not the map centre (50% y)
+      const zoom = map.getZoom();
+      const size = map.getSize();
+      const targetPt = map.project([pos.lat, pos.lng], zoom);
+      const adjustedCenter = map.unproject(
+        L.point(targetPt.x, targetPt.y + size.y * 0.25),
+        zoom,
+      );
+      map.panTo(adjustedCenter, { animate: true, duration: 0.9 });
     }
   }, [ride, now, map]);
 
@@ -139,7 +147,7 @@ export default function MapView() {
     currentLatLng,
     ride,
   } = useData();
-  const { now } = useClock();
+  const now = useClock();
   const defaultZoom = 16;
   const flyToRef = useRef(null);
 

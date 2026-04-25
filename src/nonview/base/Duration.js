@@ -1,4 +1,17 @@
 /**
+ * Format a duration (in milliseconds) always showing seconds precision.
+ * e.g. "45 sec", "2 min 34 sec", "> 1 hour"
+ */
+export function formatDurationSeconds(ms) {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+  if (totalSeconds >= 3600) return "> 1 hour";
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  if (mins === 0) return `${secs} sec`;
+  return `${mins} min ${secs} sec`;
+}
+
+/**
  * Format a duration (in milliseconds) as a human-readable string.
  *
  * Rules:

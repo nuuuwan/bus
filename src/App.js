@@ -68,7 +68,7 @@ function DrawerHeader({ onClose }) {
     text = "My Profile";
   } else if (location.pathname.match(/\/ride$/)) {
     icon = <DirectionsBusIcon sx={{ color: "success.main" }} />;
-    text = "On Bus";
+    text = "Ongoing Ride";
   } else if (location.pathname.includes("/route/")) {
     color = selectedRoute ? selectedRoute.getColor() : undefined;
     icon = <RouteIcon sx={color ? { color } : undefined} />;

@@ -4,7 +4,7 @@ import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineE
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
-import { formatDuration } from "../../nonview/base/Duration";
+import { formatDurationSeconds } from "../../nonview/base/Duration";
 import HaltInfo from "../atoms/HaltInfo";
 import BusInfo from "../atoms/BusInfo";
 import DrawerPage from "../moles/DrawerPage";
@@ -18,7 +18,9 @@ export default function RideView() {
   if (!ride) return null;
 
   const atHalt = ride.bus.currentHalt(now);
+  const nextArrival = ride.bus.nextHaltArrival(now);
   const durationMs = now - ride.boardedAtMs;
+  const liveFare = ride.fareAt(now);
 
   const match = location.pathname.match(/^\/([^/]+)/);
   const latLng = match ? match[1] : "";
@@ -29,26 +31,6 @@ export default function RideView() {
         {/* Bus info */}
         <Box mb={1}>
           <BusInfo bus={ride.bus} />
-        </Box>
-
-        <Divider sx={{ my: 0.75 }} />
-
-        {/* Current status */}
-        <Box mb={1}>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ display: "block", mb: 0.25 }}
-          >
-            {atHalt ? "Currently at" : "Travelling…"}
-          </Typography>
-          {atHalt ? (
-            <HaltInfo halt={atHalt} />
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              Between stops
-            </Typography>
-          )}
         </Box>
 
         <Divider sx={{ my: 0.75 }} />
@@ -65,6 +47,42 @@ export default function RideView() {
           <HaltInfo halt={ride.boardedAtHalt} />
         </Box>
 
+        <Divider sx={{ my: 0.75 }} />
+
+        {/* Next stop */}
+        {nextArrival && (
+          <>
+            <Box mb={1}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block", mb: 0.25 }}
+              >
+                Next stop
+              </Typography>
+              <HaltInfo halt={nextArrival.halt} />
+            </Box>
+            <Divider sx={{ my: 0.75 }} />
+          </>
+        )}
+
+        {/* Current stop (only shown when dwelling) */}
+        {atHalt && (
+          <>
+            <Box mb={1}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block", mb: 0.25 }}
+              >
+                Current stop
+              </Typography>
+              <HaltInfo halt={atHalt} />
+            </Box>
+            <Divider sx={{ my: 0.75 }} />
+          </>
+        )}
+
         {/* Duration + Fare */}
         <Box display="flex" gap={2} mb={1.5}>
           <Box>
@@ -72,7 +90,7 @@ export default function RideView() {
               Duration
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              {formatDuration(durationMs)}
+              {formatDurationSeconds(durationMs)}
             </Typography>
           </Box>
           <Box>
@@ -80,7 +98,7 @@ export default function RideView() {
               Fare
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              LKR {ride.fare.toFixed(2)}
+              LKR {liveFare.toFixed(2)}
             </Typography>
           </Box>
         </Box>

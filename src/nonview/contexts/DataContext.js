@@ -236,19 +236,22 @@ export function DataProvider({ children }) {
 
   function boardBus(bus, halt) {
     if (ride) return; // already riding
-    if (user.cashBalance < Ride.FARE_LKR) return; // insufficient funds
+    if (user.cashBalance < Ride.FARE_BASE_LKR) return; // insufficient funds
     setRide(new Ride(bus, halt, Date.now()));
-    setUser(
-      new User(user.name, user.address, user.cashBalance - Ride.FARE_LKR),
-    );
+    // Fare is deducted at alight time once the actual amount is known
   }
 
   function alightBus(halt) {
     if (ride) {
+      const ms = Date.now();
+      const finalFare = ride.fareAt(ms);
       setRideHistory((prev) => [
         ...prev,
-        ride.withAlight(halt ?? null, Date.now()),
+        ride.withAlight(halt ?? null, ms),
       ]);
+      setUser(
+        new User(user.name, user.address, user.cashBalance - finalFare),
+      );
     }
     setRide(null);
   }
