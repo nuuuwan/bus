@@ -4,8 +4,10 @@ import {
   CircularProgress,
   List,
   ListItemButton,
+  Button,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
@@ -14,7 +16,7 @@ import Distance from "../atoms/Distance";
 import BusInfo from "../atoms/BusInfo";
 
 export default function HaltPage() {
-  const { selectedHalt, routes, buses, currentLatLng, loading } = useData();
+  const { selectedHalt, routes, buses, currentLatLng, loading, ride, boardBus } = useData();
   const now = useClock();
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,26 +72,59 @@ export default function HaltPage() {
       )}
       <Box width="100%" overflow="auto" flexGrow={1}>
         <List sx={{ p: 0 }}>
-          {busItems.map(({ bus, arrivalMs }) => (
-            <ListItemButton
-              key={bus.id}
-              divider
-              onClick={() =>
-                navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
-              }
-              sx={{
-                py: 1.5,
-                px: 2,
-                gap: 1,
-              }}
-            >
-              <BusInfo bus={bus} />
-              <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-              <Typography variant="caption" color="text.secondary">
-                {formatArrival(arrivalMs, now)}
-              </Typography>
-            </ListItemButton>
-          ))}
+          {busItems.map(({ bus, arrivalMs }) => {
+            const busAtThisHalt =
+              selectedHalt && bus.currentHalt(now)?.id === selectedHalt.id;
+            const canBoard = busAtThisHalt && !ride;
+            return (
+              <ListItemButton
+                key={bus.id}
+                divider
+                onClick={() =>
+                  navigate(`/${latLng}/bus/${encodeURIComponent(bus.id)}`)
+                }
+                sx={{
+                  py: 1.5,
+                  px: 2,
+                  gap: 1,
+                }}
+              >
+                <BusInfo bus={bus} />
+                {busAtThisHalt ? (
+                  canBoard ? (
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="success"
+                      startIcon={<DirectionsBusIcon />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        boardBus(bus, selectedHalt);
+                      }}
+                      sx={{ ml: "auto", textTransform: "none", flexShrink: 0 }}
+                    >
+                      Get On
+                    </Button>
+                  ) : (
+                    <Typography
+                      variant="caption"
+                      color="success.dark"
+                      sx={{ ml: "auto", fontWeight: 600, flexShrink: 0 }}
+                    >
+                      Boarding
+                    </Typography>
+                  )
+                ) : (
+                  <>
+                    <AccessTimeIcon sx={{ fontSize: 14, ml: "auto" }} color="action" />
+                    <Typography variant="caption" color="text.secondary">
+                      {formatArrival(arrivalMs, now)}
+                    </Typography>
+                  </>
+                )}
+              </ListItemButton>
+            );
+          })}
         </List>
       </Box>
     </Box>

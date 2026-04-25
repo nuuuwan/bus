@@ -1,8 +1,10 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import HailIcon from "@mui/icons-material/Hail";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -15,7 +17,7 @@ import { formatArrival } from "../../nonview/base/Duration";
 import HaltInfo from "../atoms/HaltInfo";
 
 export default function BusPage() {
-  const { selectedBus, loading } = useData();
+  const { selectedBus, loading, ride, boardBus, alightBus } = useData();
   const now = useClock();
   const nextHaltRef = useRef(null);
   const [nextHaltIndex, setNextHaltIndex] = useState(-1);
@@ -142,15 +144,46 @@ export default function BusPage() {
                     }}
                   >
                     <HaltInfo halt={halt} />
-                    {isAtHalt && (
-                      <Typography
-                        variant="caption"
-                        color="success.dark"
-                        sx={{ fontWeight: 600, display: "block", mt: 0.25 }}
-                      >
-                        Boarding · Alighting
-                      </Typography>
-                    )}
+                    {isAtHalt && (() => {
+                      const onThisBus = ride?.bus.id === selectedBus.id;
+                      const canBoard = !ride;
+                      const canAlight = onThisBus;
+                      return (
+                        <Box display="flex" alignItems="center" gap={1} mt={0.5} flexWrap="wrap">
+                          <Typography
+                            variant="caption"
+                            color="success.dark"
+                            sx={{ fontWeight: 600 }}
+                          >
+                            Boarding · Alighting
+                          </Typography>
+                          {canBoard && (
+                            <Button
+                              size="small"
+                              variant="contained"
+                              color="success"
+                              startIcon={<DirectionsBusIcon />}
+                              onClick={() => boardBus(selectedBus, halt)}
+                              sx={{ textTransform: "none" }}
+                            >
+                              Get On
+                            </Button>
+                          )}
+                          {canAlight && (
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              color="error"
+                              startIcon={<ExitToAppIcon />}
+                              onClick={() => alightBus()}
+                              sx={{ textTransform: "none" }}
+                            >
+                              Get Off
+                            </Button>
+                          )}
+                        </Box>
+                      );
+                    })()}
                     {!isAtHalt && isUpcoming && arrivalMs !== null && (
                       <Box
                         display="flex"

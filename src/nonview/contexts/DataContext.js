@@ -4,6 +4,7 @@ import Halt from "../core/Halt";
 import Route from "../core/Route";
 import Bus from "../core/Bus";
 import User from "../core/User";
+import Ride from "../core/Ride";
 import LatLng from "../base/LatLng";
 
 const DataContext = createContext();
@@ -18,7 +19,8 @@ export function DataProvider({ children }) {
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [selectedBus, setSelectedBus] = useState(null);
   const [currentLatLng, setCurrentLatLng] = useState(null);
-  const [user] = useState(() => User.getDefault());
+  const [user, setUser] = useState(() => User.getDefault());
+  const [ride, setRide] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -116,6 +118,17 @@ export function DataProvider({ children }) {
     }
   }, [location.pathname]);
 
+  function boardBus(bus, halt) {
+    if (ride) return; // already riding
+    if (user.cashBalance < Ride.FARE_LKR) return; // insufficient funds
+    setRide(new Ride(bus, halt, Date.now()));
+    setUser(new User(user.name, user.address, user.cashBalance - Ride.FARE_LKR));
+  }
+
+  function alightBus() {
+    setRide(null);
+  }
+
   const value = {
     halts,
     routes,
@@ -125,6 +138,9 @@ export function DataProvider({ children }) {
     selectedBus,
     currentLatLng,
     user,
+    ride,
+    boardBus,
+    alightBus,
     loading,
     error,
   };
