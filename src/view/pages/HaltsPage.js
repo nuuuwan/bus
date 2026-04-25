@@ -1,9 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  List,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, List, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
@@ -30,8 +25,7 @@ export default function HaltsPage() {
   const nearbyCount = currentLatLng
     ? sortedHalts.filter(
         (halt) =>
-          halt.latLng &&
-          currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
+          halt.latLng && currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
       ).length
     : sortedHalts.length;
 
