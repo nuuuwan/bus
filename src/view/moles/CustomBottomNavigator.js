@@ -62,8 +62,7 @@ export default function CustomBottomNavigator() {
     }
   };
 
-  const isDrawerOpen =
-    location.pathname.split("/").filter(Boolean).length > 1;
+  const isDrawerOpen = location.pathname.split("/").filter(Boolean).length > 1;
 
   return (
     <Paper
