@@ -95,6 +95,7 @@ export function DataProvider({ children }) {
       "/:latLngId/halt/:haltId",
       "/:latLngId/buses",
       "/:latLngId/bus/:busId",
+      "/:latLngId/ride",
       "/:latLngId/rides",
     ];
 

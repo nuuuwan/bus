@@ -14,10 +14,15 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
+import { useNavigate, useLocation } from "react-router-dom";
 import HaltInfo from "../atoms/HaltInfo";
 
 export default function BusPage() {
   const { selectedBus, loading, ride, boardBus, alightBus } = useData();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const match = location.pathname.match(/^\/([^/]+)/);
+  const latLng = match ? match[1] : "";
   const now = useClock();
   const nextHaltRef = useRef(null);
   const [nextHaltIndex, setNextHaltIndex] = useState(-1);
@@ -170,7 +175,10 @@ export default function BusPage() {
                                 variant="contained"
                                 color="success"
                                 startIcon={<DirectionsBusIcon />}
-                                onClick={() => boardBus(selectedBus, halt)}
+                                onClick={() => {
+                                  boardBus(selectedBus, halt);
+                                  navigate(`/${latLng}/ride`);
+                                }}
                                 sx={{ textTransform: "none" }}
                               >
                                 Get On

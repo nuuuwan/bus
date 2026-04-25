@@ -108,6 +108,7 @@ export default function HaltPage() {
                       onClick={(e) => {
                         e.stopPropagation();
                         boardBus(bus, selectedHalt);
+                        navigate(`/${latLng}/ride`);
                       }}
                       sx={{ ml: "auto", textTransform: "none", flexShrink: 0 }}
                     >

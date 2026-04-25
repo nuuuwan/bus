@@ -83,7 +83,10 @@ export default function RideView() {
           size="small"
           startIcon={<ExitToAppIcon />}
           disabled={!atHalt}
-          onClick={() => alightBus(atHalt)}
+          onClick={() => {
+            alightBus(atHalt);
+            navigate(`/${latLng}`);
+          }}
           sx={{ textTransform: "none" }}
         >
           Get Off

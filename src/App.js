@@ -60,6 +60,9 @@ function DrawerHeader({ onClose }) {
   } else if (location.pathname.includes("/rides")) {
     icon = <DirectionsBusIcon />;
     text = "Ride History";
+  } else if (location.pathname.match(/\/ride$/)) {
+    icon = <DirectionsBusIcon sx={{ color: "success.main" }} />;
+    text = "On Bus";
   } else if (location.pathname.includes("/route/")) {
     color = selectedRoute ? selectedRoute.getColor() : undefined;
     icon = <RouteIcon sx={color ? { color } : undefined} />;
@@ -124,11 +127,9 @@ function DrawerHeader({ onClose }) {
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { ride } = useData();
 
   const pathParts = location.pathname.split("/").filter(Boolean);
   const isDrawerOpen = pathParts.length > 1;
-  const isRideDrawerOpen = ride !== null;
 
   const handleDrawerClose = () => {
     const match = location.pathname.match(/^\/([^/]+)/);
@@ -176,53 +177,9 @@ function AppContent() {
           <Route path="/:latLngId/halt/:haltId" element={<HaltPage />} />
           <Route path="/:latLngId/buses" element={<BusesPage />} />
           <Route path="/:latLngId/bus/:busId" element={<BusPage />} />
+          <Route path="/:latLngId/ride" element={<RideView />} />
           <Route path="/:latLngId/rides" element={<RidesPage />} />
         </Routes>
-      </Drawer>
-
-      {/* Ride drawer — opens automatically when user is on a bus */}
-      <Drawer
-        anchor="bottom"
-        open={isRideDrawerOpen}
-        onClose={() => {}}
-        hideBackdrop
-        disableScrollLock
-        sx={{
-          pointerEvents: "none",
-          "& .MuiDrawer-paper": {
-            height: "38vh",
-            borderRadius: "16px 16px 0 0",
-            pointerEvents: "auto",
-            width: "min(100vw, 390px)",
-            left: "max(0px, calc((100% - 390px) / 2))",
-            right: "auto",
-            bottom: 0,
-            zIndex: 1150,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            px: 1.5,
-            py: 0.75,
-            minHeight: 40,
-            gap: 1,
-            borderBottom: "1px solid",
-            borderColor: "divider",
-          }}
-        >
-          <DirectionsBusIcon sx={{ color: "success.main" }} />
-          <Typography
-            variant="subtitle1"
-            sx={{ flexGrow: 1, fontWeight: 600, color: "success.dark" }}
-          >
-            On Bus
-          </Typography>
-          {ride && <NumberPlate bus={ride.bus} />}
-        </Box>
-        <RideView />
       </Drawer>
 
       <CustomBottomNavigator />
