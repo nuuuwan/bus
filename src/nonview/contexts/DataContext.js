@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { useLocation, matchPath } from "react-router-dom";
 import Halt from "../core/Halt";
 import Route from "../core/Route";
@@ -6,6 +6,38 @@ import Bus from "../core/Bus";
 import User from "../core/User";
 import Ride from "../core/Ride";
 import LatLng from "../base/LatLng";
+
+const STORAGE_USER = "bus_app_user";
+const STORAGE_RIDE = "bus_app_ride";
+const STORAGE_RIDE_HISTORY = "bus_app_ride_history";
+
+function serializeRide(ride) {
+  if (!ride) return null;
+  return {
+    busId: ride.bus.id,
+    boardedAtHaltId: ride.boardedAtHalt?.id ?? null,
+    boardedAtMs: ride.boardedAtMs,
+    alightedAtHaltId: ride.alightedAtHalt?.id ?? null,
+    alightedAtMs: ride.alightedAtMs,
+  };
+}
+
+function deserializeRide(data, buses, halts) {
+  if (!data) return null;
+  const bus = buses.find((b) => b.id === data.busId);
+  const boardedAtHalt = halts.find((h) => h.id === data.boardedAtHaltId);
+  if (!bus || !boardedAtHalt) return null;
+  const alightedAtHalt = data.alightedAtHaltId
+    ? halts.find((h) => h.id === data.alightedAtHaltId) ?? null
+    : null;
+  return new Ride(
+    bus,
+    boardedAtHalt,
+    data.boardedAtMs,
+    alightedAtHalt,
+    data.alightedAtMs,
+  );
+}
 
 const DataContext = createContext();
 
@@ -19,9 +51,19 @@ export function DataProvider({ children }) {
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [selectedBus, setSelectedBus] = useState(null);
   const [currentLatLng, setCurrentLatLng] = useState(null);
-  const [user, setUser] = useState(() => User.getDefault());
+  const [user, setUser] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_USER);
+      if (raw) {
+        const d = JSON.parse(raw);
+        return new User(d.name, d.address, d.cashBalance);
+      }
+    } catch {}
+    return User.getDefault();
+  });
   const [ride, setRide] = useState(null);
   const [rideHistory, setRideHistory] = useState([]);
+  const restoredRef = useRef(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -135,6 +177,60 @@ export function DataProvider({ children }) {
     }, 1000);
     return () => clearInterval(timer);
   }, [ride]);
+
+  // Restore ride state from localStorage once buses & halts are available
+  useEffect(() => {
+    if (loading || buses.length === 0 || halts.length === 0) return;
+    if (restoredRef.current) return;
+    restoredRef.current = true;
+    try {
+      const rawRide = localStorage.getItem(STORAGE_RIDE);
+      if (rawRide) {
+        const restored = deserializeRide(JSON.parse(rawRide), buses, halts);
+        if (restored) setRide(restored);
+      }
+      const rawHistory = localStorage.getItem(STORAGE_RIDE_HISTORY);
+      if (rawHistory) {
+        const restoredHistory = JSON.parse(rawHistory)
+          .map((d) => deserializeRide(d, buses, halts))
+          .filter(Boolean);
+        if (restoredHistory.length > 0) setRideHistory(restoredHistory);
+      }
+    } catch (err) {
+      console.error("Failed to restore rides from localStorage:", err);
+    }
+  }, [loading, buses, halts]);
+
+  // Persist user on change
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        STORAGE_USER,
+        JSON.stringify({
+          name: user.name,
+          address: user.address,
+          cashBalance: user.cashBalance,
+        }),
+      );
+    } catch {}
+  }, [user]);
+
+  // Persist active ride on change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_RIDE, JSON.stringify(serializeRide(ride)));
+    } catch {}
+  }, [ride]);
+
+  // Persist ride history on change
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        STORAGE_RIDE_HISTORY,
+        JSON.stringify(rideHistory.map(serializeRide)),
+      );
+    } catch {}
+  }, [rideHistory]);
 
   function boardBus(bus, halt) {
     if (ride) return; // already riding
