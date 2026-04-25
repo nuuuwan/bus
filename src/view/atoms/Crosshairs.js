@@ -1,14 +1,20 @@
 import { Circle, useMap } from "react-leaflet";
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import L from "leaflet";
+
+function getCrosshairLatLng(map) {
+  const size = map.getSize();
+  return map.containerPointToLatLng(L.point(size.x / 2, size.y * 0.25));
+}
 
 export default function Crosshairs() {
   const map = useMap();
-  const [center, setCenter] = useState(map.getCenter());
+  const [center, setCenter] = useState(() => getCrosshairLatLng(map));
 
   useEffect(() => {
     const updateCenter = () => {
-      setCenter(map.getCenter());
+      setCenter(getCrosshairLatLng(map));
     };
 
     map.on("moveend", updateCenter);

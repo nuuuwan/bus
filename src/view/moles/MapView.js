@@ -95,8 +95,11 @@ function MapController({
   // Handle User Drags
   useEffect(() => {
     const onMapMove = () => {
-      const center = map.getCenter();
-      onMoveEnd(new LatLng(center.lat, center.lng));
+      const size = map.getSize();
+      const crosshairLatLng = map.containerPointToLatLng(
+        L.point(size.x / 2, size.y * 0.25),
+      );
+      onMoveEnd(new LatLng(crosshairLatLng.lat, crosshairLatLng.lng));
     };
 
     map.on("moveend", onMapMove);
