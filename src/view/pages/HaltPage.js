@@ -12,7 +12,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
-import NumberPlate from "../atoms/NumberPlate";
+import BusInfo from "../atoms/BusInfo";
 
 export default function HaltPage() {
   const { selectedHalt, routes, buses, currentLatLng, loading } = useData();
@@ -85,7 +85,7 @@ export default function HaltPage() {
                 gap: 1,
               }}
             >
-              <NumberPlate bus={bus} />
+              <BusInfo bus={bus} />
               <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
               <Typography variant="caption" color="text.secondary">
                 {formatArrival(arrivalMs, now)}

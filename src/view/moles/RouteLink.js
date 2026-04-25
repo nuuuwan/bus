@@ -1,12 +1,12 @@
 import { Box, Divider, Typography } from "@mui/material";
-import RouteIcon from "@mui/icons-material/Route";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
-import NumberPlate from "../atoms/NumberPlate";
+import RouteInfo from "../atoms/RouteInfo";
+import BusInfo from "../atoms/BusInfo";
 
 export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
   const location = useLocation();
@@ -93,23 +93,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
         }}
       >
         <Box display="flex" alignItems="center" gap={1}>
-          <Box
-            sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 0.5,
-              px: 1,
-              py: 0.4,
-              borderRadius: 2,
-              backgroundColor: route.getColor(),
-              color: "#fff",
-            }}
-          >
-            <RouteIcon sx={{ fontSize: 16 }} />
-            <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-              {route.shortLabel}
-            </Typography>
-          </Box>
+          <RouteInfo route={route} />
         </Box>
         {hasNextBuses ? (
           <Box mt={0.5}>
@@ -117,7 +101,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
               const dur = formatArrival(arrivalMs, now);
               return (
                 <Box key={bus.id} display="flex" alignItems="center" gap={0.5}>
-                  <NumberPlate bus={bus} />
+                  <BusInfo bus={bus} />
                   <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                   <Typography variant="caption" color="text.secondary">
                     {dur}
@@ -137,7 +121,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
           <>
             {bestCatch && (
               <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-                <NumberPlate bus={bestCatch.bus} />
+                <BusInfo bus={bestCatch.bus} />
                 {bestCatch.arrivalMs !== null && (
                   <>
                     <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />

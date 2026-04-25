@@ -13,7 +13,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import Distance from "../atoms/Distance";
-import NumberPlate from "../atoms/NumberPlate";
+import BusInfo from "../atoms/BusInfo";
 
 export default function BusesPage() {
   const { buses, currentLatLng, loading } = useData();
@@ -91,7 +91,7 @@ export default function BusesPage() {
                 >
                   <Box flex={1} minWidth={0}>
                     <Box display="flex" alignItems="center" gap={0.5}>
-                      <NumberPlate bus={bus} />
+                      <BusInfo bus={bus} />
                       {approachArrow === "up" && (
                         <ArrowUpwardIcon
                           sx={{ fontSize: 16, color: "success.main" }}
