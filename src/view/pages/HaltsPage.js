@@ -1,8 +1,9 @@
-import { Box, CircularProgress, List, Typography } from "@mui/material";
+import { CircularProgress, Box, List, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
 import HaltLink from "../moles/HaltLink";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function HaltsPage() {
   const { halts, routes, buses, currentLatLng, loading } = useData();
@@ -47,17 +48,15 @@ export default function HaltsPage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
-      >
-        {nearbyCount} halts within 1km
-      </Typography>
-      <Box width="100%" overflow="auto" flexGrow={1}>
-        <List sx={{ p: 0 }}>
-          <AnimatePresence>
+    <DrawerPage
+      subheader={
+        <Typography variant="caption" color="text.secondary">
+          {nearbyCount} halts within 1km
+        </Typography>
+      }
+    >
+      <List sx={{ p: 0 }}>
+        <AnimatePresence>
             {sortedHalts.map((halt) => {
               const isNearby =
                 !currentLatLng ||
@@ -76,7 +75,6 @@ export default function HaltsPage() {
             })}
           </AnimatePresence>
         </List>
-      </Box>
-    </Box>
+    </DrawerPage>
   );
 }

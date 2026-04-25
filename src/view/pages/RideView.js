@@ -6,6 +6,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatDuration } from "../../nonview/base/Duration";
 import HaltInfo from "../atoms/HaltInfo";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function RideView() {
   const { ride, alightBus, rideHistory } = useData();
@@ -22,7 +23,8 @@ export default function RideView() {
   const latLng = match ? match[1] : "";
 
   return (
-    <Box sx={{ px: 2, py: 1, overflow: "auto", height: "100%" }}>
+    <DrawerPage>
+      <Box sx={{ px: 2, py: 1 }}>
       {/* Current status */}
       <Box mb={1}>
         <Typography
@@ -103,6 +105,7 @@ export default function RideView() {
           </Button>
         )}
       </Box>
-    </Box>
+      </Box>
+    </DrawerPage>
   );
 }

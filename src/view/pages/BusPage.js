@@ -16,6 +16,7 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import { useNavigate, useLocation } from "react-router-dom";
 import HaltInfo from "../atoms/HaltInfo";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function BusPage() {
   const { selectedBus, loading, ride, boardBus, alightBus } = useData();
@@ -86,9 +87,8 @@ export default function BusPage() {
   }
 
   return (
-    <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto" p={1}>
-        {/* Full halt timeline */}
+    <DrawerPage>
+      <Box p={1}>
         <Timeline
           position="right"
           sx={{
@@ -219,6 +219,6 @@ export default function BusPage() {
           })()}
         </Timeline>
       </Box>
-    </Box>
+    </DrawerPage>
   );
 }

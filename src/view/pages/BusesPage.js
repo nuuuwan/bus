@@ -14,6 +14,7 @@ import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import Distance from "../atoms/Distance";
 import BusInfo from "../atoms/BusInfo";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function BusesPage() {
   const { buses, currentLatLng, loading } = useData();
@@ -65,16 +66,14 @@ export default function BusesPage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
-      >
-        {nearbyCount} buses within 1km
-      </Typography>
-      <Box width="100%" overflow="auto" flexGrow={1}>
-        <List sx={{ p: 0 }}>
+    <DrawerPage
+      subheader={
+        <Typography variant="caption" color="text.secondary">
+          {nearbyCount} buses within 1km
+        </Typography>
+      }
+    >
+      <List sx={{ p: 0 }}>
           {busItems.map(({ bus, distanceKm, approachArrow }) => {
             return (
               <motion.div
@@ -136,7 +135,6 @@ export default function BusesPage() {
             );
           })}
         </List>
-      </Box>
-    </Box>
+    </DrawerPage>
   );
 }

@@ -4,6 +4,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import { useData } from "../../nonview/contexts/DataContext";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function UserProfilePage() {
   const { user, rideHistory, ride } = useData();
@@ -37,7 +38,8 @@ export default function UserProfilePage() {
   ];
 
   return (
-    <Box sx={{ px: 2, py: 1, overflow: "auto", height: "100%" }}>
+    <DrawerPage>
+      <Box sx={{ px: 2, py: 1 }}>
       {rows.map(({ icon, label, value }, i) => (
         <Box key={label}>
           {i > 0 && <Divider />}
@@ -56,6 +58,7 @@ export default function UserProfilePage() {
           </Box>
         </Box>
       ))}
-    </Box>
+      </Box>
+    </DrawerPage>
   );
 }

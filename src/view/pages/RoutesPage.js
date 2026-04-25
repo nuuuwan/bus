@@ -1,8 +1,9 @@
-import { Box, CircularProgress, List, Typography } from "@mui/material";
+import { CircularProgress, Box, List, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteLink from "../moles/RouteLink";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function RoutesPage() {
   const { routes, currentLatLng, loading } = useData();
@@ -58,17 +59,15 @@ export default function RoutesPage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
-      >
-        {nearbyCount} routes within 1km
-      </Typography>
-      <Box width="100%" overflow="auto" flexGrow={1}>
-        <List sx={{ p: 0 }}>
-          <AnimatePresence>
+    <DrawerPage
+      subheader={
+        <Typography variant="caption" color="text.secondary">
+          {nearbyCount} routes within 1km
+        </Typography>
+      }
+    >
+      <List sx={{ p: 0 }}>
+        <AnimatePresence>
             {sortedRoutes.map((route) => {
               const isNearby =
                 !currentLatLng ||
@@ -90,7 +89,6 @@ export default function RoutesPage() {
             })}
           </AnimatePresence>
         </List>
-      </Box>
-    </Box>
+    </DrawerPage>
   );
 }

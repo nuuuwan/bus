@@ -14,6 +14,7 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import BusInfo from "../atoms/BusInfo";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function HaltPage() {
   const {
@@ -72,14 +73,8 @@ export default function HaltPage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
-      {haltDistanceKm !== null && (
-        <Box sx={{ px: 2, pt: 1, pb: 0.5, flexShrink: 0 }}>
-          <Distance distanceKm={haltDistanceKm} />
-        </Box>
-      )}
-      <Box width="100%" overflow="auto" flexGrow={1}>
-        <List sx={{ p: 0 }}>
+    <DrawerPage subheader={haltDistanceKm !== null ? <Distance distanceKm={haltDistanceKm} /> : null}>
+      <List sx={{ p: 0 }}>
           {busItems.map(({ bus, arrivalMs }) => {
             const busAtThisHalt =
               selectedHalt && bus.currentHalt(now)?.id === selectedHalt.id;
@@ -138,7 +133,6 @@ export default function HaltPage() {
             );
           })}
         </List>
-      </Box>
-    </Box>
+    </DrawerPage>
   );
 }

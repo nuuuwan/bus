@@ -11,6 +11,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useData } from "../../nonview/contexts/DataContext";
 import { useClock } from "../../nonview/contexts/ClockContext";
 import HaltLink from "../moles/HaltLink";
+import DrawerPage from "../moles/DrawerPage";
 
 export default function RoutePage() {
   const { selectedRoute, buses, currentLatLng, loading } = useData();
@@ -70,16 +71,17 @@ export default function RoutePage() {
   }
 
   return (
-    <Box display="flex" height="100vh">
-      <Box width="100%" overflow="auto" p={1}>
-        <Box px={1} pb={1}>
-          <Chip
-            icon={<AirportShuttleIcon />}
-            label={`${buses.filter((b) => b.route.id === selectedRoute.id).length} buses`}
-            size="small"
-            variant="outlined"
-          />
-        </Box>
+    <DrawerPage
+      subheader={
+        <Chip
+          icon={<AirportShuttleIcon />}
+          label={`${buses.filter((b) => b.route.id === selectedRoute.id).length} buses`}
+          size="small"
+          variant="outlined"
+        />
+      }
+    >
+      <Box p={1}>
         <Timeline
           position="right"
           sx={{
@@ -135,6 +137,6 @@ export default function RoutePage() {
           })}
         </Timeline>
       </Box>
-    </Box>
+    </DrawerPage>
   );
 }

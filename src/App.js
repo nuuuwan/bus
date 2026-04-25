@@ -172,10 +172,13 @@ function AppContent() {
             left: "max(0px, calc((100% - 390px) / 2))",
             right: "auto",
             bottom: 0,
+            display: "flex",
+            flexDirection: "column",
           },
         }}
       >
         <DrawerHeader onClose={handleDrawerClose} />
+        <Box sx={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
         <Routes>
           <Route path="/:latLngId/routes" element={<RoutesPage />} />
           <Route path="/:latLngId/route/:routeId" element={<RoutePage />} />
@@ -187,6 +190,7 @@ function AppContent() {
           <Route path="/:latLngId/rides" element={<RidesPage />} />
           <Route path="/:latLngId/profile" element={<UserProfilePage />} />
         </Routes>
+        </Box>
       </Drawer>
 
       <CustomBottomNavigator />
