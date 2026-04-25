@@ -218,7 +218,11 @@ export default class Bus {
     const currentMs = legFrac * legMs;
 
     // Waypoints: route start, each halt, route end
-    const waypoints = [{ halt: null, frac: 0 }, ...pairs, { halt: null, frac: 1 }];
+    const waypoints = [
+      { halt: null, frac: 0 },
+      ...pairs,
+      { halt: null, frac: 1 },
+    ];
 
     let elapsed = 0;
     for (let i = 0; i < waypoints.length - 1; i++) {

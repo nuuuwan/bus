@@ -152,7 +152,12 @@ export default function BusPage() {
                       </Typography>
                     )}
                     {!isAtHalt && isUpcoming && arrivalMs !== null && (
-                      <Box display="flex" alignItems="center" gap={0.5} mt={0.25}>
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        gap={0.5}
+                        mt={0.25}
+                      >
                         <AccessTimeIcon sx={{ fontSize: 12 }} color="action" />
                         <Typography variant="caption" color="text.secondary">
                           {formatArrival(arrivalMs, now)}

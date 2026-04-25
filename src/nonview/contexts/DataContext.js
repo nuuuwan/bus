@@ -3,6 +3,7 @@ import { useLocation, matchPath } from "react-router-dom";
 import Halt from "../core/Halt";
 import Route from "../core/Route";
 import Bus from "../core/Bus";
+import User from "../core/User";
 import LatLng from "../base/LatLng";
 
 const DataContext = createContext();
@@ -17,6 +18,7 @@ export function DataProvider({ children }) {
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [selectedBus, setSelectedBus] = useState(null);
   const [currentLatLng, setCurrentLatLng] = useState(null);
+  const [user] = useState(() => User.getDefault());
   const location = useLocation();
 
   useEffect(() => {
@@ -122,6 +124,7 @@ export function DataProvider({ children }) {
     selectedRoute,
     selectedBus,
     currentLatLng,
+    user,
     loading,
     error,
   };
