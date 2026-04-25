@@ -154,13 +154,13 @@ function AppContent() {
         sx={{
           pointerEvents: "none",
           "& .MuiDrawer-paper": {
-            height: "calc(50vh - 56px)",
+            height: "50vh",
             borderRadius: "16px 16px 0 0",
             pointerEvents: "auto",
             width: "min(100vw, 390px)",
             left: "max(0px, calc((100% - 390px) / 2))",
             right: "auto",
-            bottom: "56px",
+            bottom: 0,
           },
         }}
       >
