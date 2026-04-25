@@ -242,6 +242,13 @@ export default function MapView() {
         center={initialCenter.current}
         zoom={defaultZoom}
         style={{ height: "100%", width: "100%" }}
+        zoomControl={false}
+        dragging={false}
+        scrollWheelZoom={false}
+        doubleClickZoom={false}
+        touchZoom={false}
+        boxZoom={false}
+        keyboard={false}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
