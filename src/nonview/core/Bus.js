@@ -106,7 +106,7 @@ export default class Bus {
    */
   static CYCLE_MINUTES = 60;
   static SPEED_VARIATION = 0.25; // ±25%
-  static HALT_DWELL_MS = 60_000; // 1 sim-minute dwell at each halt (6 real seconds at 10× speed)
+  static HALT_DWELL_MS = 30_000; // 30 sim-seconds dwell at each halt (3 real seconds at 10× speed)
   static SIM_SPEED = 10; // simulation runs 10× real time
 
   /**

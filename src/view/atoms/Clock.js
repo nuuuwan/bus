@@ -1,11 +1,15 @@
 import { Box, Typography } from "@mui/material";
 import { useClock } from "../../nonview/contexts/ClockContext";
 
+const SIM_SPEED = 10;
+const START_REAL_MS = Date.now();
+const START_SIM_MS = Date.now();
+
 export default function Clock() {
   const nowMs = useClock();
-  const now = new Date(nowMs);
+  const simNow = new Date(START_SIM_MS + (nowMs - START_REAL_MS) * SIM_SPEED);
 
-  const time = now.toLocaleTimeString([], {
+  const time = simNow.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
