@@ -36,6 +36,17 @@ export default function RoutesPage() {
       })
     : routes;
 
+  const NEARBY_KM = 1;
+  const nearbyCount = currentLatLng
+    ? sortedRoutes.filter((route) =>
+        route.haltList.some(
+          (halt) =>
+            halt.latLng &&
+            currentLatLng.distanceTo(halt.latLng) <= NEARBY_KM,
+        ),
+      ).length
+    : sortedRoutes.length;
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [sortedRoutes]);
@@ -60,7 +71,7 @@ export default function RoutesPage() {
         color="text.secondary"
         sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
       >
-        {sortedRoutes.length} routes
+        {nearbyCount} routes within 1km
       </Typography>
       <Divider />
       <Box width="100%" overflow="auto" flexGrow={1}>

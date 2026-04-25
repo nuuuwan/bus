@@ -46,6 +46,11 @@ export default function BusesPage() {
       .sort((a, b) => a.distanceKm - b.distanceKm);
   })();
 
+  const NEARBY_KM = 1;
+  const nearbyCount = busItems.filter(
+    ({ distanceKm }) => distanceKm <= NEARBY_KM,
+  ).length;
+
   if (loading) {
     return (
       <Box
@@ -66,7 +71,7 @@ export default function BusesPage() {
         color="text.secondary"
         sx={{ px: 2, pt: 1, pb: 0.5, display: "block", flexShrink: 0 }}
       >
-        {busItems.length} buses
+        {nearbyCount} buses within 1km
       </Typography>
       <Divider />
       <Box width="100%" overflow="auto" flexGrow={1}>
