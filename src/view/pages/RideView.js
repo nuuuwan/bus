@@ -25,7 +25,11 @@ export default function RideView() {
     <Box sx={{ px: 2, py: 1, overflow: "auto", height: "100%" }}>
       {/* Current status */}
       <Box mb={1}>
-        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.25 }}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: "block", mb: 0.25 }}
+        >
           {atHalt ? "Currently at" : "Travelling…"}
         </Typography>
         {atHalt ? (
@@ -41,7 +45,11 @@ export default function RideView() {
 
       {/* Boarded at */}
       <Box mb={1}>
-        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.25 }}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: "block", mb: 0.25 }}
+        >
           Boarded at
         </Typography>
         <HaltInfo halt={ride.boardedAtHalt} />
@@ -50,13 +58,17 @@ export default function RideView() {
       {/* Duration + Fare */}
       <Box display="flex" gap={2} mb={1.5}>
         <Box>
-          <Typography variant="caption" color="text.secondary">Duration</Typography>
+          <Typography variant="caption" color="text.secondary">
+            Duration
+          </Typography>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
             {formatDuration(durationMs)}
           </Typography>
         </Box>
         <Box>
-          <Typography variant="caption" color="text.secondary">Fare</Typography>
+          <Typography variant="caption" color="text.secondary">
+            Fare
+          </Typography>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
             LKR {ride.fare.toFixed(2)}
           </Typography>

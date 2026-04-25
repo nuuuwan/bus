@@ -131,7 +131,10 @@ export function DataProvider({ children }) {
 
   function alightBus(halt) {
     if (ride) {
-      setRideHistory((prev) => [...prev, ride.withAlight(halt ?? null, Date.now())]);
+      setRideHistory((prev) => [
+        ...prev,
+        ride.withAlight(halt ?? null, Date.now()),
+      ]);
     }
     setRide(null);
   }

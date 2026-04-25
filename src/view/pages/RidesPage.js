@@ -9,14 +9,18 @@ import HaltInfo from "../atoms/HaltInfo";
 export default function RidesPage() {
   const { rideHistory, ride } = useData();
 
-  const allRides = [
-    ...(ride ? [ride] : []),
-    ...[...rideHistory].reverse(),
-  ];
+  const allRides = [...(ride ? [ride] : []), ...[...rideHistory].reverse()];
 
   if (allRides.length === 0) {
     return (
-      <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="80%" gap={1}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="80%"
+        gap={1}
+      >
         <AirportShuttleIcon sx={{ fontSize: 40, color: "text.disabled" }} />
         <Typography variant="body2" color="text.secondary">
           No rides yet
@@ -40,17 +44,31 @@ export default function RidesPage() {
             <ListItem
               key={i}
               divider
-              sx={{ flexDirection: "column", alignItems: "flex-start", py: 1.5, px: 2, gap: 0.5 }}
+              sx={{
+                flexDirection: "column",
+                alignItems: "flex-start",
+                py: 1.5,
+                px: 2,
+                gap: 0.5,
+              }}
             >
               {/* Bus */}
               <NumberPlate bus={r.bus} />
 
               {/* From → To */}
-              <Box display="flex" alignItems="center" gap={0.5} flexWrap="wrap" mt={0.25}>
+              <Box
+                display="flex"
+                alignItems="center"
+                gap={0.5}
+                flexWrap="wrap"
+                mt={0.25}
+              >
                 <HaltInfo halt={r.boardedAtHalt} />
                 {r.alightedAtHalt && (
                   <>
-                    <ArrowForwardIcon sx={{ fontSize: 14, color: "text.secondary" }} />
+                    <ArrowForwardIcon
+                      sx={{ fontSize: 14, color: "text.secondary" }}
+                    />
                     <HaltInfo halt={r.alightedAtHalt} />
                   </>
                 )}
@@ -65,7 +83,11 @@ export default function RidesPage() {
                   LKR {r.fare.toFixed(2)}
                 </Typography>
                 {r.isActive && (
-                  <Typography variant="caption" color="success.main" sx={{ fontWeight: 600 }}>
+                  <Typography
+                    variant="caption"
+                    color="success.main"
+                    sx={{ fontWeight: 600 }}
+                  >
                     Active
                   </Typography>
                 )}

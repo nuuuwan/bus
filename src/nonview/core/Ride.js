@@ -38,12 +38,6 @@ export default class Ride {
 
   /** Returns a completed copy of this ride. */
   withAlight(halt, ms) {
-    return new Ride(
-      this.bus,
-      this.boardedAtHalt,
-      this.boardedAtMs,
-      halt,
-      ms,
-    );
+    return new Ride(this.bus, this.boardedAtHalt, this.boardedAtMs, halt, ms);
   }
 }
