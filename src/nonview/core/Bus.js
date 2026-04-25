@@ -106,7 +106,8 @@ export default class Bus {
    */
   static CYCLE_MINUTES = 60;
   static SPEED_VARIATION = 0.25; // ±25%
-  static HALT_DWELL_MS = 5_000; // ms bus stays stationary at each halt
+  static HALT_DWELL_MS = 60_000; // 1 sim-minute dwell at each halt (6 real seconds at 10× speed)
+  static SIM_SPEED = 10; // simulation runs 10× real time
 
   /**
    * Per-bus cycle duration (minutes) — gives each bus a slightly different speed.
@@ -122,7 +123,7 @@ export default class Bus {
 
   _progressAt(nowMs) {
     const cycleMs = this._cycleMinutes() * 60_000;
-    const cycleProgress = (nowMs % cycleMs) / cycleMs;
+    const cycleProgress = ((nowMs * Bus.SIM_SPEED) % cycleMs) / cycleMs;
     // Evenly space buses around the route, then add a small jitter so they
     // don't look mechanical. Jitter is at most 10% of the even spacing.
     const baseOffset = this.busIndex / this.totalBusesOnRoute;
@@ -378,7 +379,7 @@ export default class Bus {
     const currentCycle = this._progressAt(nowMs);
     const cycleMs = this._cycleMinutes() * 60_000;
     const delta = (haltPathProgress - currentCycle + 1) % 1;
-    return nowMs + delta * cycleMs;
+    return nowMs + (delta * cycleMs) / Bus.SIM_SPEED;
   }
 
   /**
