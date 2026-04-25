@@ -1,4 +1,11 @@
-import { Box, Divider, List, ListItem, ListItemButton, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  Typography,
+} from "@mui/material";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -52,7 +59,9 @@ export default function RidesPage() {
               <ItemComponent
                 key={i}
                 divider
-                onClick={isActive ? () => navigate(`/${latLng}/ride`) : undefined}
+                onClick={
+                  isActive ? () => navigate(`/${latLng}/ride`) : undefined
+                }
                 sx={{
                   flexDirection: "column",
                   alignItems: "flex-start",
@@ -61,48 +70,48 @@ export default function RidesPage() {
                   gap: 0.5,
                 }}
               >
-              {/* Bus */}
-              <NumberPlate bus={r.bus} />
+                {/* Bus */}
+                <NumberPlate bus={r.bus} />
 
-              {/* From → To */}
-              <Box
-                display="flex"
-                alignItems="center"
-                gap={0.5}
-                flexWrap="wrap"
-                mt={0.25}
-              >
-                <HaltInfo halt={r.boardedAtHalt} />
-                {r.alightedAtHalt && (
-                  <>
-                    <ArrowForwardIcon
-                      sx={{ fontSize: 14, color: "text.secondary" }}
-                    />
-                    <HaltInfo halt={r.alightedAtHalt} />
-                  </>
-                )}
-              </Box>
+                {/* From → To */}
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap={0.5}
+                  flexWrap="wrap"
+                  mt={0.25}
+                >
+                  <HaltInfo halt={r.boardedAtHalt} />
+                  {r.alightedAtHalt && (
+                    <>
+                      <ArrowForwardIcon
+                        sx={{ fontSize: 14, color: "text.secondary" }}
+                      />
+                      <HaltInfo halt={r.alightedAtHalt} />
+                    </>
+                  )}
+                </Box>
 
-              {/* Duration + fare */}
-              <Box display="flex" gap={2} mt={0.25}>
-                <Typography variant="caption" color="text.secondary">
-                  {formatDuration(r.durationMs())}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  LKR {r.fare.toFixed(2)}
-                </Typography>
-                {r.isActive && (
-                  <Typography
-                    variant="caption"
-                    color="success.main"
-                    sx={{ fontWeight: 600 }}
-                  >
-                    Active
+                {/* Duration + fare */}
+                <Box display="flex" gap={2} mt={0.25}>
+                  <Typography variant="caption" color="text.secondary">
+                    {formatDuration(r.durationMs())}
                   </Typography>
-                )}
-              </Box>
-              <Divider />
-            </ItemComponent>
+                  <Typography variant="caption" color="text.secondary">
+                    LKR {r.fare.toFixed(2)}
+                  </Typography>
+                  {r.isActive && (
+                    <Typography
+                      variant="caption"
+                      color="success.main"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      Active
+                    </Typography>
+                  )}
+                </Box>
+                <Divider />
+              </ItemComponent>
             );
           })}
         </List>

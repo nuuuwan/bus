@@ -122,6 +122,20 @@ export function DataProvider({ children }) {
     }
   }, [location.pathname]);
 
+  // While riding, keep currentLatLng in sync with the bus position so that
+  // proximity sorting, the dotted line, and other location-dependent UI
+  // reflect where the user actually is.
+  useEffect(() => {
+    if (!ride) return;
+    const timer = setInterval(() => {
+      const pos = ride.bus.latLngAt(Date.now());
+      if (pos) {
+        setCurrentLatLng(new LatLng(pos.lat, pos.lng));
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [ride]);
+
   function boardBus(bus, halt) {
     if (ride) return; // already riding
     if (user.cashBalance < Ride.FARE_LKR) return; // insufficient funds
