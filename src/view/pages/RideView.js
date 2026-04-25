@@ -90,7 +90,28 @@ export default function RideView() {
           </>
         )}
 
-        {/* Duration + Fare */}
+        {/* Fare */}
+        <Box sx={{ mb: 1, display: "inline-flex", flexDirection: "column", alignItems: "flex-start" }}>
+          <Typography variant="caption" sx={{ color: "text.secondary", mb: 0.25 }}>
+            Fare
+          </Typography>
+          <Box
+            sx={{
+              bgcolor: "black",
+              borderRadius: 1.5,
+              px: 1.25,
+              py: 0.5,
+              display: "inline-flex",
+              alignItems: "baseline",
+            }}
+          >
+            <Typography sx={{ color: "white", fontWeight: 700, fontSize: "1.4rem", fontFamily: "monospace", lineHeight: 1 }}>
+              LKR {liveFare.toFixed(2)}
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Duration */}
         <Box display="flex" gap={2} mb={1.5}>
           <Box>
             <Typography variant="caption" color="text.secondary">
@@ -98,14 +119,6 @@ export default function RideView() {
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 600 }}>
               {formatDurationSeconds(durationMs)}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="caption" color="text.secondary">
-              Fare
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              LKR {liveFare.toFixed(2)}
             </Typography>
           </Box>
         </Box>
