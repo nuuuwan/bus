@@ -136,12 +136,14 @@ export default class Bus {
 
   /**
    * Convert a cycle progress [0,1) to a path position [0,1].
-   * Buses travel forward only (0→1) then wrap back to the start.
-   * Each route is already directional (e.g. 138N vs 138S), so there is no
-   * need to reverse along the same path.
+   * Buses bounce: forward (0→1) for the first half of the cycle, then
+   * reverse (1→0) for the second half — simulating a real bus that turns
+   * around at the terminus and travels back along the same route.
    */
   _pathProgress(cycleProgress) {
-    return cycleProgress;
+    // Triangle wave: 0→1→0 over one full cycle
+    const p = (cycleProgress * 2) % 2;
+    return p < 1 ? p : 2 - p;
   }
 
   /**
