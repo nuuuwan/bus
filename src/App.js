@@ -155,6 +155,20 @@ function AppContent() {
       <MapView />
       <Clock />
 
+      {isDrawerOpen && (
+        <Box
+          onClick={handleDrawerClose}
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1100,
+          }}
+        />
+      )}
+
       <Drawer
         anchor="bottom"
         open={isDrawerOpen}
