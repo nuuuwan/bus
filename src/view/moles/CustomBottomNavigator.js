@@ -12,13 +12,12 @@ import PersonIcon from "@mui/icons-material/Person";
 export default function CustomBottomNavigator() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [value, setValue] = useState("routes");
+  const [value, setValue] = useState(null);
 
   useEffect(() => {
     if (
       location.pathname.includes("/routes") ||
-      location.pathname.includes("/route/") ||
-      location.pathname.match(/^\/[^/]+$/)
+      location.pathname.includes("/route/")
     ) {
       setValue("routes");
     } else if (
