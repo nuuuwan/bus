@@ -12,7 +12,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import RouteIcon from "@mui/icons-material/Route";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import PersonIcon from "@mui/icons-material/Person";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import { DataProvider, useData } from "./nonview/contexts/DataContext";
@@ -67,7 +66,7 @@ function DrawerHeader({ onClose }) {
     icon = <PersonIcon />;
     text = "My Profile";
   } else if (location.pathname.match(/\/ride$/)) {
-    icon = <DirectionsBusIcon sx={{ color: "success.main" }} />;
+    icon = <AirlineSeatReclineExtraIcon sx={{ color: "success.main" }} />;
     text = "Ongoing Ride";
   } else if (location.pathname.includes("/route/")) {
     color = selectedRoute ? selectedRoute.getColor() : undefined;
