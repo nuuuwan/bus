@@ -8,7 +8,7 @@ import { formatArrival } from "../../nonview/base/Duration";
 import NumberPlate from "../atoms/NumberPlate";
 import HaltInfo from "../atoms/HaltInfo";
 
-export default function HaltLink({ halt, buses = [], nextBus }) {
+export default function HaltLink({ halt, buses = [], nextBus, simple }) {
   const location = useLocation();
   const navigate = useNavigate();
   const now = useClock();
@@ -43,7 +43,7 @@ export default function HaltLink({ halt, buses = [], nextBus }) {
       sx={{ flexDirection: "column", alignItems: "flex-start", py: 1.5, px: 2 }}
     >
       <HaltInfo halt={halt} />
-      {resolvedNextBus && (
+      {!simple && resolvedNextBus && (
         <Box
           display="flex"
           alignItems="center"

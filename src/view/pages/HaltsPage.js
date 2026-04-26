@@ -69,7 +69,7 @@ export default function HaltsPage() {
                 transition={{ duration: 0.35, ease: "easeInOut" }}
                 style={{ opacity: isNearby ? 1 : 0.25 }}
               >
-                <HaltLink halt={halt} buses={buses} />
+                <HaltLink halt={halt} buses={buses} simple />
               </motion.div>
             );
           })}

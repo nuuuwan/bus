@@ -102,14 +102,13 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses, simple }) {
           <RouteIconView route={route} />
           {closestHalt && (
             <Box mt={0.5}>
-              <Box display="flex" alignItems="center" gap={0.75} flexWrap="wrap">
-                <Typography variant="caption" color="text.secondary">
-                  via
-                </Typography>
+              <Box
+                display="flex"
+                alignItems="center"
+                gap={0.75}
+                flexWrap="wrap"
+              >
                 <HaltInfo halt={closestHalt} showRoutes={false} />
-              </Box>
-              <Box mt={0.25}>
-                <Distance distanceKm={closestDistanceKm} />
               </Box>
             </Box>
           )}
@@ -117,21 +116,60 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses, simple }) {
       ) : (
         <RouteInfo route={route} />
       )}
-      {!simple && (hasNextBuses ? (
-        <Box mt={0.5}>
-          {nextBuses.map(({ bus, arrivalMs }) => {
-            const isAtHalt = !!bus.currentHalt(now);
-            const dur = formatArrival(arrivalMs, now);
-            return (
+      {!simple &&
+        (hasNextBuses ? (
+          <Box mt={0.5}>
+            {nextBuses.map(({ bus, arrivalMs }) => {
+              const isAtHalt = !!bus.currentHalt(now);
+              const dur = formatArrival(arrivalMs, now);
+              return (
+                <Box
+                  key={bus.id}
+                  display="flex"
+                  alignItems="center"
+                  gap={0.5}
+                  flexWrap="wrap"
+                >
+                  <BusInfo bus={bus} />
+                  {isAtHalt ? (
+                    <Chip
+                      label="Boarding"
+                      size="small"
+                      color="success"
+                      variant="outlined"
+                      sx={{ height: 18, fontSize: "0.65rem" }}
+                    />
+                  ) : (
+                    <>
+                      <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
+                      <Typography variant="caption" color="text.secondary">
+                        {dur}
+                      </Typography>
+                    </>
+                  )}
+                </Box>
+              );
+            })}
+          </Box>
+        ) : durationStr !== null ? (
+          <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
+            <AccessTimeIcon fontSize="small" color="action" />
+            <Typography variant="body2" color="text.secondary">
+              {durationStr}
+            </Typography>
+          </Box>
+        ) : (
+          <>
+            {bestCatch && (
               <Box
-                key={bus.id}
                 display="flex"
                 alignItems="center"
                 gap={0.5}
+                mt={0.5}
                 flexWrap="wrap"
               >
-                <BusInfo bus={bus} />
-                {isAtHalt ? (
+                <BusInfo bus={bestCatch.bus} />
+                {bestCatch.bus.currentHalt(now) ? (
                   <Chip
                     label="Boarding"
                     size="small"
@@ -139,64 +177,28 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses, simple }) {
                     variant="outlined"
                     sx={{ height: 18, fontSize: "0.65rem" }}
                   />
-                ) : (
+                ) : bestCatch.arrivalMs !== null ? (
                   <>
                     <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
                     <Typography variant="caption" color="text.secondary">
-                      {dur}
+                      {formatArrival(bestCatch.arrivalMs, now)}
                     </Typography>
                   </>
-                )}
+                ) : null}
               </Box>
-            );
-          })}
-        </Box>
-      ) : durationStr !== null ? (
-        <Box display="flex" alignItems="center" gap={0.5} mt={0.5}>
-          <AccessTimeIcon fontSize="small" color="action" />
-          <Typography variant="body2" color="text.secondary">
-            {durationStr}
-          </Typography>
-        </Box>
-      ) : (
-        <>
-          {bestCatch && (
-            <Box
-              display="flex"
-              alignItems="center"
-              gap={0.5}
-              mt={0.5}
-              flexWrap="wrap"
-            >
-              <BusInfo bus={bestCatch.bus} />
-              {bestCatch.bus.currentHalt(now) ? (
-                <Chip
-                  label="Boarding"
-                  size="small"
-                  color="success"
-                  variant="outlined"
-                  sx={{ height: 18, fontSize: "0.65rem" }}
-                />
-              ) : bestCatch.arrivalMs !== null ? (
-                <>
-                  <AccessTimeIcon sx={{ fontSize: 14 }} color="action" />
-                  <Typography variant="caption" color="text.secondary">
-                    {formatArrival(bestCatch.arrivalMs, now)}
-                  </Typography>
-                </>
-              ) : null}
+            )}
+            {bestCatch?.halt && (
+              <Box mt={0.25}>
+                <HaltInfo halt={bestCatch.halt} />
+              </Box>
+            )}
+            <Box mt={0.5}>
+              <Distance
+                distanceKm={bestCatch?.distanceKm ?? closestDistanceKm}
+              />
             </Box>
-          )}
-          {bestCatch?.halt && (
-            <Box mt={0.25}>
-              <HaltInfo halt={bestCatch.halt} />
-            </Box>
-          )}
-          <Box mt={0.5}>
-            <Distance distanceKm={bestCatch?.distanceKm ?? closestDistanceKm} />
-          </Box>
-        </>
-      ))}
+          </>
+        ))}
     </ListItemButton>
   );
 }
