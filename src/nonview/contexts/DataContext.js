@@ -166,15 +166,25 @@ export function DataProvider({ children }) {
     }
   }, [location.pathname, ride]);
 
-  // While riding, keep currentLatLng in sync with the bus position so that
-  // proximity sorting, the dotted line, and other location-dependent UI
-  // reflect where the user actually is.
+  // While riding, keep currentLatLng in sync with the bus position and
+  // auto-alight when the bus reaches its last halt.
   useEffect(() => {
     if (!ride) return;
     const timer = setInterval(() => {
-      const pos = ride.bus.latLngAt(Date.now());
+      const now = Date.now();
+      const pos = ride.bus.latLngAt(now);
       if (pos) {
         setCurrentLatLng(new LatLng(pos.lat, pos.lng));
+      }
+      if (ride.bus.isAtLastHalt(now)) {
+        const lastHalt = ride.bus.lastHalt;
+        const finalFare = ride.fareAt(now);
+        setRideHistory((prev) => [...prev, ride.withAlight(lastHalt, now)]);
+        setUser(
+          (prev) =>
+            new User(prev.name, prev.address, prev.cashBalance - finalFare),
+        );
+        setRide(null);
       }
     }, 1000);
     return () => clearInterval(timer);

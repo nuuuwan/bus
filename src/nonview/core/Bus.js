@@ -341,6 +341,24 @@ export default class Bus {
   // ── Arrival prediction ───────────────────────────────────────────────────
 
   /**
+   * The last halt on this bus's route (highest path-fraction halt).
+   */
+  get lastHalt() {
+    const pairs = this._haltFracPairs();
+    return pairs.length > 0 ? pairs[pairs.length - 1].halt : null;
+  }
+
+  /**
+   * Returns true when the bus is currently dwelling at its last halt.
+   */
+  isAtLastHalt(nowMs = Date.now()) {
+    const current = this.currentHalt(nowMs);
+    const last = this.lastHalt;
+    if (!current || !last) return false;
+    return current.id === last.id;
+  }
+
+  /**
    * Returns the progress fraction [0,1) of the path point closest to targetLatLng.
    */
   _progressOfLatLng(targetLatLng) {
