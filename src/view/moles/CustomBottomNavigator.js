@@ -87,8 +87,7 @@ export default function CustomBottomNavigator() {
         bottom: 0,
         left: 0,
         right: 0,
-        zIndex: 1100,
-        display: isDrawerOpen ? "none" : "block",
+        zIndex: 1300,
       }}
       elevation={3}
     >
@@ -96,6 +95,7 @@ export default function CustomBottomNavigator() {
         value={value}
         onChange={handleChange}
         showLabels={false}
+        sx={{ backgroundColor: "#e8e8e8" }}
       >
         <BottomNavigationAction icon={<StopCircleIcon />} value="halts" />
         <BottomNavigationAction icon={<RouteIcon />} value="routes" />

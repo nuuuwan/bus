@@ -171,7 +171,7 @@ function AppContent() {
             width: "min(100vw, 390px)",
             left: "max(0px, calc((100% - 390px) / 2))",
             right: "auto",
-            bottom: 0,
+            bottom: "56px",
             display: "flex",
             flexDirection: "column",
           },
