@@ -9,9 +9,7 @@ export default function HaltInfo({ halt, showRoutes = true }) {
 
   const haltRoutes = routes.filter((route) => route.hasHalt(halt));
   const distanceKm =
-    currentLatLng && halt.latLng
-      ? currentLatLng.distanceTo(halt.latLng)
-      : null;
+    currentLatLng && halt.latLng ? currentLatLng.distanceTo(halt.latLng) : null;
 
   return (
     <Box>
