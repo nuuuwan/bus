@@ -6,10 +6,11 @@ import { useClock } from "../../nonview/contexts/ClockContext";
 import { formatArrival } from "../../nonview/base/Duration";
 import Distance from "../atoms/Distance";
 import RouteInfo from "../atoms/RouteInfo";
+import RouteIconView from "../atoms/RouteIcon";
 import BusInfo from "../atoms/BusInfo";
 import HaltInfo from "../atoms/HaltInfo";
 
-export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
+export default function RouteLink({ route, nextArrivalMs, nextBuses, simple }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentLatLng, buses } = useData();
@@ -96,8 +97,27 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
         opacity,
       }}
     >
-      <RouteInfo route={route} />
-      {hasNextBuses ? (
+      {simple ? (
+        <>
+          <RouteIconView route={route} />
+          {closestHalt && (
+            <Box mt={0.5}>
+              <Box display="flex" alignItems="center" gap={0.75} flexWrap="wrap">
+                <Typography variant="caption" color="text.secondary">
+                  via
+                </Typography>
+                <HaltInfo halt={closestHalt} showRoutes={false} />
+              </Box>
+              <Box mt={0.25}>
+                <Distance distanceKm={closestDistanceKm} />
+              </Box>
+            </Box>
+          )}
+        </>
+      ) : (
+        <RouteInfo route={route} />
+      )}
+      {!simple && (hasNextBuses ? (
         <Box mt={0.5}>
           {nextBuses.map(({ bus, arrivalMs }) => {
             const isAtHalt = !!bus.currentHalt(now);
@@ -176,7 +196,7 @@ export default function RouteLink({ route, nextArrivalMs, nextBuses }) {
             <Distance distanceKm={bestCatch?.distanceKm ?? closestDistanceKm} />
           </Box>
         </>
-      )}
+      ))}
     </ListItemButton>
   );
 }

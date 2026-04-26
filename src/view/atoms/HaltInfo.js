@@ -3,7 +3,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { useData } from "../../nonview/contexts/DataContext";
 import RouteIconView from "./RouteIcon";
 
-export default function HaltInfo({ halt }) {
+export default function HaltInfo({ halt, showRoutes = true }) {
   const { routes } = useData();
 
   const haltRoutes = routes.filter((route) => route.hasHalt(halt));
@@ -15,7 +15,7 @@ export default function HaltInfo({ halt }) {
         {halt.displayName}
       </Typography>
       {haltRoutes.map((route) => (
-        <RouteIconView key={route.id} route={route} />
+        showRoutes && <RouteIconView key={route.id} route={route} />
       ))}
     </Box>
   );

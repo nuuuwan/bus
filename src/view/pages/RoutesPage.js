@@ -83,7 +83,7 @@ export default function RoutesPage() {
                 transition={{ duration: 0.35, ease: "easeInOut" }}
                 style={{ opacity: isNearby ? 1 : 0.25 }}
               >
-                <RouteLink route={route} />
+                <RouteLink route={route} simple />
               </motion.div>
             );
           })}
